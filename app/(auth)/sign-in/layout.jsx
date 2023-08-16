@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={inter.className}>
         <main>
             <div className='flex flex-col items-center justify-center bg-black pt-20 px-5'>
@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
                 </div>
             </div>
             <svg className="-mt-12" width="100%" height="100" viewBox="0 0 500 80" preserveAspectRatio="none">
-                <path d="M0,0 L0,40 Q250,80 500,40 L500,0 Z" fill="black" />
+                <path d="M0,0 L0,40 Q250,90 500,40 L500,0 Z" fill="black" />
             </svg>
             {children}
         </main>
