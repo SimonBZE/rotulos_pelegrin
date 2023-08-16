@@ -1,11 +1,12 @@
 'use client'
 
-import {TopNavbar} from '@/components/layout/TopNavbar'
+import {useState, useEffect} from 'react'
 import '../globals.css'
 import { Inter } from 'next/font/google'
-import { LeftNavbar } from '@/components/layout/LeftNavbar'
-import { FooterNavbar } from '@/components/layout/FooterNavbar'
-import { MenuProvider } from '@/context/MenuContext'
+import Loader from "@/components/common/Loader";
+
+import Sidebar from "@/components/Sidebar";
+import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,30 +16,51 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  
+
   return (
-    <MenuProvider>
-    <html lang="es">
-      <body className={`${inter.className}`}>
-        
-        <TopNavbar />
-        <div className="flex overflow-hidden bg-white pt-16">
-       
-          <LeftNavbar />
-        
+    <html lang="en">
+      <body suppressHydrationWarning={true}>
+        <div className="dark:bg-boxdark-2 dark:text-bodydark">
+          {loading ? (
+            <Loader />
+          ) : (
+            
+            <div className="flex h-screen overflow-hidden">
+              {/* <!-- ===== Sidebar Start ===== --> */}
+              
+              <Sidebar
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
+              {/* <!-- ===== Sidebar End ===== --> */}
+
+              {/* <!-- ===== Content Area Start ===== --> */}
+              <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                {/* <!-- ===== Header Start ===== --> */}
+                <Header
+                  sidebarOpen={sidebarOpen}
+                  setSidebarOpen={setSidebarOpen}
+                />
+                {/* <!-- ===== Header End ===== --> */}
+
+                {/* <!-- ===== Main Content Start ===== --> */}
+                <main>
+                  <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                    {children}
+                  </div>
+                </main>
+                {/* <!-- ===== Main Content End ===== --> */}
+              </div>
+              {/* <!-- ===== Content Area End ===== --> */}
+            </div>
+          )}
         </div>
-        
-        <main className='w-full md:pl-52 overflow-hidden'>
-          <div className='m-auto max-w-7xl p-5 bg-red-600'>
-            {children}
-          </div>
-         </main>
-        <FooterNavbar />
-        <div className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10" id="sidebarBackdrop"></div>
-      <div id="main-content" className="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64">
-         
-      </div>
       </body>
     </html>
-    </MenuProvider>
-  )
+  );
 }
