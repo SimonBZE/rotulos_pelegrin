@@ -58,9 +58,9 @@ const Header = ({
 
           <Link className="block flex-shrink-0 lg:hidden" href="/">
             <Image
-              width={100}
+              width={32}
               height={32}
-              src={"/assets/oraculo_oscuro.svg"}
+              src={"/images/logo/logo-icon.svg"}
               alt="Logo"
             />
           </Link>
@@ -105,7 +105,7 @@ const Header = ({
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
             {/* <!-- Dark Mode Toggler --> */}
-            {/* <DarkModeSwitcher /> */}
+            <DarkModeSwitcher />
             {/* <!-- Dark Mode Toggler --> */}
 
             {/* <!-- Notification Menu Area --> */}
