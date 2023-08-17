@@ -4,6 +4,17 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer components {
+  .formulario{
+    @apply rounded border-[1.5px] border-stroke bg-white py-2 px-2 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary
+  }
+
+  .labels{
+    @apply text-base font-bold text-black;
+  }
+}
+
 @layer base {
   body {
     @apply font-satoshi font-normal text-base text-body bg-whiten relative z-1;
@@ -173,4 +184,9 @@ span.flatpickr-weekday,
 
 .map-btn .jvectormap-container .jvectormap-zoomin {
   right: 45px;
+}
+
+.icon-color {
+  fill: #fff;
+  stroke-width: 0px;
 }
