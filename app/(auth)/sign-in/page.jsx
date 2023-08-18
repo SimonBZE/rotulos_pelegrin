@@ -1,11 +1,12 @@
 import Image from 'next/image'
 import {buttonVariants} from '@/components/ui/button'
+import Link from 'next/link'
 
 function page() {
   return (
     <div className='px-5 flex min-h-full flex-1 flex-col justify-center py-12 lg:px-8'>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <h1 className='text-center text-2xl text-gray-500 mb-5'>Bienvenido</h1>
+            <h1 className='text-center text-2xl text-gray-500 mb-5 text-black'>Bienvenido</h1>
           <form className="space-y-6" action="#" method="POST">
             <div>
               <div className="mt-2 relative">
@@ -38,12 +39,13 @@ function page() {
             </div>
 
             <div>
-              <button
+              <Link
                 type="submit"
-                className={`${buttonVariants({ variant: "default" })} w-full`}
+                href="/"
+                className={`${buttonVariants({ variant: "default" })} w-full text-white font-bold uppercase`}
               >
                 Iniciar Sesión
-              </button>
+              </Link>
             </div>
           </form>
 

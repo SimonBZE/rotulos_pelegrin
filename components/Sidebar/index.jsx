@@ -7,37 +7,37 @@ import Image from "next/image";
 const menu = [
   {
     nombre: 'Presupuesto',
-    imagen: './assets/Presupuestos.svg',
+    imagen: './assets/Presupuestos-blanco.svg',
     color: '#2fa7ff',
     link: '/presupuesto'
   },
 {
     nombre: 'Nuevo Proyecto',
-    imagen: './assets/Nuevo_proyecto.svg',
+    imagen: './assets/Nuevo_proyecto-blanco.svg',
     color: '#6e5fff',
     link: '/nuevo-proyecto'
 },
 {
     nombre: 'Proyectos en curso',
-    imagen: './assets/Proyectos-en-curso.svg',
+    imagen: './assets/Proyectos-en-curso-blanco.svg',
     color: '#ff5f5f',
     link: '/en-curso'
 },
 {
     nombre: 'Calendario',
-    imagen: './assets/Calendario.svg',
+    imagen: './assets/Calendario-blanco.svg',
     color: '#16dae4',
     link: '/calendario'
 },
 {
     nombre: 'Stock',
-    imagen: './assets/Stock.svg',
+    imagen: './assets/Stock-blanco.svg',
     color: '#cb83ff',
     link: '/stock-levels'
 },
 {
     nombre: 'Empleados',
-    imagen: './assets/Empleados.svg',
+    imagen: './assets/Empleados-blanco.svg',
     color: '#ffa008',
     link: '/empleados'
 },

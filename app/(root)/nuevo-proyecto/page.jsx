@@ -4,6 +4,10 @@ import Image from "next/image";
 import { Design } from "./components/Design";
 import useForm from "@/hooks/useForm";
 import { Print } from "./components/Print";
+import { Cut } from "./components/cut";
+import { Mounting } from "./components/Mounting";
+import { Paint } from "./components/Paint";
+import { Locksmith } from "./components/Locksmith";
 
 const servicios = [
   {
@@ -48,64 +52,47 @@ export default function NuevoProyecto() {
     Descripcion: "",
     Diseno: [],
     Impresion: [],
-    corte: [],
+    Corte: [],
     cerrajeria: [],
     pintura: [],
-    montaje: []
+    Montaje: [],
   };
 
   const {
     values,
     handleChange,
-    handleArrayChange,
-    handleAddArrayField,
-    handleRemoveArrayField,
+    handleComponentChange,
+    addComponent,
+    removeComponent,
     handleSubmit,
   } = useForm(initialValues, (formData) => {
     console.log("Datos enviados:", formData);
   });
 
-  // const { handleSubmit, handleChange, values } = useFormik({
-  //   initialValues: {
-  //     Nombre: "",
-  //     presupuesto: "",
-  //     prioridad: "",
-  //     Descripcion: "",
-  //     Diseno: diseno,
-  //   },
-  //   onSubmit: (values) => {
-  //     console.log(values);
-  //   },
-  // });
-
-  // const [form, setForm] = useState({
-  //   "Nombre": "",
-  //   "presupuesto": "",
-  //   "prioridad": "",
-  //   "Descripcion": "",
-  //   "Diseno": diseno
-  // })
-
-  // const eliminarDiseno = (idKey) => {
-  //   const nuevosDisenos = diseno.filter((design) => design.idKey !== idKey);
-  //   setDiseno(nuevosDisenos);
-  // };
-
   const addService = (servicio) => {
+    console.log(servicio)
     if (servicio === "Diseño") {
-      handleAddArrayField("Diseno", { precio: "", horas: "" });
+      addComponent("Diseno");
     }
 
     if (servicio === "Impresión") {
-      handleAddArrayField("Impresion", {
-        nombre: "",
-        ancho: "",
-        alto: "",
-        profundo: "",
-        material: "",
-        laminacion: "",
-        precio: ''
-      });
+      addComponent("Impresion");
+    }
+
+    if (servicio === "Corte") {
+      addComponent("Corte");
+    }
+
+    if (servicio === "Montaje") {
+      addComponent("Montaje");
+    }
+
+    if (servicio === "Cerrajería") {
+      addComponent("cerrajeria");
+    }
+
+    if (servicio === "Pintura") {
+      addComponent("pintura");
     }
   };
 
@@ -118,7 +105,7 @@ export default function NuevoProyecto() {
               PRESUPUESTO
             </h2>
 
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
               <div>
                 <p className="text-primary font-bold">PRDCM00003</p>
                 <input
@@ -201,9 +188,6 @@ export default function NuevoProyecto() {
                 key={nombre}
                 className="text-center max-w-35 cursor-pointer transition"
                 onClick={() => addService(nombre)}
-                // onClick={() =>
-                //   handleAddArrayField("Diseno", { precio: "", horas: "" })
-                // }
               >
                 <div
                   className={`p-7 rounded-3xl flex flex-col items-center transition justify-center hover:scale-105 duration-300`}
@@ -236,27 +220,89 @@ export default function NuevoProyecto() {
             </div>
             <p className="font-bold text-black dark:text-whiten">50€</p>
           </div>
-          {values.Diseno.map((diseno, index) => {
-            return (
-              <Design
+
+          <div className="grid md:grid-cols-2 gap-4 lg:grid-cols-3 gap-4">
+            {/* FOrmulario de diseño */}
+            {values.Diseno.map((diseno, index) => {
+              return (
+                <Design
+                  key={index}
+                  index={index}
+                  data={values.Diseno[index]}
+                  onChange={handleComponentChange}
+                  onRemove={() => removeComponent("Diseno", index)}
+                />
+              );
+            })}
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Formulario de Impresion */}
+            {values.Impresion.map((impresion, index) => (
+              <Print
                 key={index}
                 index={index}
-                data={diseno}
-                handleChange={handleArrayChange}
-                handleRemove={() => handleRemoveArrayField("Diseno", index)}
+                data={values.Impresion[index]}
+                onChange={handleComponentChange}
+                onRemove={() => removeComponent("Impresion", index)}
               />
-            );
-          })}
+            ))}
+          </div>
 
-          {values.Impresion.map((impresion, index) => (
-            <Print
-              key={index}
-              index={index}
-              data={impresion}
-              handleChange={handleArrayChange}
-              handleRemove={() => handleRemoveArrayField("Impresion", index)}
-            />
-          ))}
+          {/* Formulario de corte */}
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {values.Corte.map((cortes, index) => (
+              <Cut
+                key={index}
+                index={index}
+                data={values.Corte[index]}
+                onChange={handleComponentChange}
+                onRemove={() => removeComponent("Corte", index)}
+              />
+            ))}
+          </div>
+
+          {/* Formulario de cerrajeria */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {values.cerrajeria.map((cerrajerias, index) => (
+              <Locksmith
+                key={index}
+                index={index}
+                data={values.cerrajeria[index]}
+                onChange={handleComponentChange}
+                onRemove={() => removeComponent("cerrajeria", index)}
+              />
+            ))}
+          </div>
+
+          {/* Formulario de pintura */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {values.pintura.map((pinturas, index) => (
+              <Paint
+                key={index}
+                index={index}
+                data={values.pintura[index]}
+                onChange={handleComponentChange}
+                onRemove={() => removeComponent("pintura", index)}
+              />
+            ))}
+          </div>
+
+          {/* Formulario de montaje */}
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {values.Montaje.map((montaje, index) => (
+              <Mounting
+                key={index}
+                index={index}
+                data={values.Montaje[index]}
+                onChange={handleComponentChange}
+                onRemove={() => removeComponent("Montaje", index)}
+              />
+            ))}
+          </div>
+
         </div>
 
         <button

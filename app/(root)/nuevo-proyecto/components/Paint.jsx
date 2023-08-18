@@ -1,38 +1,10 @@
-import { useState, useRef } from "react";
-import { CardHeader } from "./CardHeader";
 import ImageUploader from "@/components/common/ImageUploader";
+import { CardHeader } from "./CardHeader";
 
-export const Print = ({ index, data, onChange, onRemove }) => {
-  const [previewImages, setPreviewImages] = useState([]);
-  const fileInputRef = useRef(null);
-
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    const newImageURLs = files.map((file) => URL.createObjectURL(file));
-
-    const combinedImageURLs = [...previewImages, ...newImageURLs];
-    setPreviewImages(combinedImageURLs);
-  };
-
-  const handleImageRemove = (removeIndex) => {
-    const filteredImages = previewImages.filter(
-      (_, imgIndex) => imgIndex !== removeIndex
-    );
-    setPreviewImages(filteredImages);
-  };
-
-  const onDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const onDrop = (e) => {
-    e.preventDefault();
-    handleImageChange({ target: { files: e.dataTransfer.files } });
-  };
-
+export const Paint = ({ index, data, onChange, onRemove }) => {
   return (
-    <div className="rounded-md bg-[#2FA7FF30] mt-5 p-3">
-      <CardHeader title={"Impresión"} onRemove={onRemove} />
+    <div className="rounded-md bg-[#8AC11130] mt-5 p-3">
+      <CardHeader title={"Pintura"} onRemove={onRemove} />
 
       <div className="flex items-center">
         <label htmlFor="nombre" className="labels ml-2">
@@ -43,12 +15,12 @@ export const Print = ({ index, data, onChange, onRemove }) => {
           type="text"
           id="nombre"
           className="formulario ml-2"
-          name={`Impresion`}
+          name={`pintura`}
           data-index={index}
           data-field="nombre"
           value={data.nombre || ""}
           onChange={(e) =>
-            onChange("Impresion", index, "nombre", e.target.value)
+            onChange("pintura", index, "nombre", e.target.value)
           }
         />
       </div>
@@ -61,11 +33,11 @@ export const Print = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="ancho"
             className="formulario w-14"
-            name="Impresion"
+            name="pintura"
             data-index={index}
             value={data.ancho || ""}
             onChange={(e) =>
-              onChange("Impresion", index, "ancho", e.target.value)
+              onChange("pintura", index, "ancho", e.target.value)
             }
           />
         </div>
@@ -77,11 +49,11 @@ export const Print = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="alto"
             className="formulario w-14"
-            name="Impresion"
+            name="pintura"
             data-index={index}
             value={data.alto || ""}
             onChange={(e) =>
-              onChange("Impresion", index, "alto", e.target.value)
+              onChange("pintura", index, "alto", e.target.value)
             }
           />
         </div>
@@ -93,10 +65,10 @@ export const Print = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="profundo"
             className="formulario w-14"
-            name="Impresion"
+            name="pintura"
             value={data.profundo || ""}
             onChange={(e) =>
-              onChange("Impresion", index, "profundo", e.target.value)
+              onChange("pintura", index, "profundo", e.target.value)
             }
           />
         </div>
@@ -106,12 +78,12 @@ export const Print = ({ index, data, onChange, onRemove }) => {
           Material
         </label>
         <select
-          name="Impresion"
+          name="pintura"
           id="material"
           className="formulario"
           value={data.material || ""}
           onChange={(e) =>
-            onChange("Impresion", index, "material", e.target.value)
+            onChange("pintura", index, "material", e.target.value)
           }
         >
           <option disabled value="default">
@@ -128,12 +100,12 @@ export const Print = ({ index, data, onChange, onRemove }) => {
           Laminación
         </label>
         <select
-          name="Impresion"
+          name="pintura"
           id="laminacion"
           className="formulario"
           value={data.laminacion || ""}
           onChange={(e) =>
-            onChange("Impresion", index, "laminacion", e.target.value)
+            onChange("pintura", index, "laminacion", e.target.value)
           }
         >
           <option disabled value="default">
@@ -145,30 +117,30 @@ export const Print = ({ index, data, onChange, onRemove }) => {
         </select>
       </div>
 
-      <ImageUploader 
+          {/* Imagenes */}
+          <ImageUploader 
         onImagesChange={(imageURLs) => {
-          onChange('Impresion', index, 'imagenes', imageURLs);
+          onChange('pintura', index, 'imagenes', imageURLs);
         }}
       />
 
-      {/* Precio */}
+        {/* Precio */}
       <div className="flex justify-end mt-4 items-center">
         <input
           className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
           type="number"
-          name={`Impresion`}
+          name={`pintura`}
           data-index={index}
           data-field="precio"
           value={data.precio || ""}
-          onChange={(e) =>
-            onChange("Impresion", index, "precio", e.target.value)
-          }
+          onChange={(e) => onChange("pintura", index, "precio", e.target.value)}
           placeholder="Precio"
         />
         <label htmlFor="unidades ml-2" className="labels ml-2">
           €
         </label>
       </div>
+
     </div>
   );
 };
