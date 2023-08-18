@@ -9,6 +9,7 @@ import { Mounting } from "./components/Mounting";
 import { Paint } from "./components/Paint";
 import { Locksmith } from "./components/Locksmith";
 import { Cut } from "./components/Cut";
+import { Sumaries } from "./components/Sumaries";
 
 const servicios = [
   {
@@ -305,6 +306,8 @@ export default function NuevoProyecto() {
           </div>
 
         </div>
+
+        <Sumaries />
 
         <button
           type="submit"
