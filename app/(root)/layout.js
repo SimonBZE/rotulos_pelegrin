@@ -10,11 +10,6 @@ import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
-  title: 'Rotulos Pelegrín',
-  description: 'Gestion Integral',
-}
-
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
