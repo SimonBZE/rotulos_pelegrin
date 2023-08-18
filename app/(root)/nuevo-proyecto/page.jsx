@@ -1,7 +1,9 @@
 "use client";
-import { useState } from "react";
+
 import Image from "next/image";
 import { Design } from "./components/Design";
+import useForm from "@/hooks/useForm";
+import { Print } from "./components/Print";
 
 const servicios = [
   {
@@ -37,41 +39,79 @@ const servicios = [
 ];
 
 export default function NuevoProyecto() {
-  
+  // const [diseno, setDiseno] = useState([]);
 
-  const [diseno, setDiseno] = useState([]);
+  const initialValues = {
+    Nombre: "",
+    presupuesto: "",
+    prioridad: "",
+    Descripcion: "",
+    Diseno: [],
+    Impresion: [],
+    corte: [],
+    cerrajeria: [],
+    pintura: [],
+    montaje: []
+  };
 
-  const [form, setForm] = useState({
-    "Nombre": "",
-    "presupuesto": "",
-    "prioridad": "",
-    "Descripcion": "",
-    "Diseno": diseno
-  })
+  const {
+    values,
+    handleChange,
+    handleArrayChange,
+    handleAddArrayField,
+    handleRemoveArrayField,
+    handleSubmit,
+  } = useForm(initialValues, (formData) => {
+    console.log("Datos enviados:", formData);
+  });
 
-  const eliminarDiseno = (idKey) => {
-    const nuevosDisenos = diseno.filter( design => design.idKey !== idKey );
-    setDiseno(nuevosDisenos)
-  }
+  // const { handleSubmit, handleChange, values } = useFormik({
+  //   initialValues: {
+  //     Nombre: "",
+  //     presupuesto: "",
+  //     prioridad: "",
+  //     Descripcion: "",
+  //     Diseno: diseno,
+  //   },
+  //   onSubmit: (values) => {
+  //     console.log(values);
+  //   },
+  // });
+
+  // const [form, setForm] = useState({
+  //   "Nombre": "",
+  //   "presupuesto": "",
+  //   "prioridad": "",
+  //   "Descripcion": "",
+  //   "Diseno": diseno
+  // })
+
+  // const eliminarDiseno = (idKey) => {
+  //   const nuevosDisenos = diseno.filter((design) => design.idKey !== idKey);
+  //   setDiseno(nuevosDisenos);
+  // };
 
   const addService = (servicio) => {
     if (servicio === "Diseño") {
-      const designAtt = {
-        Horas: "",
-        Precio: "",
-        idKey: new Date().getTime(),
-      };
-      setDiseno([...diseno, designAtt]);
+      handleAddArrayField("Diseno", { precio: "", horas: "" });
+    }
+
+    if (servicio === "Impresión") {
+      handleAddArrayField("Impresion", {
+        nombre: "",
+        ancho: "",
+        alto: "",
+        profundo: "",
+        material: "",
+        laminacion: "",
+        precio: ''
+      });
     }
   };
 
-  const handleChange = (e) => {
-    console.log(e.target.value)
-  }
-
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="mt-5 px-5">
           <div>
             <h2 className="text-title-md font-semibold text-black dark:text-white">
@@ -85,7 +125,9 @@ export default function NuevoProyecto() {
                   className="formulario"
                   type="text"
                   placeholder="Nombre del presupuesto"
-                  value={}
+                  name="Nombre"
+                  value={values.Nombre}
+                  onChange={handleChange}
                 />
               </div>
               {/* <p className="font-bold text-base">PLACA METACRILATO</p> */}
@@ -113,8 +155,9 @@ export default function NuevoProyecto() {
               </label>
               <select
                 className="bg-white relative w-full appearance-none rounded border border-stroke bg-transparent py-2 px-6 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
-                name=""
-                id=""
+                name="prioridad"
+                value={values.prioridad}
+                onChange={handleChange}
               >
                 <option value="baja">Baja</option>
                 <option value="media">Media</option>
@@ -145,6 +188,9 @@ export default function NuevoProyecto() {
               rows={3}
               placeholder="Describe el proyecto"
               className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input"
+              name="Descripcion"
+              value={values.Descripcion}
+              onChange={handleChange}
             ></textarea>
           </div>
 
@@ -155,6 +201,9 @@ export default function NuevoProyecto() {
                 key={nombre}
                 className="text-center max-w-35 cursor-pointer transition"
                 onClick={() => addService(nombre)}
+                // onClick={() =>
+                //   handleAddArrayField("Diseno", { precio: "", horas: "" })
+                // }
               >
                 <div
                   className={`p-7 rounded-3xl flex flex-col items-center transition justify-center hover:scale-105 duration-300`}
@@ -187,10 +236,35 @@ export default function NuevoProyecto() {
             </div>
             <p className="font-bold text-black dark:text-whiten">50€</p>
           </div>
-          {diseno.map(({ idKey }) => {
-            return <Design key={idKey} eliminarDiseno={eliminarDiseno} idKey={idKey}/>;
+          {values.Diseno.map((diseno, index) => {
+            return (
+              <Design
+                key={index}
+                index={index}
+                data={diseno}
+                handleChange={handleArrayChange}
+                handleRemove={() => handleRemoveArrayField("Diseno", index)}
+              />
+            );
           })}
+
+          {values.Impresion.map((impresion, index) => (
+            <Print
+              key={index}
+              index={index}
+              data={impresion}
+              handleChange={handleArrayChange}
+              handleRemove={() => handleRemoveArrayField("Impresion", index)}
+            />
+          ))}
         </div>
+
+        <button
+          type="submit"
+          className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "
+        >
+          Crear Presupuesto
+        </button>
       </form>
     </>
   );
