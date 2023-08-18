@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useState, useRef } from 'react';
 
 function ImageUploader({ onImagesChange }) {
@@ -54,10 +55,12 @@ function ImageUploader({ onImagesChange }) {
       <div className="flex space-x-2">
         {previewImages.map((imageURL, imgIndex) => (
           <div key={imgIndex} className="relative">
-            <img 
+            <Image 
               src={imageURL} 
               alt="Previsualización" 
               className="w-24 h-24 object-cover rounded-md shadow-sm" 
+              width={100}
+              height={100}
             />
             <button 
               className="absolute top-0 right-0 bg-black text-white rounded-full w-5 h-5 flex items-center justify-center"

@@ -46,7 +46,7 @@ export default function Home() {
      <Image src="./assets/pelegrin-design.svg" alt="Pelegrin Design" width={300} height={22} />
      <div className='grid grid-cols-3 gap-5 mt-10'>
       {menu.map( ({nombre, imagen, color, link}) => (
-        <Link href={link}>        
+        <Link key={nombre} href={link}>        
           <div className='text-center'>
             <div className="p-7 rounded-3xl flex justify-center" style={{backgroundColor: color+"20"}}>
               <Image src={imagen} alt="presupuestos" width={100} height={100} className='w-10 h-10 sm:w-15 sm:h-15' />
