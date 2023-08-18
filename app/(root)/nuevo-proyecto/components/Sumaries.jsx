@@ -23,11 +23,11 @@ const multimedia = [
 
 export const Sumaries = () => {
   return (
-    <div className="rounded-xl mt-5 p-5 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="rounded-xl mt-5 py-5 px-5 md:p-10 border max-w-screen-md m-auto border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <h3 className="labels text-lg">Contenido</h3>
       <div className="flex justify-center items-center gap-3 mt-5">
         {multimedia.map(({ nombre, imagen, numero, color }) => (
-          <div className="text-center">
+          <div key={nombre} className="text-center">
             <div
               className={`p-7 rounded-3xl flex justify-center`}
               style={{background: color}}

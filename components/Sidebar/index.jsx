@@ -1,52 +1,52 @@
 import { useEffect, useRef, useState } from "react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import Image from "next/image";
 
 const menu = [
   {
-    nombre: 'Presupuesto',
-    imagen: './assets/Presupuestos-blanco.svg',
-    color: '#2fa7ff',
-    link: '/presupuesto'
+    nombre: "Presupuesto",
+    imagen: "./assets/Presupuestos-blanco.svg",
+    color: "#2fa7ff",
+    link: "/presupuesto",
   },
-{
-    nombre: 'Nuevo Proyecto',
-    imagen: './assets/Nuevo_proyecto-blanco.svg',
-    color: '#6e5fff',
-    link: '/nuevo-proyecto'
-},
-{
-    nombre: 'Proyectos en curso',
-    imagen: './assets/Proyectos-en-curso-blanco.svg',
-    color: '#ff5f5f',
-    link: '/en-curso'
-},
-{
-    nombre: 'Calendario',
-    imagen: './assets/Calendario-blanco.svg',
-    color: '#16dae4',
-    link: '/calendario'
-},
-{
-    nombre: 'Stock',
-    imagen: './assets/Stock-blanco.svg',
-    color: '#cb83ff',
-    link: '/stock-levels'
-},
-{
-    nombre: 'Empleados',
-    imagen: './assets/Empleados-blanco.svg',
-    color: '#ffa008',
-    link: '/empleados'
-},
-]
+  {
+    nombre: "Nuevo Proyecto",
+    imagen: "./assets/Nuevo_proyecto-blanco.svg",
+    color: "#6e5fff",
+    link: "/nuevo-proyecto",
+  },
+  {
+    nombre: "Proyectos en curso",
+    imagen: "./assets/Proyectos-en-curso-blanco.svg",
+    color: "#ff5f5f",
+    link: "/en-curso",
+  },
+  {
+    nombre: "Calendario",
+    imagen: "./assets/Calendario-blanco.svg",
+    color: "#16dae4",
+    link: "/calendario",
+  },
+  {
+    nombre: "Stock",
+    imagen: "./assets/Stock-blanco.svg",
+    color: "#cb83ff",
+    link: "/stock-levels",
+  },
+  {
+    nombre: "Empleados",
+    imagen: "./assets/Empleados-blanco.svg",
+    color: "#ffa008",
+    link: "/empleados",
+  },
+];
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const pathname = usePathname();
-
-  console.log(pathname)
 
   const trigger = useRef(null);
   const sidebar = useRef(null);
@@ -106,6 +106,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             height={300}
             src={"/assets/logo-oraculo.svg"}
             alt="Logo"
+            onClick={() => setSidebarOpen(false)}
           />
         </Link>
 
@@ -145,22 +146,29 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
 
-              {menu.map( ({imagen, link, nombre}) => (
+              {menu.map(({ imagen, link, nombre }) => (
                 <li key={nombre}>
-                <Link
-                  href={link}
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
-                  // ${
-                  //   pathname.includes(pathname) &&
-                  //   "bg-graydark dark:bg-meta-4"
-                  // }
-                >
-                  <Image className="icon-color" src={imagen} alt={nombre} width={20} height={20} />
-                  {nombre}
-                </Link>
-              </li>
-              ) )}
-              
+                  <Link
+                    href={link}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
+                    // ${
+                    //   pathname.includes(pathname) &&
+                    //   "bg-graydark dark:bg-meta-4"
+                    // }
+                  >
+                    <Image
+                      className="icon-color"
+                      src={imagen}
+                      alt={nombre}
+                      width={20}
+                      height={20}
+                    />
+                    {nombre}
+                  </Link>
+                </li>
+              ))}
+
               {/* <!-- Menu Item Settings --> */}
             </ul>
           </div>
@@ -173,7 +181,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Chart --> */}
-              
+
               <SidebarLinkGroup
                 activeCondition={
                   pathname === "/auth" || pathname.includes("auth")
@@ -252,6 +260,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
+                              onClick={() => setSidebarOpen(false)}
                               href="/sign-in"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                 pathname === "/auth/signin" && "text-white"
@@ -262,6 +271,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                           </li>
                           <li>
                             <Link
+                              onClick={() => setSidebarOpen(false)}
                               href="/auth/signup"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                 pathname === "/auth/signup" && "text-white"
