@@ -4,10 +4,11 @@ import Image from "next/image";
 import { Design } from "./components/Design";
 import useForm from "@/hooks/useForm";
 import { Print } from "./components/Print";
-import { Cut } from "./components/cut";
+
 import { Mounting } from "./components/Mounting";
 import { Paint } from "./components/Paint";
 import { Locksmith } from "./components/Locksmith";
+import { Cut } from "./components/Cut";
 
 const servicios = [
   {
