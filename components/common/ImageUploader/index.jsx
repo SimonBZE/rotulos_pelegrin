@@ -52,7 +52,7 @@ function ImageUploader({ onImagesChange }) {
         <p className="text-center text-gray-500">Arrastra y suelta imágenes aquí o haz clic para seleccionar</p>
       </div>
 
-      <div className="flex space-x-2">
+      <div className="grid gap-3 grid-cols-3 sm:grid-cols-4 md:grid-cols-3 2xl:grid-cols-4">
         {previewImages.map((imageURL, imgIndex) => (
           <div key={imgIndex} className="relative">
             <Image 

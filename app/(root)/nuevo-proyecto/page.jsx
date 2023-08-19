@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Design } from "./components/Design";
 import useForm from "@/hooks/useForm";
@@ -45,7 +46,9 @@ const servicios = [
 ];
 
 export default function NuevoProyecto() {
-  // const [diseno, setDiseno] = useState([]);
+  const [factura, setFactura] = useState([]);
+
+  
 
   const initialValues = {
     Nombre: "",
@@ -59,6 +62,8 @@ export default function NuevoProyecto() {
     pintura: [],
     Montaje: [],
   };
+
+
 
   const {
     values,
@@ -98,6 +103,9 @@ export default function NuevoProyecto() {
     }
   };
 
+ 
+
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -109,7 +117,7 @@ export default function NuevoProyecto() {
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-primary font-bold">PRDCM00003</p>
+                <p className="text-primary font-bold">{factura}00003</p>
                 <input
                   className="formulario"
                   type="text"
