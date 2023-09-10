@@ -6,9 +6,9 @@ export const Design = ({ index, data, onChange, onRemove }) => {
     <div className="rounded-md bg-[#6E5FFF30] mt-5 p-3">
       <CardHeader title="Diseño" onRemove={onRemove} />
 
-      <div className="flex justify-between items-center">
-        <div className="flex flex-col">
-          <label htmlFor="horas" className="labels">
+      <div className="flex justify-between items-center gap-2">
+        <div className="flex w-9/12 flex-col">
+          <label htmlFor="horas" className="labels ">
             Horas de diseño
           </label>
           <input
@@ -24,7 +24,7 @@ export const Design = ({ index, data, onChange, onRemove }) => {
           />
         </div>
         <div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-1/4">
           <label htmlFor="unidades" className="labels">
               Unid.
             </label>
@@ -32,7 +32,7 @@ export const Design = ({ index, data, onChange, onRemove }) => {
               type="number"
               name=""
               id="unidades"
-              className="formulario w-12"
+              className="formulario"
             />
             
           </div>

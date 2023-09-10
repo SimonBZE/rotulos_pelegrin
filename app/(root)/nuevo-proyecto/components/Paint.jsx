@@ -6,15 +6,15 @@ export const Paint = ({ index, data, onChange, onRemove }) => {
     <div className="rounded-md bg-[#8AC11130] mt-5 p-3">
       <CardHeader title={"Pintura"} onRemove={onRemove} />
 
-      <div className="flex items-center">
-        <label htmlFor="nombre" className="labels ml-2">
+      <div className="flex items-center flex-wrap gap-2">
+        <label htmlFor="nombre" className="labels">
           Nombre
         </label>
 
         <input
           type="text"
           id="nombre"
-          className="formulario ml-2"
+          className="formulario"
           name={`pintura`}
           data-index={index}
           data-field="nombre"

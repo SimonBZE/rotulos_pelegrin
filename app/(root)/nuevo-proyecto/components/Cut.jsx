@@ -6,15 +6,15 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
     <div className="rounded-md bg-[#FF5F5F30] mt-5 p-3">
       <CardHeader title={"Corte"} onRemove={onRemove} />
 
-      <div className="flex items-center">
-        <label htmlFor="nombre" className="labels ml-2">
+      <div className="flex items-center flex-wrap gap-2">
+        <label htmlFor="nombre" className="labels pl-2">
           Nombre
         </label>
 
         <input
           type="text"
           id="nombre"
-          className="formulario ml-2"
+          className="formulario max-w-full"
           name={`Corte`}
           data-index={index}
           data-field="nombre"
