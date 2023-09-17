@@ -6,7 +6,7 @@ export const Design = ({ index, data, onChange, onRemove }) => {
     <div className="rounded-md bg-[#6E5FFF30] mt-5 p-3">
       <CardHeader title="Diseño" onRemove={onRemove} />
 
-      <div className="flex justify-between items-center gap-2">
+      <div className="flex items-center gap-2 justify-center">
         <div className="flex w-9/12 flex-col">
           <label htmlFor="horas" className="labels ">
             Horas de diseño
@@ -15,24 +15,25 @@ export const Design = ({ index, data, onChange, onRemove }) => {
           id='horas'
             type="number"
             className="formulario"
-            name={`Diseno`}
+            name={`diseno`}
             data-index={index}
             data-field="horas"
             value={data.horas || ""}
-            onChange={(e) => onChange("Diseno", index, "horas", e.target.value)}
+            onChange={(e) => onChange("diseno", index, "horas", e.target.value)}
             placeholder="Horas"
           />
         </div>
         <div>
-          <div className="flex flex-col w-1/4">
+          <div className="flex flex-col items-end">
           <label htmlFor="unidades" className="labels">
               Unid.
             </label>
             <input
               type="number"
-              name=""
+              name="unidades"
               id="unidades"
-              className="formulario"
+              onChange={(e) => onChange("diseno", index, "unidades", e.target.value)}
+              className="formulario w-1/2"
             />
             
           </div>
@@ -55,7 +56,7 @@ export const Design = ({ index, data, onChange, onRemove }) => {
           data-index={index}
           data-field="precio"
           value={data.precio || ""}
-          onChange={(e) => onChange("Diseno", index, "precio", e.target.value)}
+          onChange={(e) => onChange("diseno", index, "precio", e.target.value)}
           placeholder="Precio"
         />
         <label htmlFor="unidades ml-2" className="labels ml-2">

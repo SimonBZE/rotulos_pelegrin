@@ -2,15 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Design } from "./components/Design";
 import useForm from "@/hooks/useForm";
-import { Print } from "./components/Print";
+import { Print, Mounting, Paint, Locksmith, Cut, Sumaries, Design } from "./components";
+import {Budget} from '@/api'
 
-import { Mounting } from "./components/Mounting";
-import { Paint } from "./components/Paint";
-import { Locksmith } from "./components/Locksmith";
-import { Cut } from "./components/Cut";
-import { Sumaries } from "./components/Sumaries";
 
 const servicios = [
   {
@@ -45,26 +40,63 @@ const servicios = [
   },
 ];
 
+const budgetCtrl = new Budget();
+
 export default function NuevoProyecto() {
-  const [factura, setFactura] = useState([]);
+
+  const [componentCounts, setComponentCounts] = useState({
+    diseno: 0,
+    impresion: 0,
+    corte: 0,
+    cerrajeria: 0,
+    pintura: 0,
+    montaje: 0,
+  });
+
+  const [presupuesto, setPresupuesto] = useState("pr{iniciales}0001");
 
   
+  
+
+  useEffect(() => {
+    const generatePresupuesto = () => {
+      let prefix = ""; // Reemplaza `{iniciales}` por las iniciales que desees.
+
+      if (componentCounts.diseno > 0) prefix += "D";
+      if (componentCounts.impresion > 0) prefix += "I";
+      if (componentCounts.corte > 0) prefix += "C";
+      if (componentCounts.cerrajeria > 0) prefix += "CE";
+      if (componentCounts.pintura > 0) prefix += "P";
+      if (componentCounts.montaje > 0) prefix += "M";
+
+      return prefix;
+    };
+
+    setPresupuesto(generatePresupuesto());
+  }, [componentCounts]);
 
   const initialValues = {
-    Nombre: "",
+    nombre: "",
     presupuesto: "",
+    cliente: "",
+    contacto: "",
+    aprovacion: false,
     prioridad: "",
-    Descripcion: "",
-    Diseno: [],
-    Impresion: [],
-    Corte: [],
+    fecha: "",
+    descripcion: "",
+    puesta_en_marcha: false,
+    diseno: [],
+    impresion: [],
+    corte: [],
     cerrajeria: [],
     pintura: [],
-    Montaje: [],
+    montaje: [],
   };
 
+  const today = new Date().toISOString().split("T")[0];
 
-
+  // const [aprovacion, setAprovacion] = useState(initialValues.aprovacion)
+// const submit = budgetCtrl.createBudget(formData);
   const {
     values,
     handleChange,
@@ -72,26 +104,34 @@ export default function NuevoProyecto() {
     addComponent,
     removeComponent,
     handleSubmit,
-  } = useForm(initialValues, (formData) => {
-    console.log("Datos enviados:", formData);
+    
+  } = useForm(initialValues, async (formData) => {
+   try{
+    await budgetCtrl.createBudget(formData)
+   }catch (error){
+    console.log(error)
+   }
+    
+    
   });
 
+  // handleSubmit(formData, url)
+
   const addService = (servicio) => {
-    console.log(servicio);
     if (servicio === "Diseño") {
-      addComponent("Diseno");
+      addComponent("diseno");
     }
 
     if (servicio === "Impresión") {
-      addComponent("Impresion");
+      addComponent("impresion");
     }
 
     if (servicio === "Corte") {
-      addComponent("Corte");
+      addComponent("corte");
     }
 
     if (servicio === "Montaje") {
-      addComponent("Montaje");
+      addComponent("montaje");
     }
 
     if (servicio === "Cerrajería") {
@@ -103,8 +143,16 @@ export default function NuevoProyecto() {
     }
   };
 
- 
-
+  useEffect(() => {
+    setComponentCounts({
+      diseno: values.diseno.length,
+      impresion: values.impresion.length,
+      corte: values.corte.length,
+      cerrajeria: values.cerrajeria.length,
+      pintura: values.pintura.length,
+      montaje: values.montaje.length,
+    });
+  }, [values]);
 
   return (
     <>
@@ -118,37 +166,58 @@ export default function NuevoProyecto() {
                     PRESUPUESTO
                   </h2>
 
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-primary font-bold">PRDCM00003</p>
-                <input
-                  className="formulario"
-                  type="text"
-                  placeholder="Nombre del presupuesto"
-                  name="Nombre"
-                  value={values.Nombre}
-                  onChange={handleChange}
-                />
-              </div>
-              {/* <p className="font-bold text-base">PLACA METACRILATO</p> */}
-              <div className="flex flex-col items-end justify-end">
-                <label htmlFor="aprovacion" className="ml-2 labels">
-                  Aprovación
-                </label>
-                <input
-                  id="aprovacion"
-                  type="checkbox"
-                  className="w-9 h-9 accent-primary"
-                />
-              </div>
-            </div>
-          </div>
-
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-sm mt-5">CLIENTE: ALEMAN CARS</p>
-                    <p className="text-sm mt-2">CONTACTO: 975 65 65 54</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-primary font-bold">
+                        PR{presupuesto}0003
+                      </p>
+                      <input
+                        className={`formulario`}
+                        type="text"
+                        placeholder="Nombre del presupuesto"
+                        name="nombre"
+                        value={values.nombre}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    {/* <p className="font-bold text-base">PLACA METACRILATO</p> */}
+                    <div className="flex flex-col items-end justify-end">
+                      <label htmlFor="aprovacion" className="ml-2 labels">
+                        Aprovación
+                      </label>
+                      <input
+                        id="aprovacion"
+                        type="checkbox"
+                        className="w-9 h-9 accent-primary"
+                        name="aprovacion"
+                        checked={values.aprovacion}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </div>
+                </div>
+
+                <div className="flex justify-between items-center mt-2">
+                  <div className="flex flex-col gap-2">
+                    <input
+                      type="text"
+                      className="formulario"
+                      placeholder="Cliente"
+                      name="cliente"
+                      value={values.cliente}
+                      onChange={handleChange}
+                    />
+
+                    <input
+                      type="number"
+                      className="formulario"
+                      placeholder="Contacto"
+                      name="contacto"
+                      value={values.contacto}
+                      onChange={handleChange}
+                    />
+                  </div>
+
                   <div className="flex flex-col items-end justify-end">
                     <label htmlFor="aprovacion" className="ml-2 labels">
                       Prioridad
@@ -157,8 +226,10 @@ export default function NuevoProyecto() {
                       className="bg-white relative w-full appearance-none rounded border border-stroke bg-transparent py-2 px-6 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                       name="prioridad"
                       value={values.prioridad}
+                      required
                       onChange={handleChange}
                     >
+                      <option>seleccione</option>
                       <option value="baja">Baja</option>
                       <option value="media">Media</option>
                       <option value="alta">Alta</option>
@@ -174,8 +245,12 @@ export default function NuevoProyecto() {
                   </label>
                   <input
                     id="fecha"
+                    min={today}
                     className="custom-input-date custom-input-date-1 rounded border-[1.5px] border-stroke bg-transparent py-2 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     type="date"
+                    name="fecha"
+                    value={values.fecha}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -188,7 +263,7 @@ export default function NuevoProyecto() {
                     rows={3}
                     placeholder="Describe el proyecto"
                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input"
-                    name="Descripcion"
+                    name="descripcion"
                     value={values.Descripcion}
                     onChange={handleChange}
                   ></textarea>
@@ -231,55 +306,53 @@ export default function NuevoProyecto() {
                       id="en_marcha"
                       type="checkbox"
                       className="w-5 h-5 accent-primary"
+                      name="puesta_en_marcha"
+                      checked={values.puesta_en_marcha}
+                      onChange={handleChange}
                     />
                   </div>
                   <p className="font-bold text-black dark:text-whiten">50€</p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4 lg:grid-cols-3 gap-4">
+                <div className="grid rid-flow-row-dense md:grid-cols-2 gap-4 lg:grid-cols-3 gap-4">
                   {/* FOrmulario de diseño */}
-                  {values.Diseno.map((diseno, index) => {
+                  {values.diseno.map((diseno, index) => {
                     return (
                       <Design
                         key={index}
                         index={index}
-                        data={values.Diseno[index]}
+                        data={values.diseno[index]}
                         onChange={handleComponentChange}
-                        onRemove={() => removeComponent("Diseno", index)}
+                        onRemove={() => removeComponent("diseno", index)}
                       />
                     );
                   })}
-                </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* Formulario de Impresion */}
-                  {values.Impresion.map((impresion, index) => (
+                  {values.impresion.map((impresion, index) => (
                     <Print
                       key={index}
                       index={index}
-                      data={values.Impresion[index]}
+                      data={values.impresion[index]}
                       onChange={handleComponentChange}
-                      onRemove={() => removeComponent("Impresion", index)}
+                      onRemove={() => removeComponent("impresion", index)}
                     />
                   ))}
-                </div>
 
-                {/* Formulario de corte */}
+                  {/* Formulario de corte */}
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {values.Corte.map((cortes, index) => (
+                  {values.corte.map((cortes, index) => (
                     <Cut
                       key={index}
                       index={index}
-                      data={values.Corte[index]}
+                      data={values.corte[index]}
                       onChange={handleComponentChange}
-                      onRemove={() => removeComponent("Corte", index)}
+                      onRemove={() => removeComponent("corte", index)}
                     />
                   ))}
-                </div>
 
-                {/* Formulario de cerrajeria */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* Formulario de cerrajeria */}
+
                   {values.cerrajeria.map((cerrajerias, index) => (
                     <Locksmith
                       key={index}
@@ -289,10 +362,9 @@ export default function NuevoProyecto() {
                       onRemove={() => removeComponent("cerrajeria", index)}
                     />
                   ))}
-                </div>
 
-                {/* Formulario de pintura */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* Formulario de pintura */}
+
                   {values.pintura.map((pinturas, index) => (
                     <Paint
                       key={index}
@@ -302,37 +374,32 @@ export default function NuevoProyecto() {
                       onRemove={() => removeComponent("pintura", index)}
                     />
                   ))}
-                </div>
 
-                {/* Formulario de montaje */}
+                  {/* Formulario de montaje */}
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {values.Montaje.map((montaje, index) => (
+                  {values.montaje.map((montaje, index) => (
                     <Mounting
                       key={index}
                       index={index}
-                      data={values.Montaje[index]}
+                      data={values.montaje[index]}
                       onChange={handleComponentChange}
-                      onRemove={() => removeComponent("Montaje", index)}
+                      onRemove={() => removeComponent("montaje", index)}
                     />
                   ))}
                 </div>
               </div>
             </div>
           </div>
-
           <div className="2xl:w-94">
             <Sumaries />
             <button
-          type="submit"
-          className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "
-        >
-          Crear Presupuesto
-        </button>
+              type="submit"
+              className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "
+            >
+              Crear Presupuesto
+            </button>
           </div>
         </div>
-
-        
       </form>
     </>
   );

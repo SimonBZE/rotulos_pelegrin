@@ -43,12 +43,12 @@ export const Print = ({ index, data, onChange, onRemove }) => {
           type="text"
           id="nombre"
           className="formulario ml-2"
-          name={`Impresion`}
+          name="impresion"
           data-index={index}
-          data-field="nombre"
+          
           value={data.nombre || ""}
           onChange={(e) =>
-            onChange("Impresion", index, "nombre", e.target.value)
+            onChange("impresion", index, "nombre", e.target.value)
           }
         />
       </div>
@@ -61,11 +61,11 @@ export const Print = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="ancho"
             className="formulario w-14"
-            name="Impresion"
+            name="impresion"
             data-index={index}
             value={data.ancho || ""}
             onChange={(e) =>
-              onChange("Impresion", index, "ancho", e.target.value)
+              onChange("impresion", index, "ancho", e.target.value)
             }
           />
         </div>
@@ -77,11 +77,11 @@ export const Print = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="alto"
             className="formulario w-14"
-            name="Impresion"
+            name="impresion"
             data-index={index}
             value={data.alto || ""}
             onChange={(e) =>
-              onChange("Impresion", index, "alto", e.target.value)
+              onChange("impresion", index, "alto", e.target.value)
             }
           />
         </div>
@@ -93,10 +93,11 @@ export const Print = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="profundo"
             className="formulario w-14"
-            name="Impresion"
+            name="impresion"
+            data-index={index}
             value={data.profundo || ""}
             onChange={(e) =>
-              onChange("Impresion", index, "profundo", e.target.value)
+              onChange("impresion", index, "profundo", e.target.value)
             }
           />
         </div>
@@ -106,15 +107,15 @@ export const Print = ({ index, data, onChange, onRemove }) => {
           Material
         </label>
         <select
-          name="Impresion"
+          name="impresion"
           id="material"
           className="formulario"
           value={data.material || ""}
           onChange={(e) =>
-            onChange("Impresion", index, "material", e.target.value)
+            onChange("impresion", index, "material", e.target.value)
           }
         >
-          <option disabled value="default">
+          <option>
             Selecciona uno
           </option>
           <option value="Vinilo x5 pro master">Vinilo x5 pro master</option>
@@ -128,26 +129,26 @@ export const Print = ({ index, data, onChange, onRemove }) => {
           Laminación
         </label>
         <select
-          name="Impresion"
+          name="impresion"
           id="laminacion"
           className="formulario"
           value={data.laminacion || ""}
           onChange={(e) =>
-            onChange("Impresion", index, "laminacion", e.target.value)
+            onChange("impresion", index, "laminacion", e.target.value)
           }
         >
-          <option disabled value="default">
+          <option>
             Selecciona uno
           </option>
-          <option value="Vinilo x5 pro master">5 años</option>
-          <option value="Vinilo x6 pro master">6 años</option>
-          <option value="Vinilo x7 pro master">7 años</option>
+          <option value="5 años">5 años</option>
+          <option value="6 años">6 años</option>
+          <option value="7 años">7 años</option>
         </select>
       </div>
 
       <ImageUploader 
         onImagesChange={(imageURLs) => {
-          onChange('Impresion', index, 'imagenes', imageURLs);
+          onChange('impresion', index, 'imagenes', imageURLs);
         }}
       />
 
@@ -156,12 +157,12 @@ export const Print = ({ index, data, onChange, onRemove }) => {
         <input
           className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
           type="number"
-          name={`Impresion`}
+          name={`impresion`}
           data-index={index}
           data-field="precio"
           value={data.precio || ""}
           onChange={(e) =>
-            onChange("Impresion", index, "precio", e.target.value)
+            onChange("impresion", index, "precio", e.target.value)
           }
           placeholder="Precio"
         />

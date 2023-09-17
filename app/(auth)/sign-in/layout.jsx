@@ -1,6 +1,11 @@
+'use client'
+
 import Image from 'next/image'
 import '../../globals.css'
 import { Inter } from 'next/font/google'
+import { AuthProvider } from "@/context/AuthContext";
+
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -10,9 +15,13 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+
+  
+
   return (
     <html lang="es">
       <body className={inter.className}>
+      <AuthProvider>
         <main>
             <div className='flex flex-col items-center justify-center bg-black pt-20 px-5'>
                 <Image src="./assets/Pelegrin_Design.svg" alt="Pelegrin Design" width={200} height={200} />
@@ -25,6 +34,7 @@ export default function RootLayout({ children }) {
             </svg>
             {children}
         </main>
+        </AuthProvider>
         </body>
     </html>
   )

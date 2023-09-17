@@ -4,7 +4,7 @@ import { CardHeader } from "./CardHeader";
 export const Cut = ({ index, data, onChange, onRemove }) => {
   return (
     <div className="rounded-md bg-[#FF5F5F30] mt-5 p-3">
-      <CardHeader title={"Corte"} onRemove={onRemove} />
+      <CardHeader title={"corte"} onRemove={onRemove} />
 
       <div className="flex items-center flex-wrap gap-2">
         <label htmlFor="nombre" className="labels pl-2">
@@ -15,11 +15,11 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
           type="text"
           id="nombre"
           className="formulario max-w-full"
-          name={`Corte`}
+          name={`corte`}
           data-index={index}
           data-field="nombre"
           value={data.nombre || ""}
-          onChange={(e) => onChange("Corte", index, "nombre", e.target.value)}
+          onChange={(e) => onChange("corte", index, "nombre", e.target.value)}
         />
       </div>
       <div className="flex justify-between mt-5">
@@ -31,10 +31,10 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="ancho"
             className="formulario w-14"
-            name="Corte"
+            name="corte"
             data-index={index}
             value={data.ancho || ""}
-            onChange={(e) => onChange("Corte", index, "ancho", e.target.value)}
+            onChange={(e) => onChange("corte", index, "ancho", e.target.value)}
           />
         </div>
         <div>
@@ -45,10 +45,10 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="alto"
             className="formulario w-14"
-            name="Corte"
+            name="corte"
             data-index={index}
             value={data.alto || ""}
-            onChange={(e) => onChange("Corte", index, "alto", e.target.value)}
+            onChange={(e) => onChange("corte", index, "alto", e.target.value)}
           />
         </div>
         <div>
@@ -59,10 +59,10 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="profundo"
             className="formulario w-14"
-            name="Corte"
+            name="corte"
             value={data.profundo || ""}
             onChange={(e) =>
-              onChange("Corte", index, "profundo", e.target.value)
+              onChange("corte", index, "profundo", e.target.value)
             }
           />
         </div>
@@ -72,11 +72,11 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
           Material
         </label>
         <select
-          name="Corte"
+          name="corte"
           id="material"
           className="formulario"
           value={data.material || ""}
-          onChange={(e) => onChange("Corte", index, "material", e.target.value)}
+          onChange={(e) => onChange("corte", index, "material", e.target.value)}
         >
           <option disabled value="default">
             Selecciona uno
@@ -92,12 +92,12 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
           Laminación
         </label>
         <select
-          name="Corte"
+          name="corte"
           id="laminacion"
           className="formulario"
           value={data.laminacion || ""}
           onChange={(e) =>
-            onChange("Corte", index, "laminacion", e.target.value)
+            onChange("corte", index, "laminacion", e.target.value)
           }
         >
           <option disabled value="default">
@@ -112,7 +112,7 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
       {/* Imagenes */}
       <ImageUploader
         onImagesChange={(imageURLs) => {
-          onChange("Corte", index, "imagenes", imageURLs);
+          onChange("corte", index, "imagenes", imageURLs);
         }}
       />
 
@@ -121,11 +121,11 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
         <input
           className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
           type="number"
-          name={`Corte`}
+          name={`corte`}
           data-index={index}
           data-field="precio"
           value={data.precio || ""}
-          onChange={(e) => onChange("Corte", index, "precio", e.target.value)}
+          onChange={(e) => onChange("corte", index, "precio", e.target.value)}
           placeholder="Precio"
         />
         <label htmlFor="unidades ml-2" className="labels ml-2">

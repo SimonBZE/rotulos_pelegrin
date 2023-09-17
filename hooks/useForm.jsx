@@ -4,11 +4,15 @@ const useForm = (initialValues, onSubmit) => {
   const [values, setValues] = useState(initialValues);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, type } = e.target;
+    const value = type === 'checkbox' ? e.target.checked : e.target.value;
+
     setValues({
       ...values,
       [name]: value
     });
+
+    
   };
 
   const handleComponentChange = (name, index, fieldName, fieldValue) => {
@@ -42,7 +46,10 @@ const useForm = (initialValues, onSubmit) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     onSubmit(values);
+
+    // console.log(onSubmit(values))
   };
 
   return {
@@ -56,57 +63,3 @@ const useForm = (initialValues, onSubmit) => {
 };
 
 export default useForm;
-
-
-// import { useState } from 'react';
-
-// const useForm = (initialValues, onSubmit) => {
-//   const [values, setValues] = useState(initialValues);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setValues({
-//       ...values,
-//       [name]: value
-//     });
-//   };
-
-//   const handleArrayChange = (name, index, field, value) => {
-//     setValues(prev => {
-//       const arrayCopy = [...prev[name]];
-//       arrayCopy[index][field] = value;
-//       return { ...prev, [name]: arrayCopy };
-//     });
-//   };
-
-//   const handleAddArrayField = (name, object) => {
-//     setValues(prev => ({
-//       ...prev,
-//       [name]: [...prev[name], object]
-//     }));
-//   };
-
-//   const handleRemoveArrayField = (name, index) => {
-//     setValues(prev => {
-//       const arrayCopy = [...prev[name]];
-//       arrayCopy.splice(index, 1);
-//       return { ...prev, [name]: arrayCopy };
-//     });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     onSubmit(values);
-//   };
-
-//   return {
-//     values,
-//     handleChange,
-//     handleArrayChange,
-//     handleAddArrayField,
-//     handleRemoveArrayField,
-//     handleSubmit
-//   };
-// };
-
-// export default useForm;

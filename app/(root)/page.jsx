@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+
 
 const menu = [
   {
@@ -41,6 +44,7 @@ const menu = [
 ]
 
 export default function Home() {
+
   return (
     <main className="flex min-h-screen flex-col items-center p-5">
      <Image src="./assets/pelegrin-design.svg" alt="Pelegrin Design" width={300} height={22} />
@@ -56,7 +60,6 @@ export default function Home() {
         </Link>        
       )
       )}
-      
       
      </div>
     </main>

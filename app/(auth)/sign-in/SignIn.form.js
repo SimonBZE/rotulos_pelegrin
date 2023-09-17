@@ -2,8 +2,8 @@ import * as Yup from 'yup'
 
 export function initialValues() {
     return {
-        identifier: '',
-        password: ''
+        identifier: 'byron',
+        password: '123456'
     }
 }
 

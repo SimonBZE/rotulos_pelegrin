@@ -29,7 +29,7 @@ function MiFormulario() {
   return (
     <form>
       <div>
-        <Image />
+        {/* <Image /> */}
         <div>
 
         </div>

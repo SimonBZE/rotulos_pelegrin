@@ -15,11 +15,11 @@ export const Mounting = ({ index, data, onChange, onRemove }) => {
           type="text"
           id="nombre"
           className="formulario ml-2"
-          name={`Montaje`}
+          name={`montaje`}
           data-index={index}
           data-field="nombre"
           value={data.nombre || ""}
-          onChange={(e) => onChange("Montaje", index, "nombre", e.target.value)}
+          onChange={(e) => onChange("montaje", index, "nombre", e.target.value)}
         />
       </div>
       <div className="flex justify-between mt-5">
@@ -31,11 +31,11 @@ export const Mounting = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="ancho"
             className="formulario w-14"
-            name="Montaje"
+            name="montaje"
             data-index={index}
             value={data.ancho || ""}
             onChange={(e) =>
-              onChange("Montaje", index, "ancho", e.target.value)
+              onChange("montaje", index, "ancho", e.target.value)
             }
           />
         </div>
@@ -47,10 +47,10 @@ export const Mounting = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="alto"
             className="formulario w-14"
-            name="Montaje"
+            name="montaje"
             data-index={index}
             value={data.alto || ""}
-            onChange={(e) => onChange("Montaje", index, "alto", e.target.value)}
+            onChange={(e) => onChange("montaje", index, "alto", e.target.value)}
           />
         </div>
         <div>
@@ -61,10 +61,10 @@ export const Mounting = ({ index, data, onChange, onRemove }) => {
             type="number"
             id="profundo"
             className="formulario w-14"
-            name="Montaje"
+            name="montaje"
             value={data.profundo || ""}
             onChange={(e) =>
-              onChange("Montaje", index, "profundo", e.target.value)
+              onChange("montaje", index, "profundo", e.target.value)
             }
           />
         </div>
@@ -74,12 +74,12 @@ export const Mounting = ({ index, data, onChange, onRemove }) => {
           Material
         </label>
         <select
-          name="Montaje"
+          name="montaje"
           id="material"
           className="formulario"
           value={data.material || ""}
           onChange={(e) =>
-            onChange("Montaje", index, "material", e.target.value)
+            onChange("montaje", index, "material", e.target.value)
           }
         >
           <option disabled value="default">
@@ -96,12 +96,12 @@ export const Mounting = ({ index, data, onChange, onRemove }) => {
           Laminación
         </label>
         <select
-          name="Montaje"
+          name="montaje"
           id="laminacion"
           className="formulario"
           value={data.laminacion || ""}
           onChange={(e) =>
-            onChange("Montaje", index, "laminacion", e.target.value)
+            onChange("montaje", index, "laminacion", e.target.value)
           }
         >
           <option disabled value="default">
@@ -116,7 +116,7 @@ export const Mounting = ({ index, data, onChange, onRemove }) => {
       {/* Imagenes */}
       <ImageUploader
         onImagesChange={(imageURLs) => {
-          onChange("Montaje", index, "imagenes", imageURLs);
+          onChange("montaje", index, "imagenes", imageURLs);
         }}
       />
 
@@ -125,11 +125,11 @@ export const Mounting = ({ index, data, onChange, onRemove }) => {
         <input
           className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
           type="number"
-          name={`Montaje`}
+          name={`montaje`}
           data-index={index}
           data-field="precio"
           value={data.precio || ""}
-          onChange={(e) => onChange("Montaje", index, "precio", e.target.value)}
+          onChange={(e) => onChange("montaje", index, "precio", e.target.value)}
           placeholder="Precio"
         />
         <label htmlFor="unidades ml-2" className="labels ml-2">
