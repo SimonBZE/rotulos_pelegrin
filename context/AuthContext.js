@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
       setToken(token);
       setLoading(false);
       
-    } catch (error) {
+    } catch (error) {      
       console.error(error);
       setLoading(false);
     }

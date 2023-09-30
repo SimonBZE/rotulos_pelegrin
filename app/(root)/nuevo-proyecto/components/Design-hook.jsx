@@ -44,11 +44,13 @@ export const Design = ({ index, data, onChange, onRemove, errors }) => {
       </div>
 
       {/* Imagenes */}
-      <ImageUploader 
-        onImagesChange={(imageURLs) => {
-          onChange('Diseno', index, 'imagenes', imageURLs);
-        }}
-      />
+      <input
+  type="file"
+  name={`diseno[${index}].imagenes`}
+  onChange={(event) => {
+    formik.setFieldValue(`diseno[${index}].imagenes`, event.currentTarget.files[0]);
+  }}
+/>
 
       
       <div className="flex justify-end mt-4 items-center">

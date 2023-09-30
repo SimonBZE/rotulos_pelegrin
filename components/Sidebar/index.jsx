@@ -102,9 +102,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/">
           <Image
-            width={300}
-            height={300}
+            width={200}
+            height={30}
+            priority={true} 
             src={"/assets/logo-oraculo.svg"}
+            className="h-auto w-full"
             alt="Logo"
             onClick={() => setSidebarOpen(false)}
           />
@@ -158,7 +160,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     // }
                   >
                     <Image
-                      className="icon-color"
+                      className="icon-color w-[20px] h-[20px]"
                       src={imagen}
                       alt={nombre}
                       width={20}

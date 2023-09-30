@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Print, Mounting, Paint, Locksmith, Cut, Sumaries } from "./components";
-import FieldDesign  from "./components/FieldArray";
+import FieldDesign from "./components/FieldArray";
 import { Budget } from "@/api";
 import * as Yup from "yup";
 import { useFormik, FormikProvider, FieldArray } from "formik";
@@ -53,6 +53,13 @@ const disenoSchema = Yup.object().shape({
     .min(0, "El precio no puede ser negativo"),
 });
 
+const newDesign = {
+  unidades: "",
+  horas: "",
+  precio: "",
+  imagenes: [],
+};
+
 const validationSchema = Yup.object({
   nombre: Yup.string().required("Debe añadir un nombre al presupuesto"),
   cliente: Yup.string().required("Debe añadir el nombre del cliente"),
@@ -65,21 +72,15 @@ const validationSchema = Yup.object({
   diseno: Yup.array().of(disenoSchema),
 });
 
-const newDesign = {
-  unidades: "",
-  horas: "",
-  precio: "",
-  imagenes: []
-};
-
 const budgetCtrl = new Budget();
 
 export default function NuevoProyecto() {
+
+  
+
   const [selectedService, setSelectedService] = useState(null);
 
   const [presupuesto, setPresupuesto] = useState("pr{iniciales}0001");
-
-
 
   const initialValues = {
     nombre: "",
@@ -109,7 +110,8 @@ export default function NuevoProyecto() {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (formData) => {
-      console.log(formData);
+      console.log(formData);    
+      // Ahora envía el formulario completo a tu API
       try {
         await budgetCtrl.createBudget(formData);
       } catch (error) {
@@ -273,6 +275,8 @@ export default function NuevoProyecto() {
                     ></textarea>
                   </div>
 
+                  
+
                   {/* Servicios */}
                   <div className="grid grid-cols-3 mt-5 auto-cols-auto gap-4 md:grid-cols-6 lg:grid-cols-6 xl:auto-cols-min">
                     {servicios.map(({ nombre, color, imagen }) => (
@@ -337,7 +341,7 @@ export default function NuevoProyecto() {
                           ))}
                           <button
                             type="button"
-                            onClick={() => arrayHelpers.push({})}
+                            onClick={() => arrayHelpers.push({...newDesign})}
                             className="mt-3 p-2 bg-blue-500 text-white"
                           >
                             Añadir Diseño

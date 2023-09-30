@@ -1,13 +1,16 @@
-import { Field, ErrorMessage } from "formik";
+import { Field, ErrorMessage, formik } from "formik";
 import { CardHeader } from ".";
+import UploadImage from "./UploadImage";
 
 const FieldDesign = ({ index, arrayHelpers, onRemove }) => {
-  const handleImageChange = (e, setFieldValue) => {
-    const files = Array.from(e.target.files);
-    const imageFiles = files.filter((file) =>
-      ["image/jpeg", "image/png", "image/gif"].includes(file.type)
-    );
-    setFieldValue(`diseno[${index}].imagenes`, imageFiles);
+  
+  const handleUploadSuccess = (result) => {
+    console.log("Imagen subida con éxito:", result);
+    // Aquí puedes hacer lo que necesites con el resultado, por ejemplo, guardar el ID de la imagen en tu estado o formulario.
+  };
+
+  const handleUploadError = (error) => {
+    console.error("Error al subir la imagen:", error);
   };
 
   return (
@@ -34,21 +37,13 @@ const FieldDesign = ({ index, arrayHelpers, onRemove }) => {
           />
           <ErrorMessage name={`diseno[${index}].unidades`} />
         </div>
-      </div>
+      </div>    
 
-      {/* Imagenes */}
-      <div>
-        <label>Imágenes:</label>
-        <input
-          type="file"
-          multiple
-          accept=".jpg,.png,.gif"
-          onChange={(e) =>
-            handleImageChange(e, arrayHelpers.form.setFieldValue)
-          }
-        />
-        <ErrorMessage name={`diseno[${index}].imagenes`} />
-      </div>
+      <div className="rounded-md bg-[#6E5FFF30] mt-5 p-3">
+      {/* ... (resto del código) */}
+      <UploadImage onUploadSuccess={handleUploadSuccess} onUploadError={handleUploadError} />
+      {/* ... (resto del código) */}
+    </div>
 
       <div className="flex justify-end mt-4 items-center">
         <Field
