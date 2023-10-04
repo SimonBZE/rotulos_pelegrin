@@ -8,16 +8,24 @@ const useImageUpload = () => {
 
   const handleFileChange = async (event, inputName, index = null) => {
     const files = Array.from(event.currentTarget.files);
+
+    // Lanza alerta en caso de que suba algo que no sea imagen
+    for (let i = 0; i < files.length; i++) {
+      const fileType = files[i]["type"];
+      const validImageTypes = ["image/gif", "image/jpeg", "image/png", "image/jpg"];
+      if (!validImageTypes.includes(fileType)) {
+        alert("Por favor, sube solo imágenes.");
+        return;
+      }
+    }
+
     const formData = new FormData();
 
     files.forEach((file) => {
       formData.append("files", file);
     });
-
-    const data = await imageApiCtrl.upload(formData)
     
-    // const newImageURLs = data.map((imagen) => imagen.id);
-    // setImageURL((prevImageURL) => [...prevImageURL, ...newImageURLs]);
+    const data = await imageApiCtrl.upload(formData)
 
     const newImageData = data.map((imagen) => ({
       id: imagen.id,
@@ -42,9 +50,10 @@ const useImageUpload = () => {
         };
       }
     });
+    
   };
   
-  return { images, handleFileChange, setImages  };
+  return { images, handleFileChange, setImages };
 };
 
 export default useImageUpload;

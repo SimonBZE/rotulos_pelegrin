@@ -1,58 +1,70 @@
 import { Field, ErrorMessage } from "formik";
-import ImageUploader from "@/components/common/ImageUploader";
-import { CardHeader } from "./CardHeader";
+import { CardHeader } from ".";
+import ImageViewer from "@/components/common/ImageViewer";
 
-export const DesignFormik = ({ index, data, onChange, onRemove }) => {
+export const Design = ({
+  index,
+  onRemove,
+  handleFileChange,
+  images,
+  handleImageRemove,
+  formik
+}) => {
   return (
     <div className="rounded-md bg-[#6E5FFF30] mt-5 p-3">
       <CardHeader title="Diseño" onRemove={onRemove} />
 
       <div className="flex items-center gap-2 justify-center">
-        <div className="flex w-9/12 flex-col">
-          <label htmlFor={`diseno[${index}].horas`} className="labels ">
-            Horas de diseño
-          </label>
+        <div className="flex flex-col ">
+          <label className="labels">Horas:</label>
           <Field
-            id={`diseno[${index}].horas`}
+            className={`formulario ${
+              formik?.touched?.diseno &&
+              formik?.touched?.diseno[index] &&
+              formik?.touched?.diseno[index]?.horas &&
+              formik?.errors?.diseno &&
+              formik?.errors?.diseno[index] &&
+              formik?.errors?.diseno[index]?.horas
+                ? "border-primary"
+                : ""
+            }`}
             type="number"
-            className="formulario"
             name={`diseno[${index}].horas`}
-            placeholder="Horas"
           />
-          <ErrorMessage name={`diseno[${index}].horas`} component="div" className="error-message" />
+          <ErrorMessage
+            name={`diseno[${index}].horas`}
+            component="div"
+            className="text-primary"
+          />
         </div>
-        <div>
-          <div className="flex flex-col items-end">
-            <label htmlFor={`diseno[${index}].unidades`} className="labels">
-              Unid.
-            </label>
-            <Field
-              type="number"
-              name={`diseno[${index}].unidades`}
-              className="formulario w-1/2"
-            />
-            <ErrorMessage name={`diseno[${index}].unidades`} component="div" className="error-message" />
-          </div>
+
+        <div className="flex w-9/12 flex-col items-end">
+          <label className="labels">Cantidad:</label>
+          <Field
+            className="formulario"
+            type="number"
+            name={`diseno[${index}].unidades`}
+          />
+          <ErrorMessage name={`diseno[${index}].unidades`} />
         </div>
       </div>
 
-      {/* Imagenes */}
-      {/* <ImageUploader 
-        onImagesChange={(imageURLs) => {
-          onChange('Diseno', index, 'imagenes', imageURLs);
-        }}
-      /> */}
+      <ImageViewer
+        serviceName="diseno"
+        index={index}
+        handleFileChange={handleFileChange}
+        images={images}
+        handleImageRemove={handleImageRemove}
+      />
 
       <div className="flex justify-end mt-4 items-center">
         <Field
+          className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
           type="number"
           name={`diseno[${index}].precio`}
-          className="formulario w-1/2"
         />
-        <ErrorMessage name={`diseno[${index}].precio`} component="div" className="error-message" />
-        <label htmlFor={`diseno[${index}].precio`} className="labels ml-2">
-          €
-        </label>
+        <label className="labels ml-2">€</label>
+        <ErrorMessage name={`diseno[${index}].precio`} />
       </div>
     </div>
   );

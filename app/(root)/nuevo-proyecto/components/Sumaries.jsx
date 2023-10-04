@@ -21,7 +21,7 @@ const multimedia = [
   },
 ];
 
-export const Sumaries = () => {
+export const Sumaries = ({ total, formik }) => {
   return (
     <div className="rounded-xl mt-5 py-5 px-5 md:p-10 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <h3 className="labels text-lg">Contenido</h3>
@@ -30,7 +30,7 @@ export const Sumaries = () => {
           <div key={nombre} className="text-center">
             <div
               className={`p-7 rounded-3xl flex justify-center`}
-              style={{background: color}}
+              style={{ background: color }}
             >
               <Image
                 src={imagen}
@@ -48,30 +48,49 @@ export const Sumaries = () => {
 
       <table className="table-fixed w-full mt-5">
         <tbody>
-          <tr>
-            <td className="labels">Diseño</td>
-            <td className="text-right labels">150 €</td>
-          </tr>
-          <tr>
-            <td className="labels">Impresión</td>
-            <td className="text-right labels">340 €</td>
-          </tr>
-          <tr>
-            <td className="labels">Corte</td>
-            <td className="text-right labels">140 €</td>
-          </tr>
-          <tr>
-            <td className="labels">Pintura</td>
-            <td className="text-right labels">340 €</td>
-          </tr>
-          <tr>
-            <td className="labels">Montaje</td>
-            <td className="text-right labels">400 €</td>
-          </tr>
+          {total.diseno > 0 && (
+            <tr>
+              <td className="labels">Diseño</td>
+              <td className="text-right labels">{total.diseno} €</td>
+            </tr>
+          )}
+
+          {total.impresion > 0 && (
+            <tr>
+              <td className="labels">Impresión</td>
+              <td className="text-right labels">{total.impresion} €</td>
+            </tr>
+          )}
+
+          {total.corte > 0 && (
+            <tr>
+              <td className="labels">Corte</td>
+              <td className="text-right labels">{total.corte} €</td>
+            </tr>
+          )}
+
+          {total.pintura > 0 && (
+            <tr>
+              <td className="labels">Pintura</td>
+              <td className="text-right labels">{total.pintura} €</td>
+            </tr>
+          )}
+
+          {total.montaje > 0 && (
+            <tr>
+              <td className="labels">Montaje</td>
+              <td className="text-right labels">{total.montaje} €</td>
+            </tr>
+          )}
+
+          {formik.values.puesta_en_marcha && <tr>
+              <td className="labels">Puesta en marcha</td>
+              <td className="text-right labels">50 €</td>
+            </tr>}
         </tbody>
       </table>
       <div className="text-right mt-6">
-        <p className="labels text-base">TOTAL: 2300 €</p>
+        <p className="labels text-base">TOTAL: {total.totalGeneral + (formik.values.puesta_en_marcha ? 50 : 0)} €</p>
       </div>
     </div>
   );

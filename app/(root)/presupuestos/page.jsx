@@ -1,9 +1,7 @@
 "use client";
 
-import { useFormik, FormikProvider, FieldArray, ErrorMessage } from "formik";
+import { useFormik, FormikProvider, FieldArray } from "formik";
 import * as Yup from "yup";
-import { Budget } from "@/api";
-import { useEffect, useState } from "react";
 import { Dinero } from "./components/Dinero";
 import useImageUpload from "@/hooks/useImageUpload";
 import ImageGrid from "@/components/common/ImageGrid";
@@ -53,7 +51,7 @@ const initialValues = {
 };
 
 const page = () => {
-  const { images, handleFileChange, setImages } = useImageUpload();
+  const { images, handleFileChange, setImages, loader } = useImageUpload();
 
   const handleImageRemove = (inputName, index, subIndex = null) => {
     setImages((prevImages) => {
@@ -73,11 +71,7 @@ const page = () => {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // const data = {
-      //   name: values.name,
-      //   cover: imageURL, // Aquí usamos la URL o el ID de la imagen
-      // };
-
+      
       values.cover = images.cover;
       values.dinero.forEach((item, index) => {
         item.imagenes = images.dinero[index];
@@ -147,6 +141,7 @@ const page = () => {
                   key={index}
                   onRemove={() => arrayHelpers.remove(index)}
                   handleFileChange={handleFileChange}
+                  loader={loader}
                   images={images}
                   setImages={setImages}
                   handleImageRemove={handleImageRemove}

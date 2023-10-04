@@ -1,12 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Print, Mounting, Paint, Locksmith, Cut, Sumaries } from "./components";
-import FieldDesign from "./components/FieldArray";
+import {
+  Print,
+  Mounting,
+  Paint,
+  Locksmith,
+  Cut,
+  Sumaries,
+  Design,
+  Contenido,
+} from "./components";
 import { Budget } from "@/api";
-import * as Yup from "yup";
+import {
+  initialValues,
+  disenoSchema,
+  printSchema,
+  cutSchema,
+  newDesign,
+  newPrint,
+  newCut,
+  validationSchema,
+} from "./utils/formikValidations";
 import { useFormik, FormikProvider, FieldArray } from "formik";
+import useImageUpload from "@/hooks/useImageUpload";
 
 const servicios = [
   {
@@ -41,77 +59,56 @@ const servicios = [
   },
 ];
 
-const disenoSchema = Yup.object().shape({
-  horas: Yup.number()
-    .required("Horas es requerido")
-    .min(1, "Debe ser al menos 1 hora"),
-  unidades: Yup.number()
-    .required("Unidades es requerido")
-    .min(1, "Debe ser al menos 1 unidad"),
-  precio: Yup.number()
-    .required("Precio es requerido")
-    .min(0, "El precio no puede ser negativo"),
-});
-
-const newDesign = {
-  unidades: "",
-  horas: "",
-  precio: "",
-  imagenes: [],
-};
-
-const validationSchema = Yup.object({
-  nombre: Yup.string().required("Debe añadir un nombre al presupuesto"),
-  cliente: Yup.string().required("Debe añadir el nombre del cliente"),
-  contacto: Yup.number().required("Debe añadir un número de contacto"),
-  aprovacion: Yup.boolean(),
-  prioridad: Yup.string().required("Debe elegir el nivel de prioridad"),
-  fecha: Yup.date().required("Debe establecer una fecha de entrega"),
-  descripcion: Yup.string(),
-  puesta_en_marcha: Yup.boolean(),
-  diseno: Yup.array().of(disenoSchema),
-});
-
 const budgetCtrl = new Budget();
 
 export default function NuevoProyecto() {
+  const { images, handleFileChange, setImages } = useImageUpload({});
 
-  
+  const [total, setTotal] = useState({
+    diseno: 0,
+    impresion: 0,
+    corte: 0,
+    pintura: 0,
+    montaje: 0,
+    totalGeneral: 0,
+  });
 
-  const [selectedService, setSelectedService] = useState(null);
-
-  const [presupuesto, setPresupuesto] = useState("pr{iniciales}0001");
-
-  const initialValues = {
-    nombre: "",
-    cliente: "",
-    contacto: "",
-    aprovacion: false,
-    prioridad: "",
-    fecha: "",
-    descripcion: "",
-    puesta_en_marcha: false,
-    diseno: [],
-    impresion: [],
-    corte: [],
-    cerrajeria: [],
-    pintura: [],
-    montaje: [],
+  const handleImageRemove = (inputName, index, subIndex = null) => {
+    setImages((prevImages) => {
+      const newImages = { ...prevImages };
+      if (subIndex !== null) {
+        // Eliminar una imagen específica de un componente hijo
+        newImages[inputName][index].splice(subIndex, 1);
+      } else {
+        // Eliminar todas las imágenes de un componente hijo
+        newImages[inputName]?.splice(index, 1);
+      }
+      return newImages;
+    });
   };
 
+  const [presupuesto, setPresupuesto] = useState();
+
   const today = new Date().toISOString().split("T")[0];
-
-  // const [aprovacion, setAprovacion] = useState(initialValues.aprovacion)
-  // const submit = budgetCtrl.createBudget(formData);
-
-  // handleSubmit(formData, url)
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (formData) => {
-      console.log(formData);    
+      console.log(formData);
       // Ahora envía el formulario completo a tu API
+      formData.diseno.forEach((item, index) => {
+        item.imagenes = images.diseno[index];
+      });
+
+      formData.impresion.forEach((item, index) => {
+        item.imagenes = images.impresion[index];
+      });
+
+      formData.corte.forEach((item, index) => {
+        item.imagenes = images.corte[index];
+      });
+
       try {
         await budgetCtrl.createBudget(formData);
       } catch (error) {
@@ -120,6 +117,19 @@ export default function NuevoProyecto() {
     },
   });
 
+  const updatePresupuesto = () => {
+    let newPresupuesto = "";
+
+    if (formik.values.diseno.length > 0) newPresupuesto += "D";
+    if (formik.values.impresion.length > 0) newPresupuesto += "I";
+    if (formik.values.corte.length > 0) newPresupuesto += "C";
+    if (formik.values.cerrajeria.length > 0) newPresupuesto += "CE";
+    if (formik.values.pintura.length > 0) newPresupuesto += "P";
+    if (formik.values.montaje.length > 0) newPresupuesto += "M";
+
+    setPresupuesto(newPresupuesto);
+  };
+
   // Agrega el servicio seleccionado en el FormArray de formik
   const handleServiceClick = (serviceName) => {
     switch (serviceName) {
@@ -127,10 +137,48 @@ export default function NuevoProyecto() {
         formik.setFieldValue("diseno", [...formik.values.diseno, newDesign]);
         break;
       // Añade casos similares para otros servicios si es necesario.
+      case "Impresión":
+        formik.setFieldValue("impresion", [
+          ...formik.values.impresion,
+          newPrint,
+        ]);
+        break;
+
+      case "Corte":
+        formik.setFieldValue("corte", [...formik.values.corte, newCut]);
+
       default:
         break;
     }
   };
+
+  useEffect(() => {
+    let totalDesign = formik.values.diseno.reduce(
+      (acc, curr) => acc + (curr.precio || 0),
+      0
+    );
+    let totalPrint = formik.values.impresion.reduce(
+      (acc, curr) => acc + (curr.precio || 0),
+      0
+    );
+    let totalCut = formik.values.corte.reduce(
+      (acc, curr) => acc + (curr.precio || 0),
+      0
+    );
+
+    // Suma los totales de cada componente para obtener el total general
+    let totalSum = totalDesign + totalPrint + totalCut;
+
+    // Actualiza el estado con el total
+    setTotal({
+      ...total,
+      diseno: totalDesign,
+      impresion: totalPrint,
+      corte: totalCut,
+      totalGeneral: totalSum,
+    });
+    updatePresupuesto();
+  }, [formik.values]);
 
   return (
     <>
@@ -138,7 +186,7 @@ export default function NuevoProyecto() {
         <form onSubmit={formik.handleSubmit}>
           <div className="2xl:h-screen 2xl:flex">
             <div className="2xl:flex-1 2xl:flex 2xl:overflow-hidden">
-              <div className="2xl:flex-1 2xl:overflow-y-scroll">
+              <div className="p-3 2xl:flex-1 2xl:overflow-y-scroll">
                 <div className="mt-5 px-5">
                   <div>
                     <h2 className="text-title-md font-semibold text-black dark:text-white">
@@ -275,8 +323,6 @@ export default function NuevoProyecto() {
                     ></textarea>
                   </div>
 
-                  
-
                   {/* Servicios */}
                   <div className="grid grid-cols-3 mt-5 auto-cols-auto gap-4 md:grid-cols-6 lg:grid-cols-6 xl:auto-cols-min">
                     {servicios.map(({ nombre, color, imagen }) => (
@@ -330,31 +376,77 @@ export default function NuevoProyecto() {
                     <FieldArray
                       name="diseno"
                       render={(arrayHelpers) => (
-                        <div>
+                        <>
                           {formik.values.diseno.map((_, index) => (
-                            <FieldDesign
+                            <Design
                               index={index}
                               arrayHelpers={arrayHelpers}
                               key={index}
-                              onRemove={() => arrayHelpers.remove(index)}
+                              formik={formik}
+                              onRemove={() => {
+                                arrayHelpers.remove(index);
+                                handleImageRemove("diseno", index);
+                              }}
+                              handleFileChange={handleFileChange}
+                              images={images}
+                              handleImageRemove={handleImageRemove}
                             />
                           ))}
-                          <button
-                            type="button"
-                            onClick={() => arrayHelpers.push({...newDesign})}
-                            className="mt-3 p-2 bg-blue-500 text-white"
-                          >
-                            Añadir Diseño
-                          </button>
-                        </div>
+                        </>
+                      )}
+                    />
+
+                    <FieldArray
+                      name="impresion"
+                      render={(arrayHelpers) => (
+                        <>
+                          {formik.values.impresion.map((_, index) => (
+                            <Print
+                              index={index}
+                              arrayHelpers={arrayHelpers}
+                              key={index}
+                              onRemove={() => {
+                                arrayHelpers.remove(index);
+                                handleImageRemove("impresion", index);
+                              }}
+                              handleFileChange={handleFileChange}
+                              images={images}
+                              handleImageRemove={handleImageRemove}
+                            />
+                          ))}
+                        </>
+                      )}
+                    />
+
+                    <FieldArray
+                      name="corte"
+                      render={(arrayHelpers) => (
+                        <>
+                          {formik.values.corte.map((_, index) => (
+                            <Cut
+                              index={index}
+                              arrayHelpers={arrayHelpers}
+                              key={index}
+                              onRemove={() => {
+                                arrayHelpers.remove(index);
+                                handleImageRemove("corte", index);
+                              }}
+                              handleFileChange={handleFileChange}
+                              images={images}
+                              handleImageRemove={handleImageRemove}
+                            />
+                          ))}
+                        </>
                       )}
                     />
                   </div>
+
+                  <Contenido />
                 </div>
               </div>
             </div>
-            <div className="2xl:w-94">
-              <Sumaries />
+            <div className="2xl:w-94 p-3">
+              <Sumaries total={total} formik={formik} />
               <button
                 type="submit"
                 className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "

@@ -1,7 +1,9 @@
-import ImageUploader from "@/components/common/ImageUploader";
-import { CardHeader } from "./CardHeader";
+import { Field, ErrorMessage } from "formik";
+import { CardHeader } from ".";
+import ImageGrid from "@/components/common/ImageGrid";
+import ImageViewer from "@/components/common/ImageViewer";
 
-export const Cut = ({ index, data, onChange, onRemove }) => {
+export const Cut = ({ index, onRemove, handleFileChange, images, handleImageRemove }) => {
   return (
     <div className="rounded-md bg-[#FF5F5F30] mt-5 p-3">
       <CardHeader title={"corte"} onRemove={onRemove} />
@@ -11,15 +13,10 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
           Nombre
         </label>
 
-        <input
+        <Field
           type="text"
-          id="nombre"
           className="formulario max-w-full"
-          name={`corte`}
-          data-index={index}
-          data-field="nombre"
-          value={data.nombre || ""}
-          onChange={(e) => onChange("corte", index, "nombre", e.target.value)}
+          name={`corte[${index}].nombre`}
         />
       </div>
       <div className="flex justify-between mt-5">
@@ -27,43 +24,30 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
           <label className="labels mr-2" htmlFor="ancho">
             Ancho
           </label>
-          <input
+          <Field
             type="number"
-            id="ancho"
             className="formulario w-14"
-            name="corte"
-            data-index={index}
-            value={data.ancho || ""}
-            onChange={(e) => onChange("corte", index, "ancho", e.target.value)}
+            name={`corte[${index}].ancho`}
           />
         </div>
         <div>
           <label className="labels mr-2" htmlFor="alto">
             Alto
           </label>
-          <input
+          <Field
             type="number"
-            id="alto"
             className="formulario w-14"
-            name="corte"
-            data-index={index}
-            value={data.alto || ""}
-            onChange={(e) => onChange("corte", index, "alto", e.target.value)}
+            name={`corte[${index}].alto`}
           />
         </div>
         <div>
           <label className="labels mr-2" htmlFor="profundo">
             Profundo
           </label>
-          <input
+          <Field
             type="number"
-            id="profundo"
             className="formulario w-14"
-            name="corte"
-            value={data.profundo || ""}
-            onChange={(e) =>
-              onChange("corte", index, "profundo", e.target.value)
-            }
+            name={`corte[${index}].profundo`}
           />
         </div>
       </div>
@@ -71,12 +55,10 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
         <label className="labels" htmlFor="material">
           Material
         </label>
-        <select
-          name="corte"
+        <Field as="select"
           id="material"
           className="formulario"
-          value={data.material || ""}
-          onChange={(e) => onChange("corte", index, "material", e.target.value)}
+          name={`corte[${index}].material`}
         >
           <option disabled value="default">
             Selecciona uno
@@ -84,21 +66,17 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
           <option value="Vinilo x5 pro master">Vinilo x5 pro master</option>
           <option value="Vinilo x7 pro master">Vinilo x6 pro master</option>
           <option value="Vinilo x8 pro master">Vinilo x7 pro master</option>
-        </select>
+        </Field>
       </div>
 
       <div className="flex flex-col mt-5">
         <label className="labels" htmlFor="laminacion">
           Laminación
         </label>
-        <select
-          name="corte"
+        <Field  as="select"
           id="laminacion"
           className="formulario"
-          value={data.laminacion || ""}
-          onChange={(e) =>
-            onChange("corte", index, "laminacion", e.target.value)
-          }
+          name={`corte[${index}].laminacion`}
         >
           <option disabled value="default">
             Selecciona uno
@@ -106,29 +84,27 @@ export const Cut = ({ index, data, onChange, onRemove }) => {
           <option value="Vinilo x5 pro master">5 años</option>
           <option value="Vinilo x6 pro master">6 años</option>
           <option value="Vinilo x7 pro master">7 años</option>
-        </select>
+        </Field>
       </div>
 
       {/* Imagenes */}
-      <ImageUploader
-        onImagesChange={(imageURLs) => {
-          onChange("corte", index, "imagenes", imageURLs);
-        }}
+      <ImageViewer
+        serviceName="corte"
+        index={index}
+        handleFileChange={handleFileChange}
+        images={images}
+        handleImageRemove={handleImageRemove}
       />
 
       {/* Precio */}
       <div className="flex justify-end mt-4 items-center">
-        <input
+        <Field
           className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
           type="number"
-          name={`corte`}
-          data-index={index}
-          data-field="precio"
-          value={data.precio || ""}
-          onChange={(e) => onChange("corte", index, "precio", e.target.value)}
+          name={`corte[${index}].precio`}
           placeholder="Precio"
         />
-        <label htmlFor="unidades ml-2" className="labels ml-2">
+        <label htmlFor="precio" className="labels ml-2">
           €
         </label>
       </div>
