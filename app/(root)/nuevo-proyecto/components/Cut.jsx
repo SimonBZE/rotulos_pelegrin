@@ -1,9 +1,16 @@
 import { Field, ErrorMessage } from "formik";
-import { CardHeader } from ".";
+import { CardHeader, Pricing } from ".";
 import ImageGrid from "@/components/common/ImageGrid";
 import ImageViewer from "@/components/common/ImageViewer";
 
-export const Cut = ({ index, onRemove, handleFileChange, images, handleImageRemove }) => {
+export const Cut = ({
+  index,
+  onRemove,
+  handleFileChange,
+  images,
+  handleImageRemove,
+  formik,
+}) => {
   return (
     <div className="rounded-md bg-[#FF5F5F30] mt-5 p-3">
       <CardHeader title={"corte"} onRemove={onRemove} />
@@ -15,7 +22,11 @@ export const Cut = ({ index, onRemove, handleFileChange, images, handleImageRemo
 
         <Field
           type="text"
-          className="formulario max-w-full"
+          className={`formulario max-w-full ${
+            formik.touched.corte?.[index]?.nombre && formik.errors.corte?.[index]?.nombre
+              ? "errores"
+              : ""
+          }`}
           name={`corte[${index}].nombre`}
         />
       </div>
@@ -26,7 +37,11 @@ export const Cut = ({ index, onRemove, handleFileChange, images, handleImageRemo
           </label>
           <Field
             type="number"
-            className="formulario w-14"
+            className={`formulario w-14 ${
+              formik.touched.corte?.[index]?.ancho && formik.errors.corte?.[index]?.ancho
+                ? "errores"
+                : ""
+            }`}
             name={`corte[${index}].ancho`}
           />
         </div>
@@ -36,18 +51,12 @@ export const Cut = ({ index, onRemove, handleFileChange, images, handleImageRemo
           </label>
           <Field
             type="number"
-            className="formulario w-14"
+            className={`formulario w-14 ${
+              formik.touched.corte?.[index]?.alto && formik.errors.corte?.[index]?.alto
+                ? "errores"
+                : ""
+            }`}
             name={`corte[${index}].alto`}
-          />
-        </div>
-        <div>
-          <label className="labels mr-2" htmlFor="profundo">
-            Profundo
-          </label>
-          <Field
-            type="number"
-            className="formulario w-14"
-            name={`corte[${index}].profundo`}
           />
         </div>
       </div>
@@ -55,35 +64,20 @@ export const Cut = ({ index, onRemove, handleFileChange, images, handleImageRemo
         <label className="labels" htmlFor="material">
           Material
         </label>
-        <Field as="select"
+        <Field
+          as="select"
           id="material"
-          className="formulario"
+          className={`formulario ${
+            formik.touched.corte?.[index]?.material && formik.errors.corte?.[index]?.material
+              ? "errores"
+              : ""
+          }`}
           name={`corte[${index}].material`}
         >
-          <option disabled value="default">
-            Selecciona uno
-          </option>
+          <option defaultValue hidden>Selecciona uno</option>
           <option value="Vinilo x5 pro master">Vinilo x5 pro master</option>
           <option value="Vinilo x7 pro master">Vinilo x6 pro master</option>
           <option value="Vinilo x8 pro master">Vinilo x7 pro master</option>
-        </Field>
-      </div>
-
-      <div className="flex flex-col mt-5">
-        <label className="labels" htmlFor="laminacion">
-          Laminación
-        </label>
-        <Field  as="select"
-          id="laminacion"
-          className="formulario"
-          name={`corte[${index}].laminacion`}
-        >
-          <option disabled value="default">
-            Selecciona uno
-          </option>
-          <option value="Vinilo x5 pro master">5 años</option>
-          <option value="Vinilo x6 pro master">6 años</option>
-          <option value="Vinilo x7 pro master">7 años</option>
         </Field>
       </div>
 
@@ -97,17 +91,9 @@ export const Cut = ({ index, onRemove, handleFileChange, images, handleImageRemo
       />
 
       {/* Precio */}
-      <div className="flex justify-end mt-4 items-center">
-        <Field
-          className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
-          type="number"
-          name={`corte[${index}].precio`}
-          placeholder="Precio"
-        />
-        <label htmlFor="precio" className="labels ml-2">
-          €
-        </label>
-      </div>
+      
+      <Pricing index={index} service={"corte"} formik={formik} />
+      
     </div>
   );
 };

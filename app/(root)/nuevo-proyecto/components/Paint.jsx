@@ -1,7 +1,16 @@
-import ImageUploader from "@/components/common/ImageUploader";
+import { Field, ErrorMessage } from "formik";
 import { CardHeader } from "./CardHeader";
+import ImageViewer from "@/components/common/ImageViewer";
+import { Pricing } from ".";
 
-export const Paint = ({ index, data, onChange, onRemove }) => {
+export const Paint = ({
+  index,
+  onRemove,
+  handleFileChange,
+  images,
+  handleImageRemove,
+  formik,
+}) => {
   return (
     <div className="rounded-md bg-[#8AC11130] mt-5 p-3">
       <CardHeader title={"Pintura"} onRemove={onRemove} />
@@ -11,17 +20,15 @@ export const Paint = ({ index, data, onChange, onRemove }) => {
           Nombre
         </label>
 
-        <input
+        <Field
           type="text"
           id="nombre"
-          className="formulario"
-          name={`pintura`}
-          data-index={index}
-          data-field="nombre"
-          value={data.nombre || ""}
-          onChange={(e) =>
-            onChange("pintura", index, "nombre", e.target.value)
-          }
+          className={`formulario ${
+            formik.touched.pintura?.[index]?.nombre && formik.errors.pintura?.[index]?.nombre
+              ? "errores"
+              : ""
+          }`}
+          name={`pintura[${index}].nombre`}
         />
       </div>
       <div className="flex justify-between mt-5">
@@ -29,118 +36,79 @@ export const Paint = ({ index, data, onChange, onRemove }) => {
           <label className="labels mr-2" htmlFor="ancho">
             Ancho
           </label>
-          <input
+          <Field
             type="number"
             id="ancho"
-            className="formulario w-14"
-            name="pintura"
-            data-index={index}
-            value={data.ancho || ""}
-            onChange={(e) =>
-              onChange("pintura", index, "ancho", e.target.value)
-            }
+            className={`formulario w-14 ${
+              formik.touched.pintura?.[index]?.ancho && formik.errors.pintura?.[index]?.ancho
+                ? "errores"
+                : ""
+            }`}
+            name={`pintura[${index}].ancho`}
           />
         </div>
         <div>
           <label className="labels mr-2" htmlFor="alto">
             Alto
           </label>
-          <input
+          <Field
             type="number"
             id="alto"
-            className="formulario w-14"
-            name="pintura"
-            data-index={index}
-            value={data.alto || ""}
-            onChange={(e) =>
-              onChange("pintura", index, "alto", e.target.value)
-            }
+            className={`formulario w-14 ${
+              formik.touched.pintura?.[index]?.alto && formik.errors.pintura?.[index]?.alto
+                ? "errores"
+                : ""
+            }`}
+            name={`pintura[${index}].alto`}
           />
         </div>
-        <div>
-          <label className="labels mr-2" htmlFor="profundo">
-            Profundo
-          </label>
-          <input
-            type="number"
-            id="profundo"
-            className="formulario w-14"
-            name="pintura"
-            value={data.profundo || ""}
-            onChange={(e) =>
-              onChange("pintura", index, "profundo", e.target.value)
-            }
-          />
-        </div>
+      </div>
+      <div className="flex items-center gap-2 mt-5">
+        <label className="labels" htmlFor="lijado">Lijado:</label>
+        <Field 
+          type="checkbox"
+          id="lijado"
+          className={`w-9 h-9 accent-primary border-none ${
+            formik.touched.pintura?.[index]?.lijado && formik.errors.pintura?.[index]?.lijado
+              ? "errores"
+              : ""
+          }`}
+          name={`pintura[${index}].lijado`}
+        />
       </div>
       <div className="flex flex-col mt-5">
         <label className="labels" htmlFor="material">
           Material
         </label>
-        <select
-          name="pintura"
+        <Field
+          as="select"
           id="material"
-          className="formulario"
-          value={data.material || ""}
-          onChange={(e) =>
-            onChange("pintura", index, "material", e.target.value)
-          }
+          className={`formulario ${
+            formik.touched.pintura?.[index]?.material && formik.errors.pintura?.[index]?.material
+              ? "errores"
+              : ""
+          }`}
+          name={`pintura[${index}].material`}
         >
-          <option disabled value="default">
+          <option hidden defaultValue>
             Selecciona uno
           </option>
           <option value="Vinilo x5 pro master">Vinilo x5 pro master</option>
           <option value="Vinilo x7 pro master">Vinilo x6 pro master</option>
           <option value="Vinilo x8 pro master">Vinilo x7 pro master</option>
-        </select>
+        </Field>
       </div>
-
-      <div className="flex flex-col mt-5">
-        <label className="labels" htmlFor="laminacion">
-          Laminación
-        </label>
-        <select
-          name="pintura"
-          id="laminacion"
-          className="formulario"
-          value={data.laminacion || ""}
-          onChange={(e) =>
-            onChange("pintura", index, "laminacion", e.target.value)
-          }
-        >
-          <option disabled value="default">
-            Selecciona uno
-          </option>
-          <option value="Vinilo x5 pro master">5 años</option>
-          <option value="Vinilo x6 pro master">6 años</option>
-          <option value="Vinilo x7 pro master">7 años</option>
-        </select>
-      </div>
-
-          {/* Imagenes */}
-          <ImageUploader 
-        onImagesChange={(imageURLs) => {
-          onChange('pintura', index, 'imagenes', imageURLs);
-        }}
+      {/* Imagenes */}
+      <ImageViewer
+        serviceName="pintura"
+        index={index}
+        handleFileChange={handleFileChange}
+        images={images}
+        handleImageRemove={handleImageRemove}
       />
 
-        {/* Precio */}
-      <div className="flex justify-end mt-4 items-center">
-        <input
-          className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
-          type="number"
-          name={`pintura`}
-          data-index={index}
-          data-field="precio"
-          value={data.precio || ""}
-          onChange={(e) => onChange("pintura", index, "precio", e.target.value)}
-          placeholder="Precio"
-        />
-        <label htmlFor="unidades ml-2" className="labels ml-2">
-          €
-        </label>
-      </div>
-
+      {/* Precio */}
+      <Pricing index={index} service={"pintura"} formik={formik} />
     </div>
   );
 };

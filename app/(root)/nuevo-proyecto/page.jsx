@@ -15,16 +15,17 @@ import {
 import { Budget } from "@/api";
 import {
   initialValues,
-  disenoSchema,
-  printSchema,
-  cutSchema,
+  newPaint,
+  newLockSmith,
   newDesign,
   newPrint,
   newCut,
+  newMounting,
   validationSchema,
 } from "./utils/formikValidations";
 import { useFormik, FormikProvider, FieldArray } from "formik";
 import useImageUpload from "@/hooks/useImageUpload";
+import { useFilesUpload } from "@/hooks/useFilesUpload";
 
 const servicios = [
   {
@@ -43,7 +44,7 @@ const servicios = [
     imagen: "./assets/Corte.svg",
   },
   {
-    nombre: "Cerrajería",
+    nombre: "Cerrajeria",
     color: "#00D7E2",
     imagen: "./assets/Cerrajeria.svg",
   },
@@ -62,7 +63,11 @@ const servicios = [
 const budgetCtrl = new Budget();
 
 export default function NuevoProyecto() {
-  const { images, handleFileChange, setImages } = useImageUpload({});
+  const { images, handleFileChange, setImages, handleImageRemove } =
+    useImageUpload({});
+  const { files, handleMultimediaChange, loading, setFiles } = useFilesUpload(
+    {}
+  );
 
   const [total, setTotal] = useState({
     diseno: 0,
@@ -70,22 +75,9 @@ export default function NuevoProyecto() {
     corte: 0,
     pintura: 0,
     montaje: 0,
+    cerrajeria: 0,
     totalGeneral: 0,
   });
-
-  const handleImageRemove = (inputName, index, subIndex = null) => {
-    setImages((prevImages) => {
-      const newImages = { ...prevImages };
-      if (subIndex !== null) {
-        // Eliminar una imagen específica de un componente hijo
-        newImages[inputName][index].splice(subIndex, 1);
-      } else {
-        // Eliminar todas las imágenes de un componente hijo
-        newImages[inputName]?.splice(index, 1);
-      }
-      return newImages;
-    });
-  };
 
   const [presupuesto, setPresupuesto] = useState();
 
@@ -95,19 +87,35 @@ export default function NuevoProyecto() {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (formData) => {
-      console.log(formData);
+      // console.log(formData);
       // Ahora envía el formulario completo a tu API
       formData.diseno.forEach((item, index) => {
-        item.imagenes = images.diseno[index];
+        item.imagenes = images.diseno?.[index] || [];
       });
 
       formData.impresion.forEach((item, index) => {
-        item.imagenes = images.impresion[index];
+        item.imagenes = images.impresion?.[index] || [];
       });
 
       formData.corte.forEach((item, index) => {
-        item.imagenes = images.corte[index];
+        item.imagenes = images.corte?.[index] || [];
       });
+
+      formData.cerrajeria.forEach((item, index) => {
+        item.imagenes = images.cerrajeria?.[index] || [];
+      });
+
+      formData.pintura.forEach((item, index) => {
+        item.imagenes = images.pintura?.[index] || [];
+      });
+
+      formData.montaje.forEach((item, index) => {
+        item.imagenes = images.montaje?.[index] || [];
+      });
+
+      if (files.videos) {
+        formData.videos = [].concat(...files.videos);
+      }
 
       try {
         await budgetCtrl.createBudget(formData);
@@ -146,6 +154,22 @@ export default function NuevoProyecto() {
 
       case "Corte":
         formik.setFieldValue("corte", [...formik.values.corte, newCut]);
+        break;
+
+      case "Cerrajeria":
+        formik.setFieldValue("cerrajeria", [
+          ...formik.values.cerrajeria,
+          newLockSmith,
+        ]);
+        break;
+
+      case "Pintura":
+        formik.setFieldValue("pintura", [...formik.values.pintura, newPaint]);
+        break;
+
+      case "Montaje":
+        formik.setFieldValue("montaje", [...formik.values.montaje, newMounting])
+        break;
 
       default:
         break;
@@ -182,9 +206,10 @@ export default function NuevoProyecto() {
 
   return (
     <>
+      {/* {JSON.stringify(formik.errors)} */}
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
-          <div className="2xl:h-screen 2xl:flex">
+          <div className="2xl:h-[calc(100vh-120px)] 2xl:flex mt-[-40px]">
             <div className="2xl:flex-1 2xl:flex 2xl:overflow-hidden">
               <div className="p-3 2xl:flex-1 2xl:overflow-y-scroll">
                 <div className="mt-5 px-5">
@@ -205,7 +230,7 @@ export default function NuevoProyecto() {
                         <input
                           className={`formulario ${
                             formik.touched.nombre && formik.errors.nombre
-                              ? "border-danger"
+                              ? "errores"
                               : ""
                           }`}
                           type="text"
@@ -238,7 +263,7 @@ export default function NuevoProyecto() {
                         type="text"
                         className={`formulario ${
                           formik.touched.cliente && formik.errors.cliente
-                            ? "border-danger"
+                            ? "errores"
                             : ""
                         }`}
                         placeholder="Cliente"
@@ -251,7 +276,7 @@ export default function NuevoProyecto() {
                         type="string"
                         className={`formulario ${
                           formik.touched.contacto && formik.errors.contacto
-                            ? "border-danger"
+                            ? "errores"
                             : ""
                         }`}
                         placeholder="Contacto"
@@ -268,7 +293,7 @@ export default function NuevoProyecto() {
                       <select
                         className={`formulario ${
                           formik.touched.prioridad && formik.errors.prioridad
-                            ? "border-danger"
+                            ? "errores"
                             : ""
                         }`}
                         name="prioridad"
@@ -293,7 +318,12 @@ export default function NuevoProyecto() {
                     <input
                       id="fecha"
                       min={today}
-                      className="custom-input-date custom-input-date-1 rounded border-[1.5px] border-stroke bg-transparent py-2 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      // "custom-input-date custom-input-date-1 rounded border-[1.5px] border-stroke bg-transparent py-2 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                      className={`formulario custom-input-date custom-input-date-1 w-40 rounded ${
+                        formik.touched.fecha && formik.errors.fecha
+                          ? "errores"
+                          : ""
+                      }`}
                       type="date"
                       name="fecha"
                       value={formik.values.fecha}
@@ -314,7 +344,7 @@ export default function NuevoProyecto() {
                       placeholder="Describe el proyecto"
                       className={`formulario ${
                         formik.touched.descripcion && formik.errors.descripcion
-                          ? "border-danger"
+                          ? "errores"
                           : ""
                       }`}
                       name="descripcion"
@@ -405,6 +435,7 @@ export default function NuevoProyecto() {
                               index={index}
                               arrayHelpers={arrayHelpers}
                               key={index}
+                              formik={formik}
                               onRemove={() => {
                                 arrayHelpers.remove(index);
                                 handleImageRemove("impresion", index);
@@ -427,6 +458,7 @@ export default function NuevoProyecto() {
                               index={index}
                               arrayHelpers={arrayHelpers}
                               key={index}
+                              formik={formik}
                               onRemove={() => {
                                 arrayHelpers.remove(index);
                                 handleImageRemove("corte", index);
@@ -439,9 +471,88 @@ export default function NuevoProyecto() {
                         </>
                       )}
                     />
+
+                    <FieldArray
+                      name="cerrajeria"
+                      render={(arrayHelpers) => (
+                        <>
+                          {formik.values.cerrajeria.map((_, index) => (
+                            <Locksmith
+                              index={index}
+                              arrayHelpers={arrayHelpers}
+                              key={index}
+                              formik={formik}
+                              onRemove={() => {
+                                arrayHelpers.remove(index);
+                                handleImageRemove("cerrajeria", index);
+                              }}
+                              handleFileChange={handleFileChange}
+                              images={images}
+                              handleImageRemove={handleImageRemove}
+                              FieldArray={FieldArray}
+                            />
+                          ))}
+                        </>
+                      )}
+                    />
+
+                    <FieldArray
+                      name="pintura"
+                      render={(arrayHelpers) => (
+                        <>
+                          {formik.values.pintura.map((_, index) => (
+                            <Paint
+                              index={index}
+                              arrayHelpers={arrayHelpers}
+                              key={index}
+                              formik={formik}
+                              onRemove={() => {
+                                arrayHelpers.remove(index);
+                                handleImageRemove("pintura", index);
+                              }}
+                              handleFileChange={handleFileChange}
+                              images={images}
+                              handleImageRemove={handleImageRemove}
+                              FieldArray={FieldArray}
+                            />
+                          ))}
+                        </>
+                      )}
+                    />
+
+                    <FieldArray
+                      name="montaje"
+                      render={(arrayHelpers) => (
+                        <>
+                          {formik.values.montaje.map((_, index) => (
+                            <Mounting
+                              index={index}
+                              arrayHelpers={arrayHelpers}
+                              key={index}
+                              formik={formik}
+                              onRemove={() => {
+                                arrayHelpers.remove(index);
+                                handleImageRemove("montaje", index);
+                              }}
+                              handleFileChange={handleFileChange}
+                              images={images}
+                              handleImageRemove={handleImageRemove}
+                              FieldArray={FieldArray}
+                            />
+                          ))}
+                        </>
+                      )}
+                    />
+
                   </div>
 
-                  <Contenido />
+                  <Contenido
+                    handleMultimediaChange={handleMultimediaChange}
+                    files={files}
+                    loading={loading}
+                    formik={formik}
+                    setFiles={setFiles}
+                  />
                 </div>
               </div>
             </div>

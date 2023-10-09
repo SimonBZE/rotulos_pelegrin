@@ -1,7 +1,16 @@
-import ImageUploader from "@/components/common/ImageUploader";
-import { CardHeader } from "./CardHeader";
+import { Field, ErrorMessage } from "formik";
+import { CardHeader, Pricing } from ".";
+import ImageViewer from "@/components/common/ImageViewer";
 
-export const Locksmith = ({ index, data, onChange, onRemove }) => {
+export const Locksmith = ({
+  index,
+  onRemove,
+  handleFileChange,
+  images,
+  handleImageRemove,
+  FieldArray,
+  formik,
+}) => {
   return (
     <div className="rounded-md bg-[#00D7E230] mt-5 p-3">
       <CardHeader title={"Cerrajería"} onRemove={onRemove} />
@@ -11,17 +20,15 @@ export const Locksmith = ({ index, data, onChange, onRemove }) => {
           Nombre
         </label>
 
-        <input
+        <Field
           type="text"
           id="nombre"
-          className="formulario ml-2"
-          name={`cerrajeria`}
-          data-index={index}
-          data-field="nombre"
-          value={data.nombre || ""}
-          onChange={(e) =>
-            onChange("cerrajeria", index, "nombre", e.target.value)
-          }
+          className={`formulario ml-2 ${
+            formik.touched.cerrajeria?.[index]?.nombre && formik.errors.cerrajeria?.[index]?.nombre
+              ? "errores"
+              : ""
+          }`}
+          name={`cerrajeria[${index}].nombre`}
         />
       </div>
       <div className="flex justify-between mt-5">
@@ -29,47 +36,45 @@ export const Locksmith = ({ index, data, onChange, onRemove }) => {
           <label className="labels mr-2" htmlFor="ancho">
             Ancho
           </label>
-          <input
+          <Field
             type="number"
             id="ancho"
-            className="formulario w-14"
-            name="cerrajeria"
-            data-index={index}
-            value={data.ancho || ""}
-            onChange={(e) =>
-              onChange("cerrajeria", index, "ancho", e.target.value)
-            }
+            className={`formulario w-14 ${
+              formik.touched.cerrajeria?.[index]?.ancho && formik.errors.cerrajeria?.[index]?.ancho
+                ? "errores"
+                : ""
+            }`}
+            name={`cerrajeria[${index}].ancho`}
           />
         </div>
         <div>
           <label className="labels mr-2" htmlFor="alto">
             Alto
           </label>
-          <input
+          <Field
             type="number"
             id="alto"
-            className="formulario w-14"
-            name="cerrajeria"
-            data-index={index}
-            value={data.alto || ""}
-            onChange={(e) =>
-              onChange("cerrajeria", index, "alto", e.target.value)
-            }
+            className={`formulario w-14 ${
+              formik.touched.cerrajeria?.[index]?.alto && formik.errors.cerrajeria?.[index]?.alto
+                ? "errores"
+                : ""
+            }`}
+            name={`cerrajeria[${index}].alto`}
           />
         </div>
         <div>
           <label className="labels mr-2" htmlFor="profundo">
-            Profundo
+            Grosor
           </label>
-          <input
+          <Field
             type="number"
-            id="profundo"
-            className="formulario w-14"
-            name="cerrajeria"
-            value={data.profundo || ""}
-            onChange={(e) =>
-              onChange("cerrajeria", index, "profundo", e.target.value)
-            }
+            id="grosor"
+            className={`formulario w-14 ${
+              formik.touched.cerrajeria?.[index]?.grosor && formik.errors.cerrajeria?.[index]?.grosor
+                ? "errores"
+                : ""
+            }`}
+            name={`cerrajeria[${index}].grosor`}
           />
         </div>
       </div>
@@ -77,71 +82,116 @@ export const Locksmith = ({ index, data, onChange, onRemove }) => {
         <label className="labels" htmlFor="material">
           Material
         </label>
-        <select
-          name="cerrajeria"
+        <Field
+          as="select"
           id="material"
-          className="formulario"
-          value={data.material || ""}
-          onChange={(e) =>
-            onChange("cerrajeria", index, "material", e.target.value)
-          }
+          className={`formulario ${
+            formik.touched.cerrajeria?.[index]?.material && formik.errors.cerrajeria?.[index]?.material
+              ? "errores"
+              : ""
+          }`}
+          name={`cerrajeria[${index}].material`}
         >
-          <option disabled value="default">
+          <option defaultValue hidden>
             Selecciona uno
           </option>
           <option value="Vinilo x5 pro master">Vinilo x5 pro master</option>
           <option value="Vinilo x7 pro master">Vinilo x6 pro master</option>
           <option value="Vinilo x8 pro master">Vinilo x7 pro master</option>
-        </select>
+        </Field>
       </div>
 
-      <div className="flex flex-col mt-5">
-        <label className="labels" htmlFor="laminacion">
-          Adicional
+      <div className="flex justify-between mt-5 items-center">
+        <label className="labels" htmlFor="horas_fabricacion">
+          Horas de fabricacion
         </label>
-        <select
-          name="cerrajeria"
-          id="laminacion"
-          className="formulario"
-          value={data.laminacion || ""}
-          onChange={(e) =>
-            onChange("cerrajeria", index, "laminacion", e.target.value)
-          }
-        >
-          <option disabled value="default">
-            Selecciona uno
-          </option>
-          <option value="Vinilo x5 pro master">5 años</option>
-          <option value="Vinilo x6 pro master">6 años</option>
-          <option value="Vinilo x7 pro master">7 años</option>
-        </select>
+        <Field
+          type="number"
+          id="horas_fabricacion"
+          className={`formulario w-14 ${
+            formik.touched.cerrajeria?.[index]?.horas_fabricacion && formik.errors.cerrajeria?.[index]?.horas_fabricacion
+              ? "errores"
+              : ""
+          }`}
+          name={`cerrajeria[${index}].horas_fabricacion`}
+        />
       </div>
+
+      <FieldArray
+        name={`cerrajeria[${index}].adicional`}
+        render={(arrayHelpersAdicional) => (
+          <div>
+            <div
+              className="my-3"
+              style={{ borderBottom: "1px solid rgba(0,0,0,.1)" }}
+            ></div>
+            <div className="flex gap-2 items-center mb-3 justify-between">
+              <p className="labels w-[50%]">Adicional</p>
+              <p className="labels">Precio</p>
+              <a
+                className="cursor-pointer bg-primary text-white rounded-2xl px-2 py-1"
+                onClick={() =>
+                  arrayHelpersAdicional.push({ nombre: "", precio: 0 })
+                }
+              >
+                Añadir
+              </a>
+            </div>
+            {arrayHelpersAdicional.form.values.cerrajeria[index].adicional.map(
+              (_, adicionalIndex) => (
+                <div key={adicionalIndex} className="mt-5">
+                  <div className="flex gap-2 items-center">
+                    <Field
+                      name={`cerrajeria[${index}].adicional[${adicionalIndex}].nombre`}
+                      placeholder="Nombre"
+                      className={`formulario ${
+                        formik.touched.cerrajeria?.[index]?.adicional?.[adicionalIndex]?.nombre && formik.errors.cerrajeria?.[index]?.adicional?.[adicionalIndex]?.nombre
+                          ? "errores"
+                          : ""
+                      }`}
+                    />
+                    <Field
+                      name={`cerrajeria[${index}].adicional[${adicionalIndex}].precio`}
+                      placeholder="Precio"
+                      type="number"
+                      className={`formulario w-17 ${
+                        formik.touched.cerrajeria?.[index]?.adicional?.[adicionalIndex]?.precio && formik.errors.cerrajeria?.[index]?.adicional?.[adicionalIndex]?.precio
+                          ? "errores"
+                          : ""
+                      }`}
+                    />
+                    <a
+                      href="#"
+                      className="rounded-full px-[8px] py-[3px] text-xs cursor-pointer bg-black text-white"
+                      onClick={() =>
+                        arrayHelpersAdicional.remove(adicionalIndex)
+                      }
+                    >
+                      X
+                    </a>
+                  </div>
+                </div>
+              )
+            )}
+            <div
+              className="my-3"
+              style={{ borderBottom: "1px solid rgba(0,0,0,.1)" }}
+            ></div>
+          </div>
+        )}
+      />
 
       {/* Imagenes */}
-      <ImageUploader
-        onImagesChange={(imageURLs) => {
-          onChange("cerrajeria", index, "imagenes", imageURLs);
-        }}
+      <ImageViewer
+        serviceName="cerrajeria"
+        index={index}
+        handleFileChange={handleFileChange}
+        images={images}
+        handleImageRemove={handleImageRemove}
       />
 
       {/* Precio */}
-      <div className="flex justify-end mt-4 items-center">
-        <input
-          className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
-          type="number"
-          name={`cerrajeria`}
-          data-index={index}
-          data-field="precio"
-          value={data.precio || ""}
-          onChange={(e) =>
-            onChange("cerrajeria", index, "precio", e.target.value)
-          }
-          placeholder="Precio"
-        />
-        <label htmlFor="unidades ml-2" className="labels ml-2">
-          €
-        </label>
-      </div>
+      <Pricing index={index} service={"cerrajeria"} formik={formik} />
     </div>
   );
 };

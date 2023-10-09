@@ -1,141 +1,144 @@
-import ImageUploader from "@/components/common/ImageUploader";
+import { Field, ErrorMessage } from "formik";
 import { CardHeader } from "./CardHeader";
+import ImageViewer from "@/components/common/ImageViewer";
+import { Pricing } from ".";
 
-export const Mounting = ({ index, data, onChange, onRemove }) => {
+export const Mounting = ({ 
+  index,
+  onRemove,
+  handleFileChange,
+  images,
+  handleImageRemove,
+  FieldArray,
+  formik,
+ }) => {
   return (
     <div className="rounded-md bg-[#FFA00830] mt-5 p-3">
       <CardHeader title={"Montaje"} onRemove={onRemove} />
 
-      <div className="flex items-center">
-        <label htmlFor="nombre" className="labels ml-2">
-          Nombre
+      <div className="flex items-center justify-between">
+        <label htmlFor="tiempo_montaje" className="labels">
+          Tiempo de montaje
         </label>
 
-        <input
-          type="text"
-          id="nombre"
-          className="formulario ml-2"
-          name={`montaje`}
-          data-index={index}
-          data-field="nombre"
-          value={data.nombre || ""}
-          onChange={(e) => onChange("montaje", index, "nombre", e.target.value)}
+        <Field
+          type="number"
+          id="tiempo_montaje"
+          className={`formulario w-14 ${
+            formik.touched.montaje?.[index]?.tiempo_montaje && formik.errors.montaje?.[index]?.tiempo_montaje
+              ? "errores"
+              : ""
+          }`}
+          name={`montaje[${index}].tiempo_montaje`}
         />
       </div>
-      <div className="flex justify-between mt-5">
-        <div>
-          <label className="labels mr-2" htmlFor="ancho">
-            Ancho
+      <div className="flex justify-between mt-5">        
+          <label className="labels" htmlFor="desplazamiento">
+           Desplazamiento
           </label>
-          <input
+          <Field
             type="number"
-            id="ancho"
-            className="formulario w-14"
-            name="montaje"
-            data-index={index}
-            value={data.ancho || ""}
-            onChange={(e) =>
-              onChange("montaje", index, "ancho", e.target.value)
-            }
-          />
-        </div>
-        <div>
-          <label className="labels mr-2" htmlFor="alto">
-            Alto
-          </label>
-          <input
-            type="number"
-            id="alto"
-            className="formulario w-14"
-            name="montaje"
-            data-index={index}
-            value={data.alto || ""}
-            onChange={(e) => onChange("montaje", index, "alto", e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="labels mr-2" htmlFor="profundo">
-            Profundo
-          </label>
-          <input
-            type="number"
-            id="profundo"
-            className="formulario w-14"
-            name="montaje"
-            value={data.profundo || ""}
-            onChange={(e) =>
-              onChange("montaje", index, "profundo", e.target.value)
-            }
-          />
-        </div>
+            id="desplazamiento"
+            className={`formulario w-14 ${
+              formik.touched.montaje?.[index]?.desplazamiento && formik.errors.montaje?.[index]?.desplazamiento
+                ? "errores"
+                : ""
+            }`}
+            name={`montaje[${index}].desplazamiento`}
+          />        
       </div>
-      <div className="flex flex-col mt-5">
-        <label className="labels" htmlFor="material">
-          Material
+      <div className="flex mt-5 justify-between">
+        <label className="labels" htmlFor="alquiler_maquinaria">
+          Alquiler de maquinaria
         </label>
-        <select
-          name="montaje"
-          id="material"
-          className="formulario"
-          value={data.material || ""}
-          onChange={(e) =>
-            onChange("montaje", index, "material", e.target.value)
-          }
-        >
-          <option disabled value="default">
-            Selecciona uno
-          </option>
-          <option value="Vinilo x5 pro master">Vinilo x5 pro master</option>
-          <option value="Vinilo x7 pro master">Vinilo x6 pro master</option>
-          <option value="Vinilo x8 pro master">Vinilo x7 pro master</option>
-        </select>
+        <Field
+          type="number"
+          id="alquiler_maquinaria"
+          className={`formulario w-14 ${
+            formik.touched.montaje?.[index]?.alquiler_maquinaria && formik.errors.montaje?.[index]?.alquiler_maquinaria
+              ? "errores"
+              : ""
+          }`}
+          name={`montaje[${index}].alquiler_maquinaria`}
+        />
       </div>
 
-      <div className="flex flex-col mt-5">
-        <label className="labels" htmlFor="laminacion">
-          Laminación
-        </label>
-        <select
-          name="montaje"
-          id="laminacion"
-          className="formulario"
-          value={data.laminacion || ""}
-          onChange={(e) =>
-            onChange("montaje", index, "laminacion", e.target.value)
-          }
-        >
-          <option disabled value="default">
-            Selecciona uno
-          </option>
-          <option value="Vinilo x5 pro master">5 años</option>
-          <option value="Vinilo x6 pro master">6 años</option>
-          <option value="Vinilo x7 pro master">7 años</option>
-        </select>
-      </div>
+      <FieldArray
+        name={`montaje[${index}].adicional`}
+        render={(arrayHelpersAdicional) => (
+          <div>
+            <div
+              className="my-3"
+              style={{ borderBottom: "1px solid rgba(0,0,0,.1)" }}
+            ></div>
+            <div className="flex gap-2 items-center mb-3 justify-between">
+              <p className="labels w-[50%]">Otros</p>
+              <a
+                className="cursor-pointer bg-primary text-white rounded-2xl px-2 py-1"
+                onClick={() =>
+                  arrayHelpersAdicional.push({ nombre: "", precio: 0 })
+                }
+              >
+                Añadir
+              </a>
+            </div>
+            {arrayHelpersAdicional.form.values.montaje[index].adicional.map(
+              (_, adicionalIndex) => (
+                <div key={adicionalIndex} className="mt-5">
+                  <div className="flex gap-2 items-center">
+                    <Field
+                      name={`montaje[${index}].adicional[${adicionalIndex}].nombre`}
+                      placeholder="Nombre"
+                      className={`formulario ${
+                        formik.touched.montaje?.[index]?.adicional?.[adicionalIndex]?.nombre && formik.errors.montaje?.[index]?.adicional?.[adicionalIndex]?.nombre
+                          ? "errores"
+                          : ""
+                      }`}
+                    />
+                    <Field
+                      name={`montaje[${index}].adicional[${adicionalIndex}].precio`}
+                      placeholder="Precio"
+                      type="number"
+                      className={`formulario w-17 ${
+                        formik.touched.montaje?.[index]?.adicional?.[adicionalIndex]?.precio && formik.errors.montaje?.[index]?.adicional?.[adicionalIndex]?.precio
+                          ? "errores"
+                          : ""
+                      }`}
+                    />
+                    <a
+                      href="#"
+                      className="rounded-full px-[8px] py-[3px] text-xs cursor-pointer bg-black text-white"
+                      onClick={() =>
+                        arrayHelpersAdicional.remove(adicionalIndex)
+                      }
+                    >
+                      X
+                    </a>
+                  </div>
+                </div>
+              )
+            )}
+            <div
+              className="my-3"
+              style={{ borderBottom: "1px solid rgba(0,0,0,.1)" }}
+            ></div>
+          </div>
+        )}
+      />
+
+      
 
       {/* Imagenes */}
-      <ImageUploader
-        onImagesChange={(imageURLs) => {
-          onChange("montaje", index, "imagenes", imageURLs);
-        }}
+      <ImageViewer
+        serviceName="montaje"
+        index={index}
+        handleFileChange={handleFileChange}
+        images={images}
+        handleImageRemove={handleImageRemove}
       />
 
       {/* Precio */}
-      <div className="flex justify-end mt-4 items-center">
-        <input
-          className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
-          type="number"
-          name={`montaje`}
-          data-index={index}
-          data-field="precio"
-          value={data.precio || ""}
-          onChange={(e) => onChange("montaje", index, "precio", e.target.value)}
-          placeholder="Precio"
-        />
-        <label htmlFor="unidades ml-2" className="labels ml-2">
-          €
-        </label>
-      </div>
+      <Pricing index={index} service={"montaje"} formik={formik} />
     </div>
   );
 };

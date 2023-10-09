@@ -7,7 +7,6 @@ const ImageViewer = ({
   handleFileChange,
   images,
   handleImageRemove,
-  loader
 }) => {
   const fileInputRef = useRef(null);
 
@@ -54,7 +53,6 @@ const ImageViewer = ({
       {images[serviceName] && images[serviceName][index] ? (
         <ImageGrid
           images={images[serviceName][index]}
-          loader={loader}
           onRemove={(imageIndex) =>
             handleImageRemove(serviceName, index, imageIndex)
           }

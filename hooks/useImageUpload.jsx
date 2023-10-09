@@ -52,8 +52,22 @@ const useImageUpload = () => {
     });
     
   };
+
+  const handleImageRemove = (inputName, index, subIndex = null) => {
+    setImages((prevImages) => {
+      const newImages = { ...prevImages };
+      if (subIndex !== null) {
+        // Eliminar una imagen específica de un componente hijo
+        newImages[inputName][index].splice(subIndex, 1);
+      } else {
+        // Eliminar todas las imágenes de un componente hijo
+        newImages[inputName]?.splice(index, 1);
+      }
+      return newImages;
+    });
+  };
   
-  return { images, handleFileChange, setImages };
+  return { images, handleFileChange, setImages, handleImageRemove };
 };
 
 export default useImageUpload;
