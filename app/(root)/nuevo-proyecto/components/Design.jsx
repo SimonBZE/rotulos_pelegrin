@@ -9,6 +9,7 @@ export const Design = ({
   images,
   handleImageRemove,
   formik,
+  loadingImage,
 }) => {
   return (
     <div className="rounded-md bg-[#6E5FFF30] mt-5 p-3">
@@ -48,6 +49,7 @@ export const Design = ({
         handleFileChange={handleFileChange}
         images={images}
         handleImageRemove={handleImageRemove}
+        loadingImage={loadingImage}
       />
 
       <Pricing index={index} service={"diseno"} formik={formik} />

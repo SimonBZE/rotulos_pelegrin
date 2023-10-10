@@ -10,6 +10,7 @@ export const Locksmith = ({
   handleImageRemove,
   FieldArray,
   formik,
+  loadingImage
 }) => {
   return (
     <div className="rounded-md bg-[#00D7E230] mt-5 p-3">
@@ -188,6 +189,7 @@ export const Locksmith = ({
         handleFileChange={handleFileChange}
         images={images}
         handleImageRemove={handleImageRemove}
+        loadingImage={loadingImage}
       />
 
       {/* Precio */}

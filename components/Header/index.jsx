@@ -61,6 +61,7 @@ const Header = ({
               width={100}
               height={32}
               src={"/assets/oraculo_oscuro.svg"}
+              className="w-[100px] h-[32px]"
               alt="Logo"
             />
           </Link>

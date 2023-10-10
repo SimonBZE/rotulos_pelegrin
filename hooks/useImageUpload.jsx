@@ -5,6 +5,7 @@ const imageApiCtrl = new imageApi();
 
 const useImageUpload = () => {
   const [images, setImages] = useState({});
+  const [loading, setLoading] = useState(false)
 
   const handleFileChange = async (event, inputName, index = null) => {
     const files = Array.from(event.currentTarget.files);
@@ -24,7 +25,7 @@ const useImageUpload = () => {
     files.forEach((file) => {
       formData.append("files", file);
     });
-    
+    setLoading(true)
     const data = await imageApiCtrl.upload(formData)
 
     const newImageData = data.map((imagen) => ({
@@ -44,13 +45,14 @@ const useImageUpload = () => {
         return { ...prevImages, [inputName]: componentImages };
       } else {
         // Si no tiene índice, es un input normal
+        setLoading(false)
         return {
           ...prevImages,
           [inputName]: [...(prevImages[inputName] || []), ...newImageData]
         };
       }
     });
-    
+    setLoading(false)
   };
 
   const handleImageRemove = (inputName, index, subIndex = null) => {
@@ -67,7 +69,7 @@ const useImageUpload = () => {
     });
   };
   
-  return { images, handleFileChange, setImages, handleImageRemove };
+  return { images, handleFileChange, setImages, handleImageRemove, loading };
 };
 
 export default useImageUpload;

@@ -26,6 +26,7 @@ import {
 import { useFormik, FormikProvider, FieldArray } from "formik";
 import useImageUpload from "@/hooks/useImageUpload";
 import { useFilesUpload } from "@/hooks/useFilesUpload";
+import Loader from "@/components/common/Loader";
 
 const servicios = [
   {
@@ -63,11 +64,12 @@ const servicios = [
 const budgetCtrl = new Budget();
 
 export default function NuevoProyecto() {
-  const { images, handleFileChange, setImages, handleImageRemove } =
+  const { images, handleFileChange, loading:loadingImage, handleImageRemove } =
     useImageUpload({});
   const { files, handleMultimediaChange, loading, setFiles } = useFilesUpload(
     {}
   );
+  const [loadingForm, setLoadingForm] = useState(false)
 
   const [total, setTotal] = useState({
     diseno: 0,
@@ -87,6 +89,7 @@ export default function NuevoProyecto() {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (formData) => {
+      setLoadingForm(true)
       // console.log(formData);
       // Ahora envía el formulario completo a tu API
       formData.diseno.forEach((item, index) => {
@@ -119,8 +122,10 @@ export default function NuevoProyecto() {
 
       try {
         await budgetCtrl.createBudget(formData);
+        setLoadingForm(false)
       } catch (error) {
         console.log(error);
+        setLoadingForm(false)
       }
     },
   });
@@ -413,6 +418,7 @@ export default function NuevoProyecto() {
                               arrayHelpers={arrayHelpers}
                               key={index}
                               formik={formik}
+                              loadingImage={loadingImage}
                               onRemove={() => {
                                 arrayHelpers.remove(index);
                                 handleImageRemove("diseno", index);
@@ -435,6 +441,7 @@ export default function NuevoProyecto() {
                               index={index}
                               arrayHelpers={arrayHelpers}
                               key={index}
+                              loadingImage={loadingImage}
                               formik={formik}
                               onRemove={() => {
                                 arrayHelpers.remove(index);
@@ -459,6 +466,7 @@ export default function NuevoProyecto() {
                               arrayHelpers={arrayHelpers}
                               key={index}
                               formik={formik}
+                              loadingImage={loadingImage}
                               onRemove={() => {
                                 arrayHelpers.remove(index);
                                 handleImageRemove("corte", index);
@@ -482,6 +490,7 @@ export default function NuevoProyecto() {
                               arrayHelpers={arrayHelpers}
                               key={index}
                               formik={formik}
+                              loadingImage={loadingImage}
                               onRemove={() => {
                                 arrayHelpers.remove(index);
                                 handleImageRemove("cerrajeria", index);
@@ -506,6 +515,7 @@ export default function NuevoProyecto() {
                               arrayHelpers={arrayHelpers}
                               key={index}
                               formik={formik}
+                              loadingImage={loadingImage}
                               onRemove={() => {
                                 arrayHelpers.remove(index);
                                 handleImageRemove("pintura", index);
@@ -530,6 +540,7 @@ export default function NuevoProyecto() {
                               arrayHelpers={arrayHelpers}
                               key={index}
                               formik={formik}
+                              loadingImage={loadingImage}
                               onRemove={() => {
                                 arrayHelpers.remove(index);
                                 handleImageRemove("montaje", index);
@@ -558,12 +569,22 @@ export default function NuevoProyecto() {
             </div>
             <div className="2xl:w-94 p-3">
               <Sumaries total={total} formik={formik} />
+
+              {loadingForm ? 
+                <a
+                
+                className="flex items-center justify-center w-full bg-white mt-5 p-3 rounded-xl text-graydark uppercase shadow-8 gap-3"
+              >
+               <Loader tamano="30px" /> Validando...
+              </a>
+              : 
               <button
                 type="submit"
                 className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "
               >
                 Crear Presupuesto
               </button>
+              }
             </div>
           </div>
         </form>

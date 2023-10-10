@@ -10,6 +10,7 @@ export const Print = ({
   images,
   handleImageRemove,
   formik,
+  loadingImage
 }) => {
   return (
     <div className="rounded-md bg-[#2FA7FF30] mt-5 p-3">
@@ -112,6 +113,7 @@ export const Print = ({
         handleFileChange={handleFileChange}
         images={images}
         handleImageRemove={handleImageRemove}
+        loadingImage={loadingImage}
       />
 
       {/* Precio */}

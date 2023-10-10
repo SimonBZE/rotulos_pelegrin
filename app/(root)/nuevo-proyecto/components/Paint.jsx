@@ -10,6 +10,7 @@ export const Paint = ({
   images,
   handleImageRemove,
   formik,
+  loadingImage
 }) => {
   return (
     <div className="rounded-md bg-[#8AC11130] mt-5 p-3">
@@ -105,6 +106,7 @@ export const Paint = ({
         handleFileChange={handleFileChange}
         images={images}
         handleImageRemove={handleImageRemove}
+        loadingImage={loadingImage}
       />
 
       {/* Precio */}

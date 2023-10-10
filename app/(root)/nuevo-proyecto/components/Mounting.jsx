@@ -11,6 +11,7 @@ export const Mounting = ({
   handleImageRemove,
   FieldArray,
   formik,
+  loadingImage
  }) => {
   return (
     <div className="rounded-md bg-[#FFA00830] mt-5 p-3">
@@ -135,6 +136,7 @@ export const Mounting = ({
         handleFileChange={handleFileChange}
         images={images}
         handleImageRemove={handleImageRemove}
+        loadingImage={loadingImage}      
       />
 
       {/* Precio */}
