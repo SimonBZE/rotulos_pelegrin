@@ -55,9 +55,11 @@ export class Budget {
       const url = `${ENV.API_URL}/${ENV.ENDPOINTS.BUDGET}`;
       //   const url = `${ENV.API_URL}/pruebas`
       const response = await authFetch(url, params);
+      
+      
       const result = await response.json();
-
-      if (result !== 200) throw result;
+      
+      if (response !== 200) throw result;
 
       return result;
     } catch (error) {

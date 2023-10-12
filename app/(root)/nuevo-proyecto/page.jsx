@@ -66,7 +66,7 @@ const budgetCtrl = new Budget();
 export default function NuevoProyecto() {
   const { images, handleFileChange, loading:loadingImage, handleImageRemove } =
     useImageUpload({});
-  const { files, handleMultimediaChange, loading, setFiles } = useFilesUpload(
+  const { files, handleMultimediaChange, loading, setFiles, uploadAudioFromBlob } = useFilesUpload(
     {}
   );
   const [loadingForm, setLoadingForm] = useState(false)
@@ -118,6 +118,14 @@ export default function NuevoProyecto() {
 
       if (files.videos) {
         formData.videos = [].concat(...files.videos);
+      }
+
+      if(files.audios) {
+        formData.audios = [].concat(...files.audios)
+      }
+
+      if(files.fotos) {
+        formData.fotos = [].concat(...files.fotos)
       }
 
       try {
@@ -212,6 +220,7 @@ export default function NuevoProyecto() {
   return (
     <>
       {/* {JSON.stringify(formik.errors)} */}
+      {/* {JSON.stringify(files)} */}
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
           <div className="2xl:h-[calc(100vh-120px)] 2xl:flex mt-[-40px]">
@@ -554,21 +563,20 @@ export default function NuevoProyecto() {
                         </>
                       )}
                     />
-
-                  </div>
-
-                  <Contenido
+                  </div>                  
+                </div>
+                <Contenido
                     handleMultimediaChange={handleMultimediaChange}
                     files={files}
                     loading={loading}
                     formik={formik}
                     setFiles={setFiles}
+                    uploadAudioFromBlob={uploadAudioFromBlob}
                   />
-                </div>
               </div>
             </div>
             <div className="2xl:w-94 p-3">
-              <Sumaries total={total} formik={formik} />
+              <Sumaries total={total} formik={formik} files={files} />
 
               {loadingForm ? 
                 <a

@@ -12,7 +12,7 @@ const ImageViewer = ({
   loadingImage
 }) => {
   const fileInputRef = useRef(null);
-  console.log([serviceName][index])
+  // console.log([serviceName][index])
   return (
     <div className="space-y-4 mt-5">
       { loadingImage ? (

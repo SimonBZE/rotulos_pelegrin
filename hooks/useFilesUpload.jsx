@@ -46,7 +46,7 @@ export const useFilesUpload = () => {
         try {
           const response = await imageApiCtrl.upload(formData);
 
-          await console.log(response)
+          // await console.log(response)
 
           const datos = response.map((imagen) => ({
             id: imagen.id,
@@ -75,6 +75,41 @@ export const useFilesUpload = () => {
     setLoading(false);
   };
 
+  const uploadAudioFromBlob = async (audioURL, fieldId) => {
+    setError(null);
+    setLoading(true);
+
+    try {
+        const resp = await fetch(audioURL);
+        const audioBlob = await resp.blob();
+        
+        const formData = new FormData();
+        formData.append("files", audioBlob, "recorded-audio.wav");
+
+        const response = await imageApiCtrl.upload(formData);
+        console.log("Upload Response:", response);
+
+        const datos = response.map((media) => ({
+            id: media.id,
+            url: media.url,
+        }));
+
+        setFiles((prev) => ({
+            ...prev,
+            [fieldId]: [
+                ...(prev[fieldId] || []),
+                ...datos,
+            ],
+        }));
+        
+    } catch (uploadError) {
+        console.error("Error uploading file:", uploadError);
+        setError("Error uploading file");
+    } finally {
+        setLoading(false);
+    }
+};
+
   const handleMediaRemove = (mediaType, index) => {
     setFiles((prevFiles) => {
       // Crear una copia del array actual de medios.
@@ -89,7 +124,7 @@ export const useFilesUpload = () => {
     });
   };
 
-  return { files, handleMultimediaChange, setFiles, loading, error, handleMediaRemove };
+  return { files, handleMultimediaChange, setFiles, loading, error, handleMediaRemove, uploadAudioFromBlob };
 };
 
 
@@ -157,6 +192,8 @@ export const useFilesUpload = () => {
 //       })
 //     );
 
+    
+
 //     setFiles((prev) => ({
 //       ...prev,
 //       [fieldId]: [
@@ -168,5 +205,19 @@ export const useFilesUpload = () => {
 //     setLoading(false);
 //   };
 
-//   return { files, handleMultimediaChange, setFiles, loading, error };
+//   const handleMediaRemove = (mediaType, index) => {
+//     setFiles((prevFiles) => {
+//       // Crear una copia del array actual de medios.
+//       const newMediaArray = prevFiles[mediaType].flat();
+//       // Eliminar el medio en el índice proporcionado.
+//       newMediaArray.splice(index, 1);
+//       // Actualizar el estado con el nuevo array de medios.
+//       return {
+//         ...prevFiles,
+//         [mediaType]: [newMediaArray],
+//       };
+//     });
+//   };
+
+//   return { files, handleMultimediaChange, setFiles, loading, error, handleMediaRemove };
 // };

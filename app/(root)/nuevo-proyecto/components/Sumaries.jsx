@@ -3,30 +3,35 @@ import Image from "next/image";
 const multimedia = [
   {
     nombre: "Vídeos",
+    field:'videos',
     imagen: "/assets/Videos.svg",
     numero: "2 archivos",
     color: "#f0efff",
   },
   {
     nombre: "Fotos",
+    field:'fotos',
     imagen: "/assets/fotos.svg",
     numero: "1 archivo",
     color: "#eaf6ff",
   },
   {
     nombre: "Audios",
+    field:'audios',
     imagen: "/assets/Audios.svg",
     numero: "2 archivo",
     color: "#ffefef",
   },
 ];
 
-export const Sumaries = ({ total, formik }) => {
+export const Sumaries = ({ total, formik, files }) => {
+
+  
   return (
     <div className="rounded-xl mt-5 py-5 px-5 md:p-10 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <h3 className="labels text-lg">Contenido</h3>
-      <div className="flex justify-center md:justify-start items-center gap-3 mt-5">
-        {multimedia.map(({ nombre, imagen, numero, color }) => (
+      {/* <div className="flex justify-center md:justify-start items-center gap-3 mt-5">
+        {multimedia.map(({ nombre, imagen, numero, color, field }) => (
           <div key={nombre} className="text-center">
             <div
               className={`p-7 rounded-3xl flex justify-center`}
@@ -41,10 +46,10 @@ export const Sumaries = ({ total, formik }) => {
               />
             </div>
             <p className=" text-black mt-2 text-base font-bold">{nombre}</p>
-            <p className="text-xs">{numero}</p>
+            <p className="text-xs">{files[field]?.length -1 > 0 ?  files[field]?.length : 0}</p>
           </div>
         ))}
-      </div>
+      </div> */}
 
       <table className="table-fixed w-full mt-5">
         <tbody>
