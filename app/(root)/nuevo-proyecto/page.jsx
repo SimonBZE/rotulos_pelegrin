@@ -64,22 +64,22 @@ const servicios = [
 const budgetCtrl = new Budget();
 
 export default function NuevoProyecto() {
-  const { images, handleFileChange, loading:loadingImage, handleImageRemove } =
-    useImageUpload({});
-  const { files, handleMultimediaChange, loading, setFiles, uploadAudioFromBlob } = useFilesUpload(
-    {}
-  );
-  const [loadingForm, setLoadingForm] = useState(false)
+  const {
+    images,
+    handleFileChange,
+    loading: loadingImage,
+    handleImageRemove,
+  } = useImageUpload({});
+  const {
+    files,
+    handleMultimediaChange,
+    loading,
+    setFiles,
+    uploadAudioFromBlob,
+  } = useFilesUpload({});
+  const [loadingForm, setLoadingForm] = useState(false);
 
-  const [total, setTotal] = useState({
-    diseno: 0,
-    impresion: 0,
-    corte: 0,
-    pintura: 0,
-    montaje: 0,
-    cerrajeria: 0,
-    totalGeneral: 0,
-  });
+  
 
   const [presupuesto, setPresupuesto] = useState();
 
@@ -89,9 +89,33 @@ export default function NuevoProyecto() {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (formData) => {
-      setLoadingForm(true)
+      setLoadingForm(true);
       // console.log(formData);
       // Ahora envía el formulario completo a tu API
+      
+      // Asignar a departamento
+      const departamentos = [
+        "diseno",
+        "impresion",
+        "corte",
+        "cerrajeria",
+        "pintura",
+        "montaje",
+      ];
+
+      const asignarDepartamento = (formData) => {
+        for (const departamento of departamentos) {
+          if (formData[departamento]?.length > 0) {
+            formData.departamento = departamento;
+            break;
+          }
+        }
+      };
+
+      asignarDepartamento(formData);
+      // Fin
+      formData.idpresupuesto=presupuesto;
+
       formData.diseno.forEach((item, index) => {
         item.imagenes = images.diseno?.[index] || [];
       });
@@ -120,20 +144,20 @@ export default function NuevoProyecto() {
         formData.videos = [].concat(...files.videos);
       }
 
-      if(files.audios) {
-        formData.audios = [].concat(...files.audios)
+      if (files.audios) {
+        formData.audios = [].concat(...files.audios);
       }
 
-      if(files.fotos) {
-        formData.fotos = [].concat(...files.fotos)
+      if (files.fotos) {
+        formData.fotos = [].concat(...files.fotos);
       }
 
       try {
         await budgetCtrl.createBudget(formData);
-        setLoadingForm(false)
+        setLoadingForm(false);
       } catch (error) {
         console.log(error);
-        setLoadingForm(false)
+        setLoadingForm(false);
       }
     },
   });
@@ -150,6 +174,10 @@ export default function NuevoProyecto() {
 
     setPresupuesto(newPresupuesto);
   };
+
+  useEffect( () => {
+    updatePresupuesto()
+  },[formik.values] )
 
   // Agrega el servicio seleccionado en el FormArray de formik
   const handleServiceClick = (serviceName) => {
@@ -181,7 +209,10 @@ export default function NuevoProyecto() {
         break;
 
       case "Montaje":
-        formik.setFieldValue("montaje", [...formik.values.montaje, newMounting])
+        formik.setFieldValue("montaje", [
+          ...formik.values.montaje,
+          newMounting,
+        ]);
         break;
 
       default:
@@ -189,37 +220,11 @@ export default function NuevoProyecto() {
     }
   };
 
-  useEffect(() => {
-    let totalDesign = formik.values.diseno.reduce(
-      (acc, curr) => acc + (curr.precio || 0),
-      0
-    );
-    let totalPrint = formik.values.impresion.reduce(
-      (acc, curr) => acc + (curr.precio || 0),
-      0
-    );
-    let totalCut = formik.values.corte.reduce(
-      (acc, curr) => acc + (curr.precio || 0),
-      0
-    );
-
-    // Suma los totales de cada componente para obtener el total general
-    let totalSum = totalDesign + totalPrint + totalCut;
-
-    // Actualiza el estado con el total
-    setTotal({
-      ...total,
-      diseno: totalDesign,
-      impresion: totalPrint,
-      corte: totalCut,
-      totalGeneral: totalSum,
-    });
-    updatePresupuesto();
-  }, [formik.values]);
+  
 
   return (
     <>
-      {/* {JSON.stringify(formik.errors)} */}
+      {/* {JSON.stringify(formik)} */}
       {/* {JSON.stringify(files)} */}
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
@@ -563,36 +568,33 @@ export default function NuevoProyecto() {
                         </>
                       )}
                     />
-                  </div>                  
+                  </div>
                 </div>
                 <Contenido
-                    handleMultimediaChange={handleMultimediaChange}
-                    files={files}
-                    loading={loading}
-                    formik={formik}
-                    setFiles={setFiles}
-                    uploadAudioFromBlob={uploadAudioFromBlob}
-                  />
+                  handleMultimediaChange={handleMultimediaChange}
+                  files={files}
+                  loading={loading}
+                  formik={formik}
+                  setFiles={setFiles}
+                  uploadAudioFromBlob={uploadAudioFromBlob}
+                />
               </div>
             </div>
             <div className="2xl:w-94 p-3">
-              <Sumaries total={total} formik={formik} files={files} />
+              <Sumaries formik={formik} files={files} />
 
-              {loadingForm ? 
-                <a
-                
-                className="flex items-center justify-center w-full bg-white mt-5 p-3 rounded-xl text-graydark uppercase shadow-8 gap-3"
-              >
-               <Loader tamano="30px" /> Validando...
-              </a>
-              : 
-              <button
-                type="submit"
-                className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "
-              >
-                Crear Presupuesto
-              </button>
-              }
+              {loadingForm ? (
+                <a className="flex items-center justify-center w-full bg-white mt-5 p-3 rounded-xl text-graydark uppercase shadow-8 gap-3">
+                  <Loader tamano="30px" /> Validando...
+                </a>
+              ) : (
+                <button
+                  type="submit"
+                  className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "
+                >
+                  Crear Presupuesto
+                </button>
+              )}
             </div>
           </div>
         </form>

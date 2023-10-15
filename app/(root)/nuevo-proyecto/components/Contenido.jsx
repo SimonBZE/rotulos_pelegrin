@@ -26,10 +26,10 @@ export const Contenido = ({
   const { audioURL, isRecording, startRecording, stopRecording, error } =
     useAudioRecorder();
 
-  const handleChange = (e, mediaType, fieldId) => {
-    handleMultimediaChange(e, mediaType, fieldId);
-    // formik.setFieldValue(fieldId, files[fieldId] || []);
-  };
+    const handleChange = (e, mediaType, fieldId) => {
+      handleMultimediaChange(e, mediaType, fieldId);
+      // formik.setFieldValue(fieldId, files[fieldId] || []);
+    };
 
   useEffect(() => {
     if (audioURL !== "") {
@@ -46,7 +46,7 @@ export const Contenido = ({
       // Actualizar el estado con el nuevo array de medios.
       return {
         ...prevFiles,
-        [mediaType]: [newMediaArray],
+        [mediaType]: newMediaArray,
       };
     });
   };
@@ -66,12 +66,17 @@ export const Contenido = ({
             name="videos"
             ref={fileVideoRef}
           />
-          <Image
-            src="./images/icon/movie.svg"
-            width={24}
-            height={24}
-            alt="videos"
-          />
+          {loading.video ? (
+            <Loader tamano={30} />
+          ) : (
+            <Image
+              src="./images/icon/movie.svg"
+              width={24}
+              height={24}
+              alt="videos"
+            />
+          )}
+
           <p>Seleccionar vídeo</p>
         </div>
 
@@ -85,23 +90,19 @@ export const Contenido = ({
             ? files.videos.flat().map((file, index) => (
                 <SwiperSlide key={index}>
                   <div className="relative">
-                    {loading ? (
-                      <Loader tamano="50px" />
-                    ) : (
-                      <>
-                        <video
-                          src={`${ENV.SERVER_HOST}${file.url}`}
-                          className="w-full max-h-[150px] min-h-[150px] rounded-xl"
-                          controls
-                        />
-                        <a
-                          onClick={() => handleMediaRemove("videos", index)}
-                          className="absolute top-1 right-1 bg-black text-white px-2 py-1 rounded-full cursor-pointer shadow-whiten"
-                        >
-                          X
-                        </a>
-                      </>
-                    )}
+                    <>
+                      <video
+                        src={`${ENV.SERVER_HOST}${file.url}`}
+                        className="w-full max-h-[150px] min-h-[150px] rounded-xl"
+                        controls
+                      />
+                      <a
+                        onClick={() => handleMediaRemove("videos", index)}
+                        className="absolute top-1 right-1 bg-black text-white px-2 py-1 rounded-full cursor-pointer shadow-whiten"
+                      >
+                        X
+                      </a>
+                    </>
                   </div>
                 </SwiperSlide>
               ))
@@ -117,23 +118,27 @@ export const Contenido = ({
             disabled={isRecording}
             className="border-dashed border-2 p-4 rounded-md relative cursor-pointer bg-white flex justify-center items-center gap-3 w-full"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="inline w-6 h-6 mr-3 text-gray-200"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M3 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
-              <path d="M9 17v-13h10v8"></path>
-              <path d="M9 8h10"></path>
-              <path d="M16 19h6"></path>
-              <path d="M19 16v6"></path>
-            </svg>
+            {loading.audios ? (
+              <Loader tamano={30} />
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="inline w-6 h-6 mr-3 text-gray-200"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M3 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+                <path d="M9 17v-13h10v8"></path>
+                <path d="M9 8h10"></path>
+                <path d="M16 19h6"></path>
+                <path d="M19 16v6"></path>
+              </svg>
+            )}
             Grabar
           </a>
         ) : (
@@ -173,34 +178,29 @@ export const Contenido = ({
             ? files.audios.flat().map((file, index) => (
                 <SwiperSlide key={index}>
                   <div className="relative">
-                    {loading ? (
-                      <Loader />
-                    ) : (
-                      <>
-                        <div className="w-full max-h-[150px] min-h-[150px] rounded-xl flex flex-col items-center justify-center bg-secondary rounded-xl p-3">
-                          <p className="text-xl font-black text-black mb-2 uppercase">
-                            Audio #{index + 1}
-                          </p>
-                          <audio
-                            src={`${ENV.SERVER_HOST}${file.url}`}
-                            controls
-                            className="w-[70%]"
-                          />
-                        </div>
-                        <a
-                          onClick={() => handleMediaRemove("audios", index)}
-                          className="absolute top-1 right-1 bg-black text-white px-2 py-1 rounded-full cursor-pointer shadow-whiten"
-                        >
-                          X
-                        </a>
-                      </>
-                    )}
+                    <>
+                      <div className="w-full max-h-[150px] min-h-[150px] rounded-xl flex flex-col items-center justify-center bg-secondary rounded-xl p-3">
+                        <p className="text-xl font-black text-black mb-2 uppercase">
+                          Audio #{index + 1}
+                        </p>
+                        <audio
+                          src={`${ENV.SERVER_HOST}${file.url}`}
+                          controls
+                          className="w-[70%]"
+                        />
+                      </div>
+                      <a
+                        onClick={() => handleMediaRemove("audios", index)}
+                        className="absolute top-1 right-1 bg-black text-white px-2 py-1 rounded-full cursor-pointer shadow-whiten"
+                      >
+                        X
+                      </a>
+                    </>
                   </div>
                 </SwiperSlide>
               ))
             : null}
         </Swiper>
-        
       </div>
       <div>
         <div
@@ -216,12 +216,16 @@ export const Contenido = ({
             ref={fileFotoRef}
             className="hidden"
           />
-          <Image
-            src="./images/icon/photo-plus.svg"
-            width={24}
-            height={24}
-            alt="videos"
-          />
+          {loading.image ? (
+            <Loader tamano={30} />
+          ) : (
+            <Image
+              src="./images/icon/photo-plus.svg"
+              width={24}
+              height={24}
+              alt="videos"
+            />
+          )}
           <p>Seleccionar fotos</p>
         </div>
         <Swiper
@@ -234,23 +238,19 @@ export const Contenido = ({
             ? files.fotos.flat().map((file, index) => (
                 <SwiperSlide key={index}>
                   <div className="relative">
-                    {loading ? (
-                      <Loader />
-                    ) : (
-                      <>
-                        <img
-                          src={`${ENV.SERVER_HOST}${file.url}`}
-                          className="w-full max-h-[150px] min-h-[150px] rounded-xl object-cover"
-                          alt="presupuesto"
-                        />
-                        <a
-                          onClick={() => handleMediaRemove("fotos", index)}
-                          className="absolute top-1 right-1 bg-black text-white px-2 py-1 rounded-full cursor-pointer shadow-whiten"
-                        >
-                          X
-                        </a>
-                      </>
-                    )}
+                    <>
+                      <img
+                        src={`${ENV.SERVER_HOST}${file.url}`}
+                        className="w-full max-h-[150px] min-h-[150px] rounded-xl object-cover"
+                        alt="presupuesto"
+                      />
+                      <a
+                        onClick={() => handleMediaRemove("fotos", index)}
+                        className="absolute top-1 right-1 bg-black text-white px-2 py-1 rounded-full cursor-pointer shadow-whiten"
+                      >
+                        X
+                      </a>
+                    </>
                   </div>
                 </SwiperSlide>
               ))
