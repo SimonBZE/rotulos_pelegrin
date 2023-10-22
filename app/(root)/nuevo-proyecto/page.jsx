@@ -27,39 +27,7 @@ import { useFormik, FormikProvider, FieldArray } from "formik";
 import useImageUpload from "@/hooks/useImageUpload";
 import { useFilesUpload } from "@/hooks/useFilesUpload";
 import Loader from "@/components/common/Loader";
-
-const servicios = [
-  {
-    nombre: "Diseño",
-    color: "#6E5FFF",
-    imagen: "./assets/Diseno.svg",
-  },
-  {
-    nombre: "Impresión",
-    color: "#2FA7FF",
-    imagen: "./assets/Impresion.svg",
-  },
-  {
-    nombre: "Corte",
-    color: "#FF5F5F",
-    imagen: "./assets/Corte.svg",
-  },
-  {
-    nombre: "Cerrajeria",
-    color: "#00D7E2",
-    imagen: "./assets/Cerrajeria.svg",
-  },
-  {
-    nombre: "Pintura",
-    color: "#8AC111",
-    imagen: "./assets/Pintura.svg",
-  },
-  {
-    nombre: "Montaje",
-    color: "#FFA008",
-    imagen: "./assets/Montaje.svg",
-  },
-];
+import { servicios } from "@/utils";
 
 const budgetCtrl = new Budget();
 
@@ -79,8 +47,6 @@ export default function NuevoProyecto() {
   } = useFilesUpload({});
   const [loadingForm, setLoadingForm] = useState(false);
 
-  
-
   const [presupuesto, setPresupuesto] = useState();
 
   const today = new Date().toISOString().split("T")[0];
@@ -92,7 +58,7 @@ export default function NuevoProyecto() {
       setLoadingForm(true);
       // console.log(formData);
       // Ahora envía el formulario completo a tu API
-      
+
       // Asignar a departamento
       const departamentos = [
         "diseno",
@@ -114,7 +80,7 @@ export default function NuevoProyecto() {
 
       asignarDepartamento(formData);
       // Fin
-      formData.idpresupuesto=presupuesto;
+      formData.idpresupuesto = presupuesto;
 
       formData.diseno.forEach((item, index) => {
         item.imagenes = images.diseno?.[index] || [];
@@ -175,9 +141,9 @@ export default function NuevoProyecto() {
     setPresupuesto(newPresupuesto);
   };
 
-  useEffect( () => {
-    updatePresupuesto()
-  },[formik.values] )
+  useEffect(() => {
+    updatePresupuesto();
+  }, [formik.values]);
 
   // Agrega el servicio seleccionado en el FormArray de formik
   const handleServiceClick = (serviceName) => {
@@ -220,11 +186,9 @@ export default function NuevoProyecto() {
     }
   };
 
-  
-
   return (
     <>
-      {/* {JSON.stringify(formik)} */}
+      {/* {JSON.stringify(formik.values)} */}
       {/* {JSON.stringify(files)} */}
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
@@ -244,7 +208,7 @@ export default function NuevoProyecto() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-primary font-bold">
-                          PR{presupuesto}0003
+                          PR{presupuesto}
                         </p>
                         <input
                           className={`formulario ${
@@ -346,6 +310,18 @@ export default function NuevoProyecto() {
                       type="date"
                       name="fecha"
                       value={formik.values.fecha}
+                      onChange={formik.handleChange}
+                    />
+                    <input
+                      type="time"
+                      step="3600000"
+                      name="hora"
+                      className={`formulario w-30 rounded ${
+                        formik.touched.fecha && formik.errors.fecha
+                          ? "errores"
+                          : ""
+                      }`}
+                      value={formik.values.hora}
                       onChange={formik.handleChange}
                     />
                   </div>

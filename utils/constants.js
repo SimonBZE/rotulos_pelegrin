@@ -11,4 +11,7 @@ export const ENV = {
         IMAGE_UPLOAD: "upload",
     },
     TOKEN: "token",
+    PRECIOS:{
+        DISENO: 40,
+    }
 };

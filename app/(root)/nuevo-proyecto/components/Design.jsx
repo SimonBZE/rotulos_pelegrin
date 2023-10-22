@@ -1,6 +1,9 @@
 import { Field, ErrorMessage } from "formik";
 import { CardHeader, Pricing } from ".";
 import ImageViewer from "@/components/common/ImageViewer";
+import { useEffect, useState } from "react";
+import {ENV} from '@/utils/constants'
+
 
 export const Design = ({
   index,
@@ -11,6 +14,21 @@ export const Design = ({
   formik,
   loadingImage,
 }) => {
+  const [total, setTotal] = useState(0);
+
+useEffect(() => {
+  const newTotal =
+    (formik.values?.diseno?.[index].horas * ENV.PRECIOS.DISENO) *
+    formik.values?.diseno?.[index].unidades *
+    formik.values?.diseno?.[index].cantidad;
+
+  // Actualiza el estado 'total' con el nuevo valor calculado
+  setTotal(newTotal);
+
+  // Asigna el nuevoTotal al precio en formik.values.diseno[index]
+  formik.values.diseno[index].precio = newTotal;
+}, [formik.values.diseno[index]]);
+
   return (
     <div className="rounded-md bg-[#6E5FFF30] mt-5 p-3">
       <CardHeader title="Diseño" onRemove={onRemove} />
@@ -52,7 +70,7 @@ export const Design = ({
         loadingImage={loadingImage}
       />
 
-      <Pricing index={index} service={"diseno"} formik={formik} />
+      <Pricing index={index} service={"diseno"} formik={formik} total={total} />
     </div>
   );
 };
