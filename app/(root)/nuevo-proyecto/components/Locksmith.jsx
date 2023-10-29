@@ -1,6 +1,8 @@
-import { Field, ErrorMessage } from "formik";
+import { Field } from "formik";
 import { CardHeader, Pricing } from ".";
 import ImageViewer from "@/components/common/ImageViewer";
+import { useEffect, useState } from "react";
+import Loader from "@/components/common/Loader";
 
 export const Locksmith = ({
   index,
@@ -10,10 +12,37 @@ export const Locksmith = ({
   handleImageRemove,
   FieldArray,
   formik,
-  loadingImage
+  loadingImage,
+  preciosServicios
 }) => {
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if(!preciosServicios?.cerrajeria) {
+      return
+    } 
+    const material = preciosServicios.cerrajeria.material[formik.values?.cerrajeria?.[index].material] || 0;    
+    const metros_cuadrados = formik.values?.cerrajeria?.[index].ancho * formik.values?.cerrajeria?.[index].alto || 0;   
+    const totalAdicional = formik.values?.cerrajeria?.[index].adicional.reduce( (total, item) => total + item.precio, 0 );
+    const totalHoras = formik.values?.cerrajeria?.[index].horas_fabricacion * preciosServicios.cerrajeria.horas;
+    const newTotal = (((material) * metros_cuadrados) * formik.values?.cerrajeria?.[index].cantidad) + totalAdicional + totalHoras || 0;
+
+    // Actualiza el estado 'total' con el nuevo valor calculado
+    setTotal(newTotal);
+    
+    // Asigna el nuevoTotal al precio en formik.values.cerrajeria[index]
+    formik.values.cerrajeria[index].precio = newTotal;
+    if(loading){
+      setLoading(false)
+    }
+
+  }, [preciosServicios, formik.values.cerrajeria[index]]);
+
   return (
-    <div className="rounded-md bg-[#00D7E230] mt-5 p-3">
+    <>
+      {loading ? <div className="h-100 flex justify-center items-center"><Loader tamano={50}/></div> :
+      <div className="rounded-md bg-[#00D7E230] mt-5 p-3">
       <CardHeader title={"Cerrajería"} onRemove={onRemove} />
 
       <div className="flex items-center">
@@ -32,7 +61,7 @@ export const Locksmith = ({
           name={`cerrajeria[${index}].nombre`}
         />
       </div>
-      <div className="flex justify-between mt-5">
+      <div className="flex justify-between mt-5 gap-3">
         <div>
           <label className="labels mr-2" htmlFor="ancho">
             Ancho
@@ -40,7 +69,7 @@ export const Locksmith = ({
           <Field
             type="number"
             id="ancho"
-            className={`formulario w-14 ${
+            className={`formulario w-full ${
               formik.touched.cerrajeria?.[index]?.ancho && formik.errors.cerrajeria?.[index]?.ancho
                 ? "errores"
                 : ""
@@ -55,7 +84,7 @@ export const Locksmith = ({
           <Field
             type="number"
             id="alto"
-            className={`formulario w-14 ${
+            className={`formulario w-full ${
               formik.touched.cerrajeria?.[index]?.alto && formik.errors.cerrajeria?.[index]?.alto
                 ? "errores"
                 : ""
@@ -70,7 +99,7 @@ export const Locksmith = ({
           <Field
             type="number"
             id="grosor"
-            className={`formulario w-14 ${
+            className={`formulario w-full ${
               formik.touched.cerrajeria?.[index]?.grosor && formik.errors.cerrajeria?.[index]?.grosor
                 ? "errores"
                 : ""
@@ -96,9 +125,12 @@ export const Locksmith = ({
           <option defaultValue hidden>
             Selecciona uno
           </option>
-          <option value="Vinilo x5 pro master">Vinilo x5 pro master</option>
-          <option value="Vinilo x7 pro master">Vinilo x6 pro master</option>
-          <option value="Vinilo x8 pro master">Vinilo x7 pro master</option>
+          {Object.keys(preciosServicios.cerrajeria.material).map((opcion) => (
+              <option key={opcion} value={opcion}>
+                {opcion}
+              </option>
+            ))
+          }
         </Field>
       </div>
 
@@ -109,7 +141,7 @@ export const Locksmith = ({
         <Field
           type="number"
           id="horas_fabricacion"
-          className={`formulario w-14 ${
+          className={`formulario w-16 ${
             formik.touched.cerrajeria?.[index]?.horas_fabricacion && formik.errors.cerrajeria?.[index]?.horas_fabricacion
               ? "errores"
               : ""
@@ -193,7 +225,10 @@ export const Locksmith = ({
       />
 
       {/* Precio */}
-      <Pricing index={index} service={"cerrajeria"} formik={formik} />
+      <Pricing index={index} service={"cerrajeria"} formik={formik} total={total} />
     </div>
+    }
+    </>
+    
   );
 };

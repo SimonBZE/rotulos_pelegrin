@@ -43,6 +43,7 @@ const DropdownUser = () => {
 
   return (
     <div className="relative">
+      {/* {JSON.stringify(user)} */}
       <Link
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}

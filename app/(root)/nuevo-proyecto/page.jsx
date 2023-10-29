@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import {useRouter} from 'next/navigation'
 import {
   Print,
   Mounting,
@@ -28,10 +29,15 @@ import useImageUpload from "@/hooks/useImageUpload";
 import { useFilesUpload } from "@/hooks/useFilesUpload";
 import Loader from "@/components/common/Loader";
 import { servicios } from "@/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from 'react-toastify';
+
+
 
 const budgetCtrl = new Budget();
 
 export default function NuevoProyecto() {
+  const router = useRouter();
   const {
     images,
     handleFileChange,
@@ -48,6 +54,10 @@ export default function NuevoProyecto() {
   const [loadingForm, setLoadingForm] = useState(false);
 
   const [presupuesto, setPresupuesto] = useState();
+
+  const [preciosServicios, setPreciosServicios] = useState({})
+
+  const {user} = useAuth();
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -70,16 +80,19 @@ export default function NuevoProyecto() {
       ];
 
       const asignarDepartamento = (formData) => {
+        formData.departamento = "";
         for (const departamento of departamentos) {
           if (formData[departamento]?.length > 0) {
             formData.departamento = departamento;
             break;
           }
         }
+        if(formData.departamento === "") notify("Debe de agregar al menos un departamento", "error")
       };
 
       asignarDepartamento(formData);
       // Fin
+      formData.creador = user.username;
       formData.idpresupuesto = presupuesto;
 
       formData.diseno.forEach((item, index) => {
@@ -119,11 +132,21 @@ export default function NuevoProyecto() {
       }
 
       try {
-        await budgetCtrl.createBudget(formData);
+        const res = await budgetCtrl.createBudget(formData);
         setLoadingForm(false);
+
+        if(!!res.error) throw res
+
+        notify("Proyecto creado con exito", "success");
+        router.push('/proyectos')
+        
       } catch (error) {
         console.log(error);
         setLoadingForm(false);
+        
+        // Muestra un mensaje de error usando Toastify
+        notify("No se ha enviado el formulario", "error");
+
       }
     },
   });
@@ -144,6 +167,16 @@ export default function NuevoProyecto() {
   useEffect(() => {
     updatePresupuesto();
   }, [formik.values]);
+
+  useEffect( () => {
+    const getPrices = async () => {
+      const precios = await budgetCtrl.getPrecios()
+      setPreciosServicios(precios.data.attributes)
+    }
+
+    getPrices()
+  }, [] )
+  
 
   // Agrega el servicio seleccionado en el FormArray de formik
   const handleServiceClick = (serviceName) => {
@@ -186,10 +219,14 @@ export default function NuevoProyecto() {
     }
   };
 
+  const notify = (mensaje, type = "") => type === "" ? toast(mensaje) : toast[type](mensaje);
+
   return (
     <>
-      {/* {JSON.stringify(formik.values)} */}
-      {/* {JSON.stringify(files)} */}
+     
+      {/* {JSON.stringify(formik.errors)} */}
+      {/* {JSON.stringify(user)}  */}
+      {/* {JSON.stringify(preciosServicios)} */}
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
           <div className="2xl:h-[calc(100vh-120px)] 2xl:flex mt-[-40px]">
@@ -349,6 +386,9 @@ export default function NuevoProyecto() {
                   </div>
 
                   {/* Servicios */}
+                  {formik.errors.departamento && (
+                    <div style={{ color: "red" }}>{formik.errors.departamento}</div>
+                  )}
                   <div className="grid grid-cols-3 mt-5 auto-cols-auto gap-4 md:grid-cols-6 lg:grid-cols-6 xl:auto-cols-min">
                     {servicios.map(({ nombre, color, imagen }) => (
                       <div
@@ -395,8 +435,9 @@ export default function NuevoProyecto() {
                     </div>
                     <p className="font-bold text-black dark:text-whiten">50€</p>
                   </div>
-
+                  
                   <div className="grid rid-flow-row-dense md:grid-cols-2 gap-4 lg:grid-cols-3 gap-4">
+                  
                     {/* FOrmulario de diseño */}
                     <FieldArray
                       name="diseno"
@@ -440,6 +481,8 @@ export default function NuevoProyecto() {
                               handleFileChange={handleFileChange}
                               images={images}
                               handleImageRemove={handleImageRemove}
+                              preciosServicios={preciosServicios}
+                              
                             />
                           ))}
                         </>
@@ -464,6 +507,7 @@ export default function NuevoProyecto() {
                               handleFileChange={handleFileChange}
                               images={images}
                               handleImageRemove={handleImageRemove}
+                              preciosServicios={preciosServicios}
                             />
                           ))}
                         </>
@@ -489,6 +533,7 @@ export default function NuevoProyecto() {
                               images={images}
                               handleImageRemove={handleImageRemove}
                               FieldArray={FieldArray}
+                              preciosServicios={preciosServicios}
                             />
                           ))}
                         </>
@@ -514,6 +559,7 @@ export default function NuevoProyecto() {
                               images={images}
                               handleImageRemove={handleImageRemove}
                               FieldArray={FieldArray}
+                              preciosServicios={preciosServicios}
                             />
                           ))}
                         </>

@@ -10,6 +10,7 @@ export const initialValues = {
   hora:"",
   descripcion: "",
   puesta_en_marcha: false,
+  departamento:"",
   diseno: [],
   impresion: [],
   corte: [],
@@ -24,7 +25,7 @@ export const initialValues = {
 export const disenoSchema = Yup.object().shape({
   horas: Yup.number()
     .required("Horas es requerido")
-    .min(1, "Debe ser al menos 1 hora"),
+    .min(0.1, "Debe ser al menos 1 hora"),
   unidades: Yup.number()
     .required("Unidades es requerido")
     .min(1, "Debe ser al menos 1 unidad"),
@@ -40,10 +41,10 @@ export const printSchema = Yup.object().shape({
   nombre: Yup.string().required("Debe agregar un nombre"),
   ancho: Yup.number()
     .required("Debe agregar un ancho")
-    .min(0, "Ancho no puede ser negativo"),
+    .moreThan(0, 'Ancho debe ser mayor que 0'),
   alto: Yup.number()
     .required("Debe de agregar un alto")
-    .min(0, "Alto no puede ser negativo"),
+    .moreThan(0, 'Alto debe ser mayor que 0'),
   material: Yup.string().required("Debe elegir un material"),
   laminacion: Yup.string(),
   imagenes: Yup.mixed(),
@@ -92,7 +93,7 @@ export const locksmithSchema = Yup.object().shape({
   material: Yup.string().required("Debe de elegir un material"),
   horas_fabricacion: Yup.number()
     .required("Es requerido")
-    .min(1, "Horas no pueden ser inferiores a 1"),
+    .min(0.1, "Horas no pueden ser inferiores a 1"),
   cantidad: Yup.number().required('Debe ingresar una cantidad').min(1, 'La cantidad minima es 1')
     .required("Cantidad es requerido")
     .min(1, "No puede ser inferior a 1"),
@@ -224,9 +225,10 @@ export const validationSchema = Yup.object({
   aprovacion: Yup.boolean(),
   prioridad: Yup.string().required("Debe elegir el nivel de prioridad"),
   fecha: Yup.date().required("Debe establecer una fecha de entrega"),
-  hora: Yup.date().required("Debe establecer una hora de entrega"),
+  hora: Yup.string().required("Debe establecer una hora de entrega"),
   descripcion: Yup.string(),
   puesta_en_marcha: Yup.boolean(),
+  departamento: Yup.string(),
   diseno: Yup.array().of(disenoSchema),
   impresion: Yup.array().of(printSchema),
   corte: Yup.array().of(cutSchema),

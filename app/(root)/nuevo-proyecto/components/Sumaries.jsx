@@ -25,16 +25,26 @@ const multimedia = [
   },
 ];
 
+const componentNames = [
+  "diseno",
+  "impresion",
+  "corte",
+  "cerrajeria",
+  "pintura",
+  "montaje",
+];
+
+
 export const Sumaries = ({ formik, files }) => {
 
   const [total, setTotal] = useState({
-    diseno: 0,
-    impresion: 0,
+    diseño: 0,
+    impresión: 0,
     corte: 0,
     pintura: 0,
     montaje: 0,
     cerrajeria: 0,
-    totalGeneral: 0,
+    total: 0,
   });
 
   useEffect(() => {
@@ -51,16 +61,33 @@ export const Sumaries = ({ formik, files }) => {
       0
     );
 
+    let totalLockSmith = formik.values.cerrajeria.reduce(
+      (acc, curr) => acc + (curr.precio || 0), 0
+    )
+
+    let totalPaint = formik.values.pintura.reduce(
+      (acc, curr) => acc + (curr.precio || 0), 0
+    )
+
+    let totalMounting = formik.values.montaje.reduce(
+      (acc, curr) => acc + (curr.precio || 0), 0
+    )
+
+
+
     // Suma los totales de cada componente para obtener el total general
-    let totalSum = totalDesign + totalPrint + totalCut;
+    let totalSum = totalDesign + totalPrint + totalCut + totalLockSmith + totalPaint + totalMounting;
 
     // Actualiza el estado con el total
     setTotal({
       ...total,
-      diseno: totalDesign,
-      impresion: totalPrint,
+      diseño: totalDesign,
+      impresión: totalPrint,
       corte: totalCut,
-      totalGeneral: totalSum,
+      cerrajeria: totalLockSmith,
+      pintura: totalPaint,
+      montaje: totalMounting,
+      total: totalSum,
     });
     
   }, [formik.values]);
@@ -92,40 +119,16 @@ export const Sumaries = ({ formik, files }) => {
 
       <table className="table-fixed w-full mt-5">
         <tbody>
-          {total.diseno > 0 && (
-            <tr>
-              <td className="labels">Diseño</td>
-              <td className="text-right labels">{total.diseno} €</td>
-            </tr>
-          )}
+        {Object.entries(total)
+      .filter(([componentName, price]) => price > 0 && componentName!=="total")
+      .map(([componentName, price]) => (
+        <tr key={componentName}>
+          <td className="labels capitalize">{componentName}</td>
+          <td className="text-right labels">{price} €</td>
+        </tr>
+      ))}
 
-          {total.impresion > 0 && (
-            <tr>
-              <td className="labels">Impresión</td>
-              <td className="text-right labels">{total.impresion} €</td>
-            </tr>
-          )}
-
-          {total.corte > 0 && (
-            <tr>
-              <td className="labels">Corte</td>
-              <td className="text-right labels">{total.corte} €</td>
-            </tr>
-          )}
-
-          {total.pintura > 0 && (
-            <tr>
-              <td className="labels">Pintura</td>
-              <td className="text-right labels">{total.pintura} €</td>
-            </tr>
-          )}
-
-          {total.montaje > 0 && (
-            <tr>
-              <td className="labels">Montaje</td>
-              <td className="text-right labels">{total.montaje} €</td>
-            </tr>
-          )}
+          
 
           {formik.values.puesta_en_marcha && <tr>
               <td className="labels">Puesta en marcha</td>
@@ -134,7 +137,7 @@ export const Sumaries = ({ formik, files }) => {
         </tbody>
       </table>
       <div className="text-right mt-6">
-        <p className="labels text-base">TOTAL: {total.totalGeneral + (formik.values.puesta_en_marcha ? 50 : 0)} €</p>
+        <p className="labels text-base">TOTAL: {total.total + (formik.values.puesta_en_marcha ? 50 : 0)} €</p>
       </div>
     </div>
   );

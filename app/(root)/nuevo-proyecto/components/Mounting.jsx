@@ -2,6 +2,7 @@ import { Field, ErrorMessage } from "formik";
 import { CardHeader } from "./CardHeader";
 import ImageViewer from "@/components/common/ImageViewer";
 import { Pricing } from ".";
+import { useEffect, useState } from "react";
 
 export const Mounting = ({ 
   index,
@@ -11,9 +12,32 @@ export const Mounting = ({
   handleImageRemove,
   FieldArray,
   formik,
-  loadingImage
+  loadingImage,
+  
  }) => {
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    
+    const montaje = formik.values.montaje?.[index]?.tiempo_montaje || 0;
+    console.log(montaje)
+    const t_desplazamiento = formik.values.montaje?.[index]?.desplazamiento || 0;
+    const maquinaria = formik.values.montaje?.[index]?.alquiler_maquinaria || 0;
+    const totalOtros = formik.values.montaje?.[index]?.adicional.reduce( (total, item) => total + item.precio, 0 );
+       
+    const newTotal = (montaje + t_desplazamiento + maquinaria + totalOtros) * formik.values?.montaje?.[index].cantidad || 0;
+
+    // Actualiza el estado 'total' con el nuevo valor calculado
+    setTotal(newTotal);
+    
+    // Asigna el nuevoTotal al precio en formik.values.montaje[index]
+    formik.values.montaje[index].precio = newTotal;
+
+  }, [formik.values.montaje[index]]);
+
   return (
+    
     <div className="rounded-md bg-[#FFA00830] mt-5 p-3">
       <CardHeader title={"Montaje"} onRemove={onRemove} />
 
@@ -25,7 +49,7 @@ export const Mounting = ({
         <Field
           type="number"
           id="tiempo_montaje"
-          className={`formulario w-14 ${
+          className={`formulario w-18 ${
             formik.touched.montaje?.[index]?.tiempo_montaje && formik.errors.montaje?.[index]?.tiempo_montaje
               ? "errores"
               : ""
@@ -40,7 +64,7 @@ export const Mounting = ({
           <Field
             type="number"
             id="desplazamiento"
-            className={`formulario w-14 ${
+            className={`formulario w-18 ${
               formik.touched.montaje?.[index]?.desplazamiento && formik.errors.montaje?.[index]?.desplazamiento
                 ? "errores"
                 : ""
@@ -55,7 +79,7 @@ export const Mounting = ({
         <Field
           type="number"
           id="alquiler_maquinaria"
-          className={`formulario w-14 ${
+          className={`formulario w-18 ${
             formik.touched.montaje?.[index]?.alquiler_maquinaria && formik.errors.montaje?.[index]?.alquiler_maquinaria
               ? "errores"
               : ""
@@ -100,7 +124,7 @@ export const Mounting = ({
                       name={`montaje[${index}].adicional[${adicionalIndex}].precio`}
                       placeholder="Precio"
                       type="number"
-                      className={`formulario w-17 ${
+                      className={`formulario w-19 ${
                         formik.touched.montaje?.[index]?.adicional?.[adicionalIndex]?.precio && formik.errors.montaje?.[index]?.adicional?.[adicionalIndex]?.precio
                           ? "errores"
                           : ""
@@ -140,7 +164,7 @@ export const Mounting = ({
       />
 
       {/* Precio */}
-      <Pricing index={index} service={"montaje"} formik={formik} />
+      <Pricing index={index} service={"montaje"} formik={formik} total={total} />
     </div>
   );
 };

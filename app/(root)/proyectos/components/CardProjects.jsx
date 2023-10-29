@@ -1,22 +1,13 @@
 import React from "react";
-import { ProgressBar } from "@/components/ui";
+
 import Link from "next/link";
 
-const colors = {
-  "en proceso": "#c0ffc9",
-  pendiente: "#e5e5e5",
-  "en pausa": "#ffecc2",
-  prioridad: "ffc2c2",
-};
+import {colors} from '@/utils/menus'
+import { ProgresoDep } from "@/components/common/ProgesoDep";
 
 export const CardProjects = ({ proyecto, params }) => {
   // Filtrar las tareas completadas
-  const tareasCompletadas = proyecto.attributes[params].filter(
-    (tarea) => tarea.completado === true
-  );
-  const tareas = tareasCompletadas.length;
-  const porcentaje =
-    tareas === 0 ? 0 : (tareas / proyecto.attributes[params].length) * 100;
+
   const estado =
     proyecto.attributes.departamento === params
       ? proyecto.attributes.estado_departamento
@@ -24,7 +15,7 @@ export const CardProjects = ({ proyecto, params }) => {
   return (
     <Link href={`/proyecto/${proyecto.id}`}>
       <div
-        className="rounded-xl p-5 m-2 bg-white flex"
+        className="rounded-xl p-5 m-2 bg-white flex justify-between"
         style={{ background: colors[estado] }}
       >
         <div className="w-9/12 flex flex-col justify-center">
@@ -46,17 +37,8 @@ export const CardProjects = ({ proyecto, params }) => {
             {proyecto.attributes.hora?.slice(0, 5)}
           </p>
         </div>
-        <div className="w-3/12 flex justify-end gap-2 items-center flex-col md:flex-row">
-          <div className="max-w-[80px]">
-            <ProgressBar percentage={porcentaje} />
-          </div>
-          <div>
-            <p>Cantidad</p>
-            <p className="labels">
-              {tareas} de {proyecto.attributes[params].length}
-            </p>
-          </div>
-        </div>
+        <ProgresoDep tareasDep={proyecto.attributes[params]} />
+        
       </div>
     </Link>
   );

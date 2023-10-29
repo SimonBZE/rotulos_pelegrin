@@ -19,7 +19,7 @@ const ImageViewer = ({
         <div
           className=" flex items-center justify-center gap-3 border-dashed border-2 p-4 rounded-md relative cursor-pointer bg-white"
         >
-          <Loader tamano="45px" /> Espera...
+          <Loader tamano="25px" /> Espera...
         </div>
       ) : (
         <div

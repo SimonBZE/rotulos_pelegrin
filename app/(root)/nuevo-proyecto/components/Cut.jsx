@@ -1,7 +1,9 @@
-import { Field, ErrorMessage } from "formik";
+import { Field } from "formik";
 import { CardHeader, Pricing } from ".";
-import ImageGrid from "@/components/common/ImageGrid";
 import ImageViewer from "@/components/common/ImageViewer";
+import { useEffect, useState } from "react";
+import Loader from "@/components/common/Loader";
+
 
 export const Cut = ({
   index,
@@ -11,8 +13,35 @@ export const Cut = ({
   handleImageRemove,
   formik,
   loadingImage,
+  preciosServicios,
 }) => {
+
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if(!preciosServicios?.corte) {
+      return
+    } 
+    const material = preciosServicios.corte.material[formik.values?.corte?.[index].material] || 0;    
+    const metros_cuadrados = formik.values?.corte?.[index].ancho * formik.values?.corte?.[index].alto || 0;    
+    const newTotal = ((material) * metros_cuadrados) * formik.values?.corte?.[index].cantidad || 0;
+
+    // Actualiza el estado 'total' con el nuevo valor calculado
+    setTotal(newTotal);
+    
+    // Asigna el nuevoTotal al precio en formik.values.corte[index]
+    formik.values.corte[index].precio = newTotal;
+    if(loading){
+      setLoading(false)
+    }
+
+  }, [preciosServicios, formik.values.corte[index]]);
+
   return (
+    <>
+      {loading ? <div className="h-100 flex justify-center items-center"><Loader tamano={50}/></div> :
+    
     <div className="rounded-md bg-[#FF5F5F30] mt-5 p-3">
       <CardHeader title={"corte"} onRemove={onRemove} />
 
@@ -31,14 +60,14 @@ export const Cut = ({
           name={`corte[${index}].nombre`}
         />
       </div>
-      <div className="flex justify-between mt-5">
+      <div className="flex justify-between mt-5 gap-5">
         <div>
           <label className="labels mr-2" htmlFor="ancho">
             Ancho
           </label>
           <Field
             type="number"
-            className={`formulario w-14 ${
+            className={`formulario w-full ${
               formik.touched.corte?.[index]?.ancho && formik.errors.corte?.[index]?.ancho
                 ? "errores"
                 : ""
@@ -52,7 +81,7 @@ export const Cut = ({
           </label>
           <Field
             type="number"
-            className={`formulario w-14 ${
+            className={`formulario w-full ${
               formik.touched.corte?.[index]?.alto && formik.errors.corte?.[index]?.alto
                 ? "errores"
                 : ""
@@ -76,9 +105,12 @@ export const Cut = ({
           name={`corte[${index}].material`}
         >
           <option defaultValue hidden>Selecciona uno</option>
-          <option value="Vinilo x5 pro master">Vinilo x5 pro master</option>
-          <option value="Vinilo x7 pro master">Vinilo x6 pro master</option>
-          <option value="Vinilo x8 pro master">Vinilo x7 pro master</option>
+          {Object.keys(preciosServicios.corte.material).map((opcion) => (
+              <option key={opcion} value={opcion}>
+                {opcion}
+              </option>
+            ))
+          }
         </Field>
       </div>
 
@@ -94,8 +126,10 @@ export const Cut = ({
 
       {/* Precio */}
       
-      <Pricing index={index} service={"corte"} formik={formik} />
+      <Pricing index={index} service={"corte"} formik={formik} total={total}/>
       
     </div>
+}
+    </>
   );
 };

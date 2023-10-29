@@ -36,3 +36,17 @@ export const servicios = [
       departamento: 'montaje'
     },
   ];
+
+  export const colors = {
+    "en proceso": "#c0ffc9",
+    "pendiente": "#e5e5e5",
+    "en pausa": "#ffecc2",
+    "prioridad": "ffc2c2",
+  };
+
+  export const estado = {
+    'pendiente': 'gray',
+    'en proceso': '#00e05a',
+    'en pausa': '#ff9a22',
+    'completado': "#3f24ff"
+  }

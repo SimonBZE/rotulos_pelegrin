@@ -73,6 +73,7 @@ export default function Proyectos() {
                   alt={servicio.nombre}
                   width={50}
                   height={50}
+                  quality={50}
                 />
                 <p className=" text-black mt-2 text-sm font-bold">
                   {servicio.nombre}

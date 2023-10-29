@@ -36,7 +36,23 @@ export class Budget {
 
       return result;
     } catch (error) {
-      console.log(error);
+      return error
     }
+  }
+
+  async getPrecios(){
+    const url =  `${ENV.API_URL}/${ENV.ENDPOINTS.PRECIOS_MATERIAL}`
+    try {
+      const res = await fetch(url)
+      
+      if(res.status != "200") throw res
+      
+      const data = await res.json()
+      console.log(data)
+      return data
+    } catch (error) {
+      return error
+    }
+    
   }
 }
