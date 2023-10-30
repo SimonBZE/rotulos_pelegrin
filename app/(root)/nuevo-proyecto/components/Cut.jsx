@@ -37,7 +37,7 @@ export const Cut = ({
     }
 
   }, [preciosServicios, formik.values.corte[index]]);
-
+  
   return (
     <>
       {loading ? <div className="h-100 flex justify-center items-center"><Loader tamano={50}/></div> :

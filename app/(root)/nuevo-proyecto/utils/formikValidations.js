@@ -25,7 +25,7 @@ export const initialValues = {
 export const disenoSchema = Yup.object().shape({
   horas: Yup.number()
     .required("Horas es requerido")
-    .min(0.1, "Debe ser al menos 1 hora"),
+    .min(1, "Debe ser al menos 1 hora"),
   unidades: Yup.number()
     .required("Unidades es requerido")
     .min(1, "Debe ser al menos 1 unidad"),
@@ -58,10 +58,10 @@ export const cutSchema = Yup.object().shape({
   nombre: Yup.string().required("Debe agregar un nombre"),
   alto: Yup.number()
     .required("Alto es requerido")
-    .min(0, "Alto no puede ser inferior a 0"),
+    .moreThan(0, 'Alto debe ser mayor que 0'),
   ancho: Yup.number()
     .required("Ancho es requerido")
-    .min(0, "Ancho no puede ser inferior a 0"),
+    .moreThan(0, 'Ancho debe ser mayor que 0'),
   material: Yup.string().required("Debe de elegir un material"),
   cantidad: Yup.number()
     .required("Corte: Cantidad es requerido")
@@ -83,13 +83,13 @@ export const locksmithSchema = Yup.object().shape({
   nombre: Yup.string().required("Debe agregar un nombre"),
   ancho: Yup.number()
     .required("Ancho es requerido")
-    .min(1, "Ancho no puede ser inferior a 1"),
+    .moreThan(0, 'Ancho debe ser mayor que 0'),
   alto: Yup.number()
     .required("Alto es requerido")
-    .min(1, "Alto no puede ser inferior a 1"),
+    .moreThan(0, 'Alto debe ser mayor que 0'),
   grosor: Yup.number()
     .required("Grosor es requerido")
-    .min(1, "Grosor no puede ser inferior a 1"),
+    .moreThan(0, 'Grosor debe ser mayor que 0'),
   material: Yup.string().required("Debe de elegir un material"),
   horas_fabricacion: Yup.number()
     .required("Es requerido")
@@ -108,10 +108,10 @@ export const paintSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre es requerido"),
   ancho: Yup.number()
     .required("Ancho es requedido")
-    .min(0, "Ancho no puede ser negativo"),
+    .moreThan(0, 'Ancho debe ser mayor que 0'),
   alto: Yup.number()
     .required("Alto es requerido")
-    .min(0, "alto no puede ser negativo"),
+    .moreThan(0, 'Alto debe ser mayor que 0'),
   lijado: Yup.boolean(),
   material: Yup.string().required("Material es requerido"),
   precio: Yup.number()

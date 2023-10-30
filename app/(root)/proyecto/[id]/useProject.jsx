@@ -30,7 +30,7 @@ export const useProject = (proyecto) => {
   }
 
   const estadoDepartamentos = () => {
-    console.log(departamentosActivos)
+    console.log('departamentos activos', departamentosActivos)
   }
 
   

@@ -8,6 +8,8 @@ import {estado, servicios} from '@/utils';
 import { ProgresoDep } from "@/components/common/ProgesoDep";
 import { useAuth } from "@/hooks/useAuth";
 import { useProject } from "./useProject";
+import { ProjectTabs } from "./components/ProjectTabs";
+
 
 const fetchData = async (id) => {
   let filter = "?";
@@ -209,7 +211,15 @@ export default function Proyecto({ params }) {
              } )}
           </div>
 
+          <div className="flex flex-col mt-10">
+            <p className="labels">Descripción</p>
+            <p>{proyecto.attributes.descripcion}</p>
+          </div>
+
+          
+
         </div>
+        <ProjectTabs proyecto={proyecto} departamentosActivos={departamentosActivos}/>
         </>
       )}
     </>
