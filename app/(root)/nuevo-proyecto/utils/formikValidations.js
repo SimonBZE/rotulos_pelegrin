@@ -129,6 +129,10 @@ export const mountingAditionalSchema = Yup.object().shape({
     .min(1, "1€ es el valor mínimo"),
 });
 
+export const matriculaMountingSchema = Yup.object().shape({
+  matricula: Yup.string()
+})
+
 export const mountingSchema = Yup.object().shape({
   tiempo_montaje: Yup.number()
     .required("Debe indicar el tiempo de montaje")
@@ -145,6 +149,11 @@ export const mountingSchema = Yup.object().shape({
   .min(1, "La cantidad minima es 1"),
   alquiler_maquinaria: Yup.number().min(0, 'No puede ser negativo'),
   adicional: Yup.array().of(mountingAditionalSchema),
+  matricula: Yup.array().of(matriculaMountingSchema),
+  lugar_montaje: Yup.string(),
+  montadores:Yup.array(),
+  vehículo: Yup.string(),
+  persona_contacto: Yup.string(),
 });
 
 export const newDesign = {
@@ -153,6 +162,7 @@ export const newDesign = {
   precio: 0,
   imagenes: [],
   cantidad: 1,
+  contador:0,
 };
 
 export const newPrint = {
@@ -163,6 +173,7 @@ export const newPrint = {
   imagenes: [],
   precio: 0,
   cantidad: 1,
+  contador:0,
 };
 
 export const newCut = {
@@ -173,6 +184,7 @@ export const newCut = {
   imagenes: [],
   precio: 0,
   cantidad: 1,
+  contador:0,
 };
 
 export const newLockSmith = {
@@ -186,6 +198,7 @@ export const newLockSmith = {
   cantidad: 1,
   precio: 0,
   imagenes: [],
+  contador:0,
 };
 
 export const newLockAditional = {
@@ -201,22 +214,33 @@ export const newPaint = {
   material: "",
   precio: 0,
   cantidad: 1,
+  contador:0,
 };
 
 export const newMounting = {
   tiempo_montaje: "",
+  matricula:[],
+  lugar_montaje: "",
+  montadores:[],
+  vehículo: "",
+  persona_contacto: "",
   desplazamiento: "",
   alquiler_maquinaria: 0,
   adicional: [],
   imagenes: [],
   precio: 0,
   cantidad: 1,
+  contador:0,
 };
 
 export const newMountingAditional = {
   nombre: "",
   precio: 0,
 };
+
+export const matriculaMounting = {
+  matricula: "",
+}
 
 export const validationSchema = Yup.object({
   nombre: Yup.string().required("Debe añadir un nombre al presupuesto"),

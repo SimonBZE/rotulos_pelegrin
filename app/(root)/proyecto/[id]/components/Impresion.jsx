@@ -8,7 +8,7 @@ export const Impresion = ({ data }) => {
       {data.map((item) => (
         <div key={item.id} className="flex flex-col gap-5 shadow-3">
           <ProjectHeader item={item} />
-          <div className="flex justify-between px-3" key={item.id}>
+          <div className="flex justify-between px-3">
             <div className="flex gap-1">
               <p className="labels">Nombre: </p>
               <p>{item.nombre}</p>
@@ -21,11 +21,11 @@ export const Impresion = ({ data }) => {
           <div className="flex justify-between px-3">
             <div className="flex gap-1">
               <p className="labels">Ancho: </p>
-              <p>{item.ancho}</p>
+              <p>{item.ancho} m</p>
             </div>
             <div className="flex gap-1">
               <p className="labels">Alto: </p>
-              <p>{item.alto}</p>
+              <p>{item.alto} m</p>
             </div>
           </div>
           <div className="flex justify-between px-3">
