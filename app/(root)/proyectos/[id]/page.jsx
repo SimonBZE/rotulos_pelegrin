@@ -15,22 +15,34 @@ const depart = [
 ];
 
 const cargarProyectos = async (departamento) => {
+  const index = depart.indexOf(departamento);
+  const dep = `?populate=*&filters[departamento][$eq]=${departamento}&filters[${departamento}][completado][$eq]=false`;
+  const next =
+    index > 0
+      ? `?populate=*&filters[departamento][$eq]=${depart[index - 1]}&filters[${
+          depart[index - 1]
+        }][completado][$eq]=false`
+      : false;
+
   const projectsCtrl = new Projects();
-  const filter = `?populate=*&filters[${departamento}][completado][$eq]=false`;
-  const res = await projectsCtrl.getBudgets(filter);
-  return res;
+  const res = await projectsCtrl.getBudgets(dep);
+  const resNext = next ? await projectsCtrl.getBudgets(next) : false;
+
+  return { res, resNext };
 };
 
 const Departamentos = ({ params }) => {
   const { user } = useAuth();
   const [proyectos, setProyectos] = useState([]);
+  const [proximosProyectos, setProximosProyectos] = useState([]);
   const [orden, setOrden] = useState("mas antiguos"); // Estado para el orden
   const [proximos, setProximos] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
-      const res = await cargarProyectos(params.id);
+      const { res, resNext } = await cargarProyectos(params.id);
       setProyectos(res.data);
+      setProximosProyectos(resNext.data);
     };
 
     getData();
@@ -55,7 +67,7 @@ const Departamentos = ({ params }) => {
 
   return (
     <div>
-      {/* {JSON.stringify(proyectos)} */}
+      {/* {JSON.stringify(proximosProyectos)} */}
       <div className="flex justify-between items-center mb-5 p-5">
         <div className="flex items-center gap-3">
           <Image
@@ -98,36 +110,55 @@ const Departamentos = ({ params }) => {
       {ordenarProyectos().map((proyecto, index) => {
         // Esta funcion muestra los proximos proyectos que van a llegar, pero solo muestra los que se encuentran justo en el departamento anterior al actual
         //Si el departamento es igual al departamento actual se sale del ciclo
-        if (proyecto.attributes.departamento === params.id) {
+        if (
+          proyecto.attributes.departamento === params.id ||
+          params.id === "diseno"
+        ) {
           return;
         }
 
         let validador = {}; // En esta variable se almacenan los departamentos, al finalizar se ve algo así {corte: 2, cerrajeria: 3, montaje: 5}
         depart.forEach((dep, index) => {
           // La respuesta de la api almacena cada proyecto en un [], si este está vácio significa que no hay tareas asiganadas al departamento, si está lleno se almacena el nombre del departamento y el index en validador
-          if (proyecto.attributes[dep].length > 0) validador[dep] = index;
+          if (proximosProyectos.attributes[dep].length > 0)
+            validador[dep] = index;
         });
 
         const propiedades = Object.keys(validador);
         // dado que se van almacenando los departamento en orden en el arreglo significa que si el departamento actual +1 es igual al departamento de departamento del encargado, significa que cuando avancen la tarea será el siguiente, por eso quiero que se muestre
         if (
-          propiedades.indexOf(proyecto.attributes.departamento) + 1 <
+          propiedades.indexOf(proximosProyectos.attributes.departamento) + 1 <
           propiedades.indexOf(params.id)
-        ) return;
-        
+        )
+          return;
+
         // Si hay hay proximos trabajos que mostrar se cambia la bandera a true, se almacena en un if porque solo necesito que se cambie el estado una unica vez
-        if(!proximos){
-          setProximos(true)
+        if (!proximos) {
+          setProximos(true);
         }
 
         return (
           <CardProjects
             key={index}
-            proyecto={proyecto}
+            proyecto={proximosProyectos}
             params={proyecto.attributes.departamento}
           />
         );
       })}
+      {!!proximosProyectos?.[0] && (
+        <>
+          <h3 className="text-title-md mt-5 mb-3 font-bold text-black ml-5">
+            Próximos proyectos
+          </h3>
+          {proximosProyectos.map( (proyecto, index) => (
+          <CardProjects
+            key={index}
+            proyecto={proyecto}
+            params={proyecto.attributes.departamento}
+          />
+          ) )}
+        </>
+      )}
     </div>
   );
 };

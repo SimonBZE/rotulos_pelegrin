@@ -1,26 +1,6 @@
 import * as Yup from "yup";
 
-export const initialValues = {
-  nombre: "",
-  cliente: "",
-  contacto: "",
-  aprovacion: false,
-  prioridad: "",
-  fecha: "",
-  hora:"",
-  descripcion: "",
-  puesta_en_marcha: false,
-  departamento:"",
-  diseno: [],
-  impresion: [],
-  corte: [],
-  cerrajeria: [],
-  pintura: [],
-  montaje: [],
-  videos: [],
-  fotos: [],
-  audios: [],
-};
+
 
 export const disenoSchema = Yup.object().shape({
   nombre: Yup.string(),

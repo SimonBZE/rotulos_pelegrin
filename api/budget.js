@@ -48,7 +48,6 @@ export class Budget {
       if(res.status != "200") throw res
       
       const data = await res.json()
-      console.log(data)
       return data
     } catch (error) {
       return error

@@ -21,7 +21,7 @@ const menu = [
     nombre: 'Proyectos en curso',
     imagen: './assets/Proyectos-en-curso.svg',
     color: '#ff5f5f',
-    link: '/en-curso'
+    link: '/proyectos'
 },
 {
     nombre: 'Calendario',

@@ -9,6 +9,7 @@ import { ProgresoDep } from "@/components/common/ProgesoDep";
 import { useAuth } from "@/hooks/useAuth";
 import { useProject } from "./useProject";
 import { ProjectTabs } from "./components/ProjectTabs";
+import { ProjectMedia } from "./components/ProjectMedia";
 
 
 const fetchData = async (id) => {
@@ -22,15 +23,11 @@ const fetchData = async (id) => {
     "&populate[cerrajeria][populate][0]=imagenes&populate[cerrajeria][populate][1]=adicional";
   const pintura = "&populate[pintura][populate][0]=imagenes";
   const montaje =
-    "&populate[montaje][populate][0]=imagenes&populate[montaje][populate][1]=adicional";
+    "&populate[montaje][populate][0]=imagenes&populate[montaje][populate][1]=adicional&populate[montaje][populate][2]=matricula&populate[montaje][populate][3]=montadores";
 
   filter += media + diseno + impresion + corte + cerrajeria + pintura + montaje;
-
-  // filter+=imagenes
-  console.log(id);
   const projectsCtrl = new Projects();
   const res = await projectsCtrl.getSingleBudget(id, filter);
-  console.log(res);
   return res;
 };
 
@@ -61,10 +58,6 @@ export default function Proyecto({ params }) {
         fotos: proyecto.attributes.fotos.data, // Incluye la información de fotos
         audios: proyecto.attributes.audios.data, // Incluye la información de audios
         videos: proyecto.attributes.videos.data, // Incluye la información de videos
-        // diseno: proyecto.diseno?.map((item) => ({
-        //   ...item,
-        //   imagenes: item.imagenes?.data || [], // Incluye la información de las imágenes de diseno
-        // })),
         diseno: procesarSeccion("diseno"),
         impresion: procesarSeccion("impresion"),
         corte: procesarSeccion("corte"),
@@ -191,20 +184,14 @@ export default function Proyecto({ params }) {
 
               let mostrar = null;
 
-              // console.log(proyecto.attributes[servicio.departamento])
-              if(proyecto.attributes[servicio.departamento] > 0){
-                proyecto.attributes[servicio.departamento].foreach( (serv) => mostrar += serv.completado)
+              if(proyecto.attributes[servicio.departamento].length > 0){
+                // console.log(proyecto.attributes[servicio.departamento])
+                proyecto.attributes[servicio.departamento].forEach( (serv) => mostrar += serv.completado)
               }
-
-              // console.log(mostrar)
-
-              // if(!mostrar){
-              //   return
-              // }
               
               return(
               <div className="flex items-center gap-1" key={index}>
-                <input type="checkbox" className="w-7 h-7 accent-primary" defaultChecked={mostrar} />
+                <input type="checkbox" className="w-7 h-7 accent-primary" checked={mostrar} readOnly />
                 <Image width={30} height={30} className="ml-3 w-[35px] h-[35px] grayscale" src={servicio.imagen} alt={servicio.nombre} />
                 <p className="labels">{servicio.nombre}</p>
               </div>)
@@ -220,42 +207,10 @@ export default function Proyecto({ params }) {
 
         </div>
         <ProjectTabs proyecto={proyecto} departamentosActivos={departamentosActivos}/>
+
+        <ProjectMedia proyecto={proyecto} />
         </>
       )}
     </>
   );
 }
-
-// Consulta
-
-// {
-//   populate: {
-//   fotos:{
-//     populate: ['*'],
-//   },
-//   audios:{
-//     populate: ['*'],
-//   },
-//   videos:{
-//     populate: ['*'],
-//   },
-//     diseno:{
-//       populate:['imagenes'],
-//     },
-//     impresion:{
-//       populate:['imagenes'],
-//     },
-//     corte: {
-//       populate:['imagenes']
-//     },
-//     cerrajeria: {
-//       populate: ['imagenes', 'adicional'],
-//     },
-//     pintura: {
-//       populate:['imagenes'],
-//     },
-//     montaje: {
-//       populate:['imagenes', 'adicional']
-//     }
-//   },
-// }

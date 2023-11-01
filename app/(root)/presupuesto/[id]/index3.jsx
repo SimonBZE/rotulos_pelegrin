@@ -13,9 +13,8 @@ import {
   Design,
   Contenido,
 } from "./components";
-import { Budget } from "@/api";
+import { Projects, Budget } from "@/api";
 import {
-  initialValues,
   newPaint,
   newLockSmith,
   newDesign,
@@ -33,11 +32,64 @@ import { servicios } from "@/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from 'react-toastify';
 
+const fetchData = async (id) => {
+  let filter = "?";
+  const media =
+    "populate[fotos][populate][0]=*&populate[audios][populate][0]=*&populate[videos][populate][0]=*";
+  const diseno = "&populate[diseno][populate][0]=imagenes";
+  const impresion = "&populate[impresion][populate][0]=imagenes";
+  const corte = "&populate[corte][populate][0]=imagenes";
+  const cerrajeria =
+    "&populate[cerrajeria][populate][0]=imagenes&populate[cerrajeria][populate][1]=adicional";
+  const pintura = "&populate[pintura][populate][0]=imagenes";
+  const montaje =
+    "&populate[montaje][populate][0]=imagenes&populate[montaje][populate][1]=adicional&populate[montaje][populate][2]=matricula&populate[montaje][populate][3]=montadores";
+
+  filter += media + diseno + impresion + corte + cerrajeria + pintura + montaje;
+  const projectsCtrl = new Projects();
+  const res = await projectsCtrl.getSingleBudget(id, filter);
+  console.log(res)
+  return res;
+};
+
+const initialValues = {
+  nombre: "Prueba",
+  cliente: "",
+  contacto: "",
+  aprovacion: false,
+  prioridad: "",
+  fecha: "",
+  hora:"",
+  descripcion: "",
+  puesta_en_marcha: false,
+  departamento:"",
+  diseno: [{
+    "id": 98,
+    "horas": 2,
+    "precio": 160,
+    "unidades": 1,
+    "cantidad": 2,
+    "completado": true,
+    "contador": null,
+    "nombre": null,
+    "imagenes":  ["/uploads/Gel_Pink_Barbie_1_copia_a2a14692f2.jpeg"],
+  }],
+  impresion: [],
+  corte: [],
+  cerrajeria: [],
+  pintura: [],
+  montaje: [],
+  videos: [],
+  fotos: [],
+  audios: [],
+}
+
+
 
 
 const budgetCtrl = new Budget();
 
-export default function NuevoProyecto() {
+export default function NuevoProyecto({ params }) {
   const router = useRouter();
   const {
     images,
@@ -57,6 +109,9 @@ export default function NuevoProyecto() {
   const [presupuesto, setPresupuesto] = useState();
 
   const [preciosServicios, setPreciosServicios] = useState({})
+
+  const [proyecto, setProyecto] = useState({});
+  const [loadingPage, setLoadingPage] = useState(true);
 
   const {user} = useAuth();
 
@@ -176,6 +231,7 @@ export default function NuevoProyecto() {
       setPreciosServicios(precios.data.attributes)
     }
 
+
     getPrices()
   }, [] )
   
@@ -237,12 +293,23 @@ export default function NuevoProyecto() {
     });
   };
 
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchData(params.id);
+      setProyecto(data.data);
+      setLoadingPage(false);
+      
+    };
+    getData();   
+    
+  }, [params]);
+
   return (
     <>
      
       {/* {JSON.stringify(formik.values)} */}
       {/* {JSON.stringify(user)}  */}
-      {/* {JSON.stringify(preciosServicios)} */}
+      {/* {JSON.stringify(proyecto)} */}
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
           <div className="2xl:h-[calc(100vh-120px)] 2xl:flex mt-[-40px]">

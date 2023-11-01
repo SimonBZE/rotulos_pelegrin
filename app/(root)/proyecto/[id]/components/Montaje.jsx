@@ -1,14 +1,29 @@
 import { GridImages } from "./GridImages";
 import { ProjectHeader } from "./ProjectHeader";
 
-export const Montaje = ({data}) => {
-  console.log(data);
+export const Montaje = ({ data }) => {
+  
   return (
     <div className="grid lg:grid-cols-2 gap-5">
       {data.map((item) => (
         <div key={item.id} className="flex flex-col gap-5 shadow-3">
           <ProjectHeader item={item} />
-          
+
+          <div className="flex flex-col justify-between px-3">
+            <div className="flex  gap-1">
+              <p className="labels"> Lugar del montaje</p>
+              <p>{item.lugar_montaje}</p>
+            </div>
+            <div className="flex gap-1 items-center">
+              <p className="labels">Montadores: </p>
+              <p  className="flex flex-wrap gap-2">{item.montadores.map( montador => <span key={montador.id} className="px-2 py-1 rounded bg-secondary">{montador.montador} </span>)}</p>
+            </div>
+            <div className="flex  gap-1 mt-2 items-center">
+              <p className="labels">Matriculas: </p>
+              <p className="flex gap-2 flex-wrap ">{item.matricula.map( item => <span key={item.id} className="px-2 py-1 rounded bg-secondary">{item.matricula} </span>)}</p>
+            </div>
+          </div>
+
           <div className="flex flex-col justify-between px-3">
             <div className="flex  gap-1">
               <p className="labels"> Alquiler de maquinaria</p>
@@ -24,7 +39,7 @@ export const Montaje = ({data}) => {
             </div>
           </div>
 
-          {!!item.adicional && (
+          {!!item.adicional?.[0]?.id && (
             <div className="flex px-3">
               <div className="overflow-x-auto  sm:rounded-lg min-w-full">
                 <table className="w-full text-sm text-left text-graydark">
@@ -51,11 +66,13 @@ export const Montaje = ({data}) => {
             </div>
           )}
 
+          
+
           <GridImages item={item} className="px-3" />
 
           {/* {!!item.imagenes.data && <SliderImages imagenes={item.imagenes} />} */}
         </div>
       ))}
     </div>
-  )
-}
+  );
+};

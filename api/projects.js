@@ -25,7 +25,7 @@ export class Projects {
       if (response.status !== 200) throw result;
       return result;
     } catch (error) {
-      alert('Error al conectar')
+      console.log('Error al conectar')
       throw error;
     }
   }
@@ -43,7 +43,7 @@ export class Projects {
       const result = await response.json();
 
       if (response !== 200){
-        alert('Error al conectar')
+        console.log('Error al conectar')
         throw result;
       } 
 
