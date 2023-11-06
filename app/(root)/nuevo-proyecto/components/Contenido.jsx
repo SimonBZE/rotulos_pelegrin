@@ -70,7 +70,7 @@ export const Contenido = ({
             <Loader tamano={30} />
           ) : (
             <Image
-              src="./images/icon/movie.svg"
+              src="/images/icon/movie.svg"
               width={24}
               height={24}
               alt="videos"
@@ -220,7 +220,7 @@ export const Contenido = ({
             <Loader tamano={30} />
           ) : (
             <Image
-              src="./images/icon/photo-plus.svg"
+              src="/images/icon/photo-plus.svg"
               width={24}
               height={24}
               alt="videos"

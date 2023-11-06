@@ -8,10 +8,10 @@ import Image from "next/image";
 
 const menu = [
   {
-    nombre: "Presupuesto",
+    nombre: "Presupuestos",
     imagen: "/assets/Presupuestos-blanco.svg",
     color: "#2fa7ff",
-    link: "/presupuesto",
+    link: "/presupuestos",
   },
   {
     nombre: "Nuevo Proyecto",

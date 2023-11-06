@@ -31,6 +31,7 @@ export const Design = ({
 
   return (
     <div className="rounded-md bg-[#6E5FFF30] mt-5 p-3">
+      
       <CardHeader title="Diseño" onRemove={onRemove} />
 
       <div className="flex items-center">

@@ -16,13 +16,10 @@ const depart = [
 
 const cargarProyectos = async (departamento) => {
   const index = depart.indexOf(departamento);
-  const dep = `?populate=*&filters[departamento][$eq]=${departamento}&filters[${departamento}][completado][$eq]=false`;
-  const next =
-    index > 0
-      ? `?populate=*&filters[departamento][$eq]=${depart[index - 1]}&filters[${
-          depart[index - 1]
-        }][completado][$eq]=false`
-      : false;
+  const dep = `?populate=*&filters[departamento][$eq]=${departamento}&filters[${departamento}][completado][$eq]=false&filters[aprovacion][$eq]=true`;
+  const nextDepFilter = `?populate=*&filters[departamento][$ne]=${departamento}&filters[${departamento}][completado][$eq]=false&filters[aprovacion][$eq]=true`;
+  // const next = index > 0 ? `?populate=*&filters[departamento][$eq]=${depart[index - 1]}&filters[${depart[index - 1]}][completado][$eq]=false&filters[${depart[index - 1]}][aprovacion][$eq]=true` : false;
+  const next = index > 0 ? nextDepFilter : false;
 
   const projectsCtrl = new Projects();
   const res = await projectsCtrl.getBudgets(dep);
@@ -150,13 +147,27 @@ const Departamentos = ({ params }) => {
           <h3 className="text-title-md mt-5 mb-3 font-bold text-black ml-5">
             Próximos proyectos
           </h3>
-          {proximosProyectos.map( (proyecto, index) => (
-          <CardProjects
-            key={index}
-            proyecto={proyecto}
-            params={proyecto.attributes.departamento}
-          />
-          ) )}
+          {proximosProyectos.map((proyecto) => {
+            const proyectosActivos = depart.filter(
+              (departamento) => proyecto.attributes[departamento]?.length > 0
+            );
+
+            const indexDep = proyectosActivos.indexOf(
+              proyecto.attributes.departamento
+            );
+
+            if (proyectosActivos[indexDep + 1] === params.id) {
+              return (
+                <CardProjects
+                  key={proyecto.id || proyecto.attributes.nombre}
+                  proyecto={proyecto}
+                  params={proyecto.attributes.departamento}
+                />
+              );
+            }
+            
+            return null;
+          })}
         </>
       )}
     </div>

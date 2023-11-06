@@ -11,18 +11,16 @@ import { AuthProvider } from "@/context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
   return (
-    <html lang="es">
+    <section>
       <AuthProvider>
       
-        <body suppressHydrationWarning={true}>
+        <div suppressHydrationWarning={true}>
            <ToastContainer 
             position="bottom-right"
             autoClose={5000}
@@ -69,8 +67,8 @@ export default function RootLayout({ children }) {
               </div>
             )}
           </div>
-        </body>
+        </div>
       </AuthProvider>
-    </html>
+    </section>
   );
 }

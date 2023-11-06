@@ -153,7 +153,7 @@ export const mountingSchema = Yup.object().shape({
   matricula: Yup.array().of(matriculaMountingSchema),
   lugar_montaje: Yup.string(),
   montadores:Yup.array(),
-  vehículo: Yup.string(),
+  vehiculo: Yup.string(),
   persona_contacto: Yup.string(),
 });
 
@@ -224,7 +224,7 @@ export const newMounting = {
   matricula:[],
   lugar_montaje: "",
   montadores:[],
-  vehículo: "",
+  vehiculo: "",
   persona_contacto: "",
   desplazamiento: "",
   alquiler_maquinaria: 0,

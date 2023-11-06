@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useProject } from "./useProject";
 import { ProjectTabs } from "./components/ProjectTabs";
 import { ProjectMedia } from "./components/ProjectMedia";
+import Link from "next/link";
 
 
 const fetchData = async (id) => {
@@ -136,6 +137,12 @@ export default function Proyecto({ params }) {
             >
               Duplicar
             </a>
+            <Link
+              href={`/presupuestos/${params.id}`}
+              className="rounded-full bg-primary text-white py-1 px-3 uppercase text-sm cursor-pointer"
+            >
+              Editar
+            </Link>
           </div>
         </div>
         <div className="rounded-xl mt-5 p-5 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">

@@ -13,7 +13,7 @@ import {
   Design,
   Contenido,
 } from "./components";
-import { Projects, Budget } from "@/api";
+import { Budget } from "@/api";
 import {
   newPaint,
   newLockSmith,
@@ -21,8 +21,7 @@ import {
   newPrint,
   newCut,
   newMounting,
-  validationSchema,
-  
+  validationSchema,  
 } from "./utils/formikValidations";
 import { useFormik, FormikProvider, FieldArray } from "formik";
 import useImageUpload from "@/hooks/useImageUpload";
@@ -32,64 +31,10 @@ import { servicios } from "@/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from 'react-toastify';
 
-const fetchData = async (id) => {
-  let filter = "?";
-  const media =
-    "populate[fotos][populate][0]=*&populate[audios][populate][0]=*&populate[videos][populate][0]=*";
-  const diseno = "&populate[diseno][populate][0]=imagenes";
-  const impresion = "&populate[impresion][populate][0]=imagenes";
-  const corte = "&populate[corte][populate][0]=imagenes";
-  const cerrajeria =
-    "&populate[cerrajeria][populate][0]=imagenes&populate[cerrajeria][populate][1]=adicional";
-  const pintura = "&populate[pintura][populate][0]=imagenes";
-  const montaje =
-    "&populate[montaje][populate][0]=imagenes&populate[montaje][populate][1]=adicional&populate[montaje][populate][2]=matricula&populate[montaje][populate][3]=montadores";
-
-  filter += media + diseno + impresion + corte + cerrajeria + pintura + montaje;
-  const projectsCtrl = new Projects();
-  const res = await projectsCtrl.getSingleBudget(id, filter);
-  console.log(res)
-  return res;
-};
-
-const initialValues = {
-  nombre: "Prueba",
-  cliente: "",
-  contacto: "",
-  aprovacion: false,
-  prioridad: "",
-  fecha: "",
-  hora:"",
-  descripcion: "",
-  puesta_en_marcha: false,
-  departamento:"",
-  diseno: [{
-    "id": 98,
-    "horas": 2,
-    "precio": 160,
-    "unidades": 1,
-    "cantidad": 2,
-    "completado": true,
-    "contador": null,
-    "nombre": null,
-    "imagenes":  ["/uploads/Gel_Pink_Barbie_1_copia_a2a14692f2.jpeg"],
-  }],
-  impresion: [],
-  corte: [],
-  cerrajeria: [],
-  pintura: [],
-  montaje: [],
-  videos: [],
-  fotos: [],
-  audios: [],
-}
-
-
-
-
 const budgetCtrl = new Budget();
 
-export default function NuevoProyecto({ params }) {
+export function Proyecto({ initialValues }) {
+  console.log(initialValues)
   const router = useRouter();
   const {
     images,
@@ -110,9 +55,6 @@ export default function NuevoProyecto({ params }) {
 
   const [preciosServicios, setPreciosServicios] = useState({})
 
-  const [proyecto, setProyecto] = useState({});
-  const [loadingPage, setLoadingPage] = useState(true);
-
   const {user} = useAuth();
 
   const today = new Date().toISOString().split("T")[0];
@@ -123,10 +65,7 @@ export default function NuevoProyecto({ params }) {
     onSubmit: async (formData) => {
       
       setLoadingForm(true);
-      // console.log(formData);
-      // Ahora envía el formulario completo a tu API
-
-      // Asignar a departamento
+      
       const departamentos = [
         "diseno",
         "impresion",
@@ -293,21 +232,10 @@ export default function NuevoProyecto({ params }) {
     });
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      const data = await fetchData(params.id);
-      setProyecto(data.data);
-      setLoadingPage(false);
-      
-    };
-    getData();   
-    
-  }, [params]);
-
   return (
     <>
      
-      {/* {JSON.stringify(formik.values)} */}
+      {/* {JSON.stringify(formik.values.diseno[0].imagenes)} */}
       {/* {JSON.stringify(user)}  */}
       {/* {JSON.stringify(proyecto)} */}
       <FormikProvider value={formik}>
@@ -538,7 +466,7 @@ export default function NuevoProyecto({ params }) {
                                 handleImageRemove("diseno", index);
                               }}
                               handleFileChange={handleFileChange}
-                              images={images}
+                              images={formik.values.diseno[index].imagenes}
                               handleImageRemove={handleImageRemove}
                             />
                           ))}
@@ -639,7 +567,7 @@ export default function NuevoProyecto({ params }) {
                                 handleImageRemove("pintura", index);
                               }}
                               handleFileChange={handleFileChange}
-                              images={images}
+                              images={formik.values.pintura[0].imagenes}
                               handleImageRemove={handleImageRemove}
                               FieldArray={FieldArray}
                               preciosServicios={preciosServicios}
@@ -700,7 +628,7 @@ export default function NuevoProyecto({ params }) {
                 //   Crear Presupuesto
                 // </button>
 
-<button type="button" className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase " onClick={handleCustomSubmit}>Enviar</button>
+<button type="button" className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase " onClick={handleCustomSubmit}>Actualizar</button>
               )}
             </div>
           </div>

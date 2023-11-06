@@ -204,7 +204,7 @@ export const newMounting = {
   matricula:[],
   lugar_montaje: "",
   montadores:[],
-  vehículo: "",
+  vehiculo: "",
   persona_contacto: "",
   desplazamiento: "",
   alquiler_maquinaria: 0,
