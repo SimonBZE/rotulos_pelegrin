@@ -12,7 +12,7 @@ const ImageViewer = ({
   loadingImage
 }) => {
   const fileInputRef = useRef(null);
-  // console.log([serviceName][index])
+  
   return (
     <div className="space-y-4 mt-5">
       { loadingImage ? (
@@ -63,7 +63,16 @@ const ImageViewer = ({
 
       {images[serviceName] && images[serviceName][index] ? (
         <ImageGrid
-          images={images[serviceName][index]}
+          images={images[serviceName]}
+          onRemove={(imageIndex) =>
+            handleImageRemove(serviceName, index, imageIndex)
+          }
+        />
+      ) : null}
+      
+      {images && images[index] ? (
+        <ImageGrid
+          images={images}
           onRemove={(imageIndex) =>
             handleImageRemove(serviceName, index, imageIndex)
           }

@@ -275,5 +275,5 @@ export default async function Presupuesto({ params }) {
     };
   });
 
-  return <Proyecto initialValues={initialValues} />;
+  return <Proyecto initialValues={initialValues} id={params.id} />;
 }

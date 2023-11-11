@@ -326,7 +326,15 @@ export default function NuevoProyecto() {
                       <label htmlFor="aprovacion" className="ml-2 labels">
                         Prioridad
                       </label>
-                      <select
+                      <input
+                          id="prioridad"
+                          type="checkbox"
+                          className="w-9 h-9 accent-primary"
+                          name="prioridad"
+                          checked={formik.values.prioridad}
+                          onChange={formik.handleChange}
+                        />
+                      {/* <select
                         className={`formulario ${
                           formik.touched.prioridad && formik.errors.prioridad
                             ? "errores"
@@ -341,7 +349,7 @@ export default function NuevoProyecto() {
                         <option value="baja">Baja</option>
                         <option value="media">Media</option>
                         <option value="alta">Alta</option>
-                      </select>
+                      </select> */}
                     </div>
                   </div>
                 </div>

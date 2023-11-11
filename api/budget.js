@@ -32,7 +32,7 @@ export class Budget {
       
       const result = await response.json();
       
-      if (response !== 200) throw result;
+      if (response.status !== 200) throw result;
 
       return result;
     } catch (error) {
@@ -53,5 +53,33 @@ export class Budget {
       return error
     }
     
+  }
+
+  async updateSingleProject(id, values) {
+    
+    const params = {
+      method: "PUT",
+      headers: {
+        "Content-Type": 'application/json',        
+      },
+      body: JSON.stringify({ "data": { ...values } }),
+    };
+
+    const url = `${ENV.API_URL}/${ENV.ENDPOINTS.BUDGET}/${id}`;
+
+    try {
+      const response = await authFetch(url, params);
+      const result = await response.json();
+      
+      if (response.status !== 200){
+        console.log('Error al conectar')
+        throw result;
+      } 
+
+      return result;
+    } catch (error) {
+      
+      throw error;
+    }
   }
 }

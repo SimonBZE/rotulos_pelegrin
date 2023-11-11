@@ -2,9 +2,10 @@ import Image from 'next/image'
 import { ENV } from '@/utils/constants'
 
 const ImageGrid = ({ images, onRemove }) => {
+ 
   return (
     <div className="overflow-x-auto whitespace-nowrap py-2" style={{ maxWidth: 'calc(100% - 1rem)'}}>
-      {images.map((image, index) => (
+      {images?.map((image, index) => (
         
         <div key={index} className="inline-block relative mr-2">          
           <img

@@ -14,7 +14,6 @@ export const Design = ({
   loadingImage,
 }) => {
   const [total, setTotal] = useState(0);
-
   useEffect(() => {
     const newTotal =
       formik.values?.diseno?.[index].horas *
@@ -28,6 +27,7 @@ export const Design = ({
     // Asigna el nuevoTotal al precio en formik.values.diseno[index]
     formik.values.diseno[index].precio = newTotal;
   }, [formik.values.diseno[index]]);
+
 
   return (
     <div className="rounded-md bg-[#6E5FFF30] mt-5 p-3">

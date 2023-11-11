@@ -33,8 +33,8 @@ import { toast } from 'react-toastify';
 
 const budgetCtrl = new Budget();
 
-export function Proyecto({ initialValues }) {
-  console.log(initialValues)
+export function Proyecto({ initialValues, id }) {
+  // console.log(initialValues)
   const router = useRouter();
   const {
     images,
@@ -128,20 +128,21 @@ export function Proyecto({ initialValues }) {
       }
 
       try {
-        const res = await budgetCtrl.createBudget(formData);
+        
+        const res = await budgetCtrl.updateSingleProject(id, formData);
         setLoadingForm(false);
 
         if(!!res.error) throw res
 
-        notify("Proyecto creado con exito", "success");
-        router.push('/proyectos')
+        notify("Proyecto creado actualizado", "success");
+        router.push(`/proyecto/${id}`)
         
       } catch (error) {
-        console.log(error);
+        
         setLoadingForm(false);
         
         // Muestra un mensaje de error usando Toastify
-        notify("No se ha enviado el formulario", "error");
+        notify("Error al actualizar el proyecto", "error");
 
       }
     },
@@ -321,22 +322,14 @@ export function Proyecto({ initialValues }) {
                       <label htmlFor="aprovacion" className="ml-2 labels">
                         Prioridad
                       </label>
-                      <select
-                        className={`formulario ${
-                          formik.touched.prioridad && formik.errors.prioridad
-                            ? "errores"
-                            : ""
-                        }`}
-                        name="prioridad"
-                        value={formik.values.prioridad}
-                        required
-                        onChange={formik.handleChange}
-                      >
-                        <option>seleccione</option>
-                        <option value="baja">Baja</option>
-                        <option value="media">Media</option>
-                        <option value="alta">Alta</option>
-                      </select>
+                      <input
+                          id="prioridad"
+                          type="checkbox"
+                          className="w-9 h-9 accent-primary"
+                          name="prioridad"
+                          checked={formik.values.prioridad}
+                          onChange={formik.handleChange}
+                        />
                     </div>
                   </div>
                 </div>
