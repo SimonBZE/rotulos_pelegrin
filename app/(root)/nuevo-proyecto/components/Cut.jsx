@@ -115,6 +115,14 @@ export const Cut = ({
       </div>
 
       {/* Imagenes */}
+      {/* <ImageViewer
+        serviceName="corte"
+        index={index}
+        handleFileChange={handleFileChange}
+        images={images}
+        handleImageRemove={handleImageRemove}
+        loadingImage={loadingImage}
+      /> */}
       <ImageViewer
         serviceName="corte"
         index={index}
@@ -122,6 +130,7 @@ export const Cut = ({
         images={images}
         handleImageRemove={handleImageRemove}
         loadingImage={loadingImage}
+        formik={formik}
       />
 
       {/* Precio */}

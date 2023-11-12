@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import {useRouter} from 'next/navigation'
+import { useRouter } from "next/navigation";
 import {
   Print,
   Mounting,
@@ -23,28 +23,21 @@ import {
   newCut,
   newMounting,
   validationSchema,
-  
 } from "./utils/formikValidations";
 import { useFormik, FormikProvider, FieldArray } from "formik";
-import useImageUpload from "@/hooks/useImageUpload";
+import useImageUpload from "@/hooks/useImageUploadFormik";
 import { useFilesUpload } from "@/hooks/useFilesUpload";
 import Loader from "@/components/common/Loader";
 import { servicios } from "@/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { toast } from 'react-toastify';
-
-
+import { toast } from "react-toastify";
 
 const budgetCtrl = new Budget();
 
+
 export default function NuevoProyecto() {
   const router = useRouter();
-  const {
-    images,
-    handleFileChange,
-    loading: loadingImage,
-    handleImageRemove,
-  } = useImageUpload({});
+
   const {
     files,
     handleMultimediaChange,
@@ -56,9 +49,9 @@ export default function NuevoProyecto() {
 
   const [presupuesto, setPresupuesto] = useState();
 
-  const [preciosServicios, setPreciosServicios] = useState({})
+  const [preciosServicios, setPreciosServicios] = useState({});
 
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -68,10 +61,7 @@ export default function NuevoProyecto() {
     onSubmit: async (formData) => {
       
       setLoadingForm(true);
-      // console.log(formData);
-      // Ahora envía el formulario completo a tu API
-
-      // Asignar a departamento
+      
       const departamentos = [
         "diseno",
         "impresion",
@@ -89,37 +79,46 @@ export default function NuevoProyecto() {
             break;
           }
         }
-        if(formData.departamento === "") notify("Debe de agregar al menos un departamento", "error")
+        if (formData.departamento === "")
+          notify("Debe de agregar al menos un departamento", "error");
       };
 
+      
       asignarDepartamento(formData);
       // Fin
       formData.creador = user.username;
       formData.idpresupuesto = presupuesto;
+      
+      
+      // departamentos.forEach(departamento => {
+      //   formData[departamento].forEach((item, index) => {
+      //     item.imagenes = item.imagenes[index] || [];
+      //   }); 
+      // })
+      
+      // formData.diseno.forEach((item, index) => {
+      //   item.imagenes = item.imagenes[index] || [];
+      // });      
 
-      formData.diseno.forEach((item, index) => {
-        item.imagenes = images.diseno?.[index] || [];
-      });
+      // formData.impresion.forEach((item, index) => {
+      //   item.imagenes = item.imagenes[index] || [];
+      // });
 
-      formData.impresion.forEach((item, index) => {
-        item.imagenes = images.impresion?.[index] || [];
-      });
+      // formData.corte.forEach((item, index) => {
+      //   item.imagenes = item.imagenes[index] || [];
+      // });
 
-      formData.corte.forEach((item, index) => {
-        item.imagenes = images.corte?.[index] || [];
-      });
+      // formData.cerrajeria.forEach((item, index) => {
+      //   item.imagenes = item.imagenes[index] || [];
+      // });
 
-      formData.cerrajeria.forEach((item, index) => {
-        item.imagenes = images.cerrajeria?.[index] || [];
-      });
+      // formData.pintura.forEach((item, index) => {
+      //   item.imagenes = item.imagenes[index] || [];
+      // });
 
-      formData.pintura.forEach((item, index) => {
-        item.imagenes = images.pintura?.[index] || [];
-      });
-
-      formData.montaje.forEach((item, index) => {
-        item.imagenes = images.montaje?.[index] || [];
-      });
+      // formData.montaje.forEach((item, index) => {
+      //   item.imagenes = item.imagenes[index] || [];
+      // });
 
       if (files.videos) {
         formData.videos = [].concat(...files.videos);
@@ -133,25 +132,32 @@ export default function NuevoProyecto() {
         formData.fotos = [].concat(...files.fotos);
       }
 
+
+      
       try {
         const res = await budgetCtrl.createBudget(formData);
         setLoadingForm(false);
 
-        if(!!res.error) throw res
+        if (!!res.error) throw res;
 
         notify("Proyecto creado con exito", "success");
-        router.push('/proyectos')
-        
+        router.push("/proyectos");
       } catch (error) {
         console.log(error);
         setLoadingForm(false);
-        
+
         // Muestra un mensaje de error usando Toastify
         notify("No se ha enviado el formulario", "error");
-
       }
     },
   });
+
+  const {
+    images,
+    handleFileChange,
+    loading: loadingImage,
+    handleImageRemove,
+  } = useImageUpload(formik);
 
   const updatePresupuesto = () => {
     let newPresupuesto = "";
@@ -170,15 +176,14 @@ export default function NuevoProyecto() {
     updatePresupuesto();
   }, [formik.values]);
 
-  useEffect( () => {
+  useEffect(() => {
     const getPrices = async () => {
-      const precios = await budgetCtrl.getPrecios()
-      setPreciosServicios(precios.data.attributes)
-    }
+      const precios = await budgetCtrl.getPrecios();
+      setPreciosServicios(precios.data.attributes);
+    };
 
-    getPrices()
-  }, [] )
-  
+    getPrices();
+  }, []);
 
   // Agrega el servicio seleccionado en el FormArray de formik
   const handleServiceClick = (serviceName) => {
@@ -221,14 +226,18 @@ export default function NuevoProyecto() {
     }
   };
 
-  const notify = (mensaje, type = "") => type === "" ? toast(mensaje) : toast[type](mensaje);
+  const notify = (mensaje, type = "") =>
+    type === "" ? toast(mensaje) : toast[type](mensaje);
 
   const handleCustomSubmit = () => {
     // Primero, forzamos la validación de Formik
-    formik.validateForm().then(errors => {
+    formik.validateForm().then((errors) => {
       // Si hay errores, mostramos un toast y no enviamos el formulario
       if (Object.keys(errors).length > 0) {
-        notify("Hay errores en el formulario. Por favor, corrígelos antes de enviar.", "error");
+        notify(
+          "Hay errores en el formulario. Por favor, corrígelos antes de enviar.",
+          "error"
+        );
         formik.handleSubmit();
       } else {
         // Si no hay errores, enviamos el formulario
@@ -239,9 +248,9 @@ export default function NuevoProyecto() {
 
   return (
     <>
-     
-      {/* {JSON.stringify(formik.values)} */}
       {/* {JSON.stringify(user)}  */}
+      {/* {JSON.stringify(formik.errors)} */}
+      {/* {JSON.stringify(formik.values)} */}
       {/* {JSON.stringify(preciosServicios)} */}
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
@@ -327,13 +336,13 @@ export default function NuevoProyecto() {
                         Prioridad
                       </label>
                       <input
-                          id="prioridad"
-                          type="checkbox"
-                          className="w-9 h-9 accent-primary"
-                          name="prioridad"
-                          checked={formik.values.prioridad}
-                          onChange={formik.handleChange}
-                        />
+                        id="prioridad"
+                        type="checkbox"
+                        className="w-9 h-9 accent-primary"
+                        name="prioridad"
+                        checked={formik.values.prioridad}
+                        onChange={formik.handleChange}
+                      />
                       {/* <select
                         className={`formulario ${
                           formik.touched.prioridad && formik.errors.prioridad
@@ -362,7 +371,6 @@ export default function NuevoProyecto() {
                     <input
                       id="fecha"
                       min={today}
-                     
                       className={`formulario custom-input-date custom-input-date-1 w-40 rounded ${
                         formik.touched.fecha && formik.errors.fecha
                           ? "errores"
@@ -411,7 +419,9 @@ export default function NuevoProyecto() {
 
                   {/* Servicios */}
                   {formik.errors.departamento && (
-                    <div style={{ color: "red" }}>{formik.errors.departamento}</div>
+                    <div style={{ color: "red" }}>
+                      {formik.errors.departamento}
+                    </div>
                   )}
                   <div className="grid grid-cols-3 mt-5 auto-cols-auto gap-4 md:grid-cols-6 lg:grid-cols-6 xl:auto-cols-min">
                     {servicios.map(({ nombre, color, imagen }) => (
@@ -459,9 +469,8 @@ export default function NuevoProyecto() {
                     </div>
                     <p className="font-bold text-black dark:text-whiten">50€</p>
                   </div>
-                  
+
                   <div className="grid rid-flow-row-dense md:grid-cols-2 gap-4 lg:grid-cols-3 gap-4">
-                  
                     {/* FOrmulario de diseño */}
                     <FieldArray
                       name="diseno"
@@ -506,7 +515,6 @@ export default function NuevoProyecto() {
                               images={images}
                               handleImageRemove={handleImageRemove}
                               preciosServicios={preciosServicios}
-                              
                             />
                           ))}
                         </>
@@ -641,7 +649,13 @@ export default function NuevoProyecto() {
                 //   Crear Presupuesto
                 // </button>
 
-<button type="button" className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase " onClick={handleCustomSubmit}>Enviar</button>
+                <button
+                  type="button"
+                  className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "
+                  onClick={handleCustomSubmit}
+                >
+                  Enviar
+                </button>
               )}
             </div>
           </div>

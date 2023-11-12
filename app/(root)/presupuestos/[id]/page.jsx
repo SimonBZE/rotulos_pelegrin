@@ -24,7 +24,6 @@ const fetchData = async (id, token) => {
   filter += media + diseno + impresion + corte + cerrajeria + pintura + montaje;
   const projectsCtrl = new Projects();
   const res = await projectsCtrl.getPresupuesto(id, filter, token);
-
   return res;
 };
 
@@ -236,6 +235,7 @@ export default async function Presupuesto({ params }) {
           alquiler_maquinaria,
           tiempo_montaje,
           imagenes,
+          adicional,
         }) => ({
           id: id,
           completado,
@@ -254,8 +254,15 @@ export default async function Presupuesto({ params }) {
           persona_contacto,
           desplazamiento,
           alquiler_maquinaria,
-          adicional: [],
-          imagenes: [],
+          adicional: !!adicional
+          ? adicional.map((item) => {
+              return {
+                id: item.id,
+                nombre: item.nombre,
+                precio: item.precio
+              };
+            })
+          : [],
           precio: 0,
           cantidad: 1,
           contador:0,
@@ -269,9 +276,30 @@ export default async function Presupuesto({ params }) {
             : [],
         })
       ),
-      videos: [],
-      fotos: [],
-      audios: [],
+      videos: !!data.attributes.videos.data
+      ? data.attributes.videos.data.map((video) => {
+          return {
+            id: video.id,
+            url: video.attributes.url,
+          };
+        })
+      : [],
+      fotos: !!data.attributes.fotos.data
+      ? data.attributes.fotos.data.map((foto) => {
+          return {
+            id: foto.id,
+            url: foto.attributes.url,
+          };
+        })
+      : [],
+      audios: !!data.attributes.audios.data
+      ? data.attributes.audios.data.map((audio) => {
+          return {
+            id: audio.id,
+            url: audio.attributes.url,
+          };
+        })
+      : [],
     };
   });
 

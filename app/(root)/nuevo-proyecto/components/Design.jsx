@@ -90,6 +90,7 @@ export const Design = ({
         images={images}
         handleImageRemove={handleImageRemove}
         loadingImage={loadingImage}
+        formik={formik}
       />
 
       <Pricing index={index} service={"diseno"} formik={formik} total={total} />

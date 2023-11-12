@@ -5,7 +5,7 @@ export const initialValues = {
   cliente: "",
   contacto: "",
   aprovacion: false,
-  prioridad: "",
+  prioridad: false,
   fecha: "",
   hora:"",
   descripcion: "",
@@ -20,6 +20,7 @@ export const initialValues = {
   videos: [],
   fotos: [],
   audios: [],
+  total: 0,
 };
 
 export const disenoSchema = Yup.object().shape({
@@ -249,7 +250,7 @@ export const validationSchema = Yup.object({
   cliente: Yup.string().required("Debe añadir el nombre del cliente"),
   contacto: Yup.string().required("Debe añadir un número de contacto").min(8, 'Debe tener minimo 8 caracteres'),
   aprovacion: Yup.boolean(),
-  prioridad: Yup.string().required("Debe elegir el nivel de prioridad"),
+  prioridad: Yup.boolean(),
   fecha: Yup.date().required("Debe establecer una fecha de entrega"),
   hora: Yup.string().required("Debe establecer una hora de entrega"),
   descripcion: Yup.string(),
@@ -264,4 +265,5 @@ export const validationSchema = Yup.object({
   videos: Yup.mixed(),
   fotos: Yup.mixed(),
   audios: Yup.mixed(),
+  total: Yup.number()
 });

@@ -78,6 +78,8 @@ export const Sumaries = ({ formik, files }) => {
     // Suma los totales de cada componente para obtener el total general
     let totalSum = totalDesign + totalPrint + totalCut + totalLockSmith + totalPaint + totalMounting;
 
+    
+
     // Actualiza el estado con el total
     setTotal({
       ...total,
@@ -89,8 +91,14 @@ export const Sumaries = ({ formik, files }) => {
       montaje: totalMounting,
       total: totalSum,
     });
+
+    
     
   }, [formik.values]);
+
+  useEffect( () => {
+    formik.values.total = total.total
+  }, [total] )
 
   
   return (

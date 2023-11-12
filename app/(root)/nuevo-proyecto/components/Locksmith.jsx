@@ -215,6 +215,14 @@ export const Locksmith = ({
       />
 
       {/* Imagenes */}
+      {/* <ImageViewer
+        serviceName="cerrajeria"
+        index={index}
+        handleFileChange={handleFileChange}
+        images={images}
+        handleImageRemove={handleImageRemove}
+        loadingImage={loadingImage}
+      /> */}
       <ImageViewer
         serviceName="cerrajeria"
         index={index}
@@ -222,6 +230,7 @@ export const Locksmith = ({
         images={images}
         handleImageRemove={handleImageRemove}
         loadingImage={loadingImage}
+        formik={formik}
       />
 
       {/* Precio */}

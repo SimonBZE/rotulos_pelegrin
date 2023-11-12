@@ -2,23 +2,20 @@ import { useRef } from "react";
 import ImageGrid from "@/components/common/ImageGrid";
 import Loader from "@/components/common/Loader";
 
-
 const ImageViewer = ({
   serviceName,
   index,
   handleFileChange,
-  images,
   handleImageRemove,
-  loadingImage
+  loadingImage,
+  formik,
 }) => {
   const fileInputRef = useRef(null);
   
   return (
     <div className="space-y-4 mt-5">
-      { loadingImage ? (
-        <div
-          className=" flex items-center justify-center gap-3 border-dashed border-2 p-4 rounded-md relative cursor-pointer bg-white"
-        >
+      {loadingImage ? (
+        <div className=" flex items-center justify-center gap-3 border-dashed border-2 p-4 rounded-md relative cursor-pointer bg-white">
           <Loader tamano="25px" /> Espera...
         </div>
       ) : (
@@ -61,7 +58,14 @@ const ImageViewer = ({
         </div>
       )}
 
-      {images[serviceName] && images[serviceName][index] ? (
+      <ImageGrid
+        images={formik.values[serviceName]?.[index]?.imagenes || []}
+        onRemove={(imageIndex) =>
+          handleImageRemove(serviceName, index, imageIndex)
+        }
+      />
+
+      {/* {images[serviceName] && images[serviceName][index] ? (
         <ImageGrid
           images={images[serviceName]}
           onRemove={(imageIndex) =>
@@ -77,7 +81,7 @@ const ImageViewer = ({
             handleImageRemove(serviceName, index, imageIndex)
           }
         />
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

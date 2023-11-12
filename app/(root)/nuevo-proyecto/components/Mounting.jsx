@@ -158,7 +158,10 @@ export const Mounting = ({
                 </div>
               )
             )}
-            <div className="my-3"  style={{ borderBottom: "1px solid rgba(0,0,0,.1)" }}></div>
+            <div
+              className="my-3"
+              style={{ borderBottom: "1px solid rgba(0,0,0,.1)" }}
+            ></div>
           </div>
         )}
       />
@@ -168,10 +171,7 @@ export const Mounting = ({
         name={`montaje[${index}].matricula`}
         render={(arrayHelpersMatricula) => (
           <div>
-            <div
-              className="my-3"
-             
-            ></div>
+            <div className="my-3"></div>
             <div className="flex gap-2 items-center mb-3 justify-between">
               <p className="labels w-[50%]">Matriculas</p>
               <a
@@ -223,7 +223,7 @@ export const Mounting = ({
           Lugar del montaje
         </label>
         <Field
-          type="number"
+          type="text"
           id="lugar_montaje"
           className={`formulario w-full ${
             formik.touched.montaje?.[index]?.lugar_montaje &&
@@ -236,6 +236,15 @@ export const Mounting = ({
       </div>
 
       {/* Imagenes */}
+      {/* <ImageViewer
+        serviceName="montaje"
+        index={index}
+        handleFileChange={handleFileChange}
+        images={images}
+        handleImageRemove={handleImageRemove}
+        loadingImage={loadingImage}
+      /> */}
+
       <ImageViewer
         serviceName="montaje"
         index={index}
@@ -243,6 +252,7 @@ export const Mounting = ({
         images={images}
         handleImageRemove={handleImageRemove}
         loadingImage={loadingImage}
+        formik={formik}
       />
 
       {/* Precio */}

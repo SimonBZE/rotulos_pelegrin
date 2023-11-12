@@ -86,7 +86,7 @@ export const Design = ({
         serviceName="diseno"
         index={index}
         handleFileChange={handleFileChange}
-        images={images}
+        formik={images}
         handleImageRemove={handleImageRemove}
         loadingImage={loadingImage}
       />

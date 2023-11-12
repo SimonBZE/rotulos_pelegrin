@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import {useRouter} from 'next/navigation'
+import { useRouter } from "next/navigation";
 import {
   Print,
   Mounting,
@@ -12,36 +12,32 @@ import {
   Sumaries,
   Design,
   Contenido,
-} from "./components";
+} from "../../nuevo-proyecto/components";
 import { Budget } from "@/api";
 import {
+  
   newPaint,
   newLockSmith,
   newDesign,
   newPrint,
   newCut,
   newMounting,
-  validationSchema,  
+  validationSchema,
 } from "./utils/formikValidations";
 import { useFormik, FormikProvider, FieldArray } from "formik";
-import useImageUpload from "@/hooks/useImageUpload";
+import useImageUpload from "@/hooks/useImageUploadFormik";
 import { useFilesUpload } from "@/hooks/useFilesUpload";
 import Loader from "@/components/common/Loader";
 import { servicios } from "@/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const budgetCtrl = new Budget();
 
 export function Proyecto({ initialValues, id }) {
-  // console.log(initialValues)
+  
   const router = useRouter();
-  const {
-    images,
-    handleFileChange,
-    loading: loadingImage,
-    handleImageRemove,
-  } = useImageUpload({});
+  
   const {
     files,
     handleMultimediaChange,
@@ -88,32 +84,10 @@ export function Proyecto({ initialValues, id }) {
 
       asignarDepartamento(formData);
       // Fin
-      formData.creador = user.username;
+      
       formData.idpresupuesto = presupuesto;
 
-      formData.diseno.forEach((item, index) => {
-        item.imagenes = images.diseno?.[index] || [];
-      });
-
-      formData.impresion.forEach((item, index) => {
-        item.imagenes = images.impresion?.[index] || [];
-      });
-
-      formData.corte.forEach((item, index) => {
-        item.imagenes = images.corte?.[index] || [];
-      });
-
-      formData.cerrajeria.forEach((item, index) => {
-        item.imagenes = images.cerrajeria?.[index] || [];
-      });
-
-      formData.pintura.forEach((item, index) => {
-        item.imagenes = images.pintura?.[index] || [];
-      });
-
-      formData.montaje.forEach((item, index) => {
-        item.imagenes = images.montaje?.[index] || [];
-      });
+      
 
       if (files.videos) {
         formData.videos = [].concat(...files.videos);
@@ -147,6 +121,13 @@ export function Proyecto({ initialValues, id }) {
       }
     },
   });
+  
+  const {
+    images,
+    handleFileChange,
+    loading: loadingImage,
+    handleImageRemove,
+  } = useImageUpload(formik);
 
   const updatePresupuesto = () => {
     let newPresupuesto = "";
@@ -233,12 +214,15 @@ export function Proyecto({ initialValues, id }) {
     });
   };
 
+  
+
   return (
     <>
      
       {/* {JSON.stringify(formik.values.diseno[0].imagenes)} */}
       {/* {JSON.stringify(user)}  */}
       {/* {JSON.stringify(proyecto)} */}
+      {/* {JSON.stringify(formik.values)} */}
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
           <div className="2xl:h-[calc(100vh-120px)] 2xl:flex mt-[-40px]">
@@ -257,7 +241,7 @@ export function Proyecto({ initialValues, id }) {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-primary font-bold">
-                          PR{presupuesto}
+                          PR{presupuesto}{id}
                         </p>
                         <input
                           className={`formulario ${
@@ -323,13 +307,29 @@ export function Proyecto({ initialValues, id }) {
                         Prioridad
                       </label>
                       <input
-                          id="prioridad"
-                          type="checkbox"
-                          className="w-9 h-9 accent-primary"
-                          name="prioridad"
-                          checked={formik.values.prioridad}
-                          onChange={formik.handleChange}
-                        />
+                        id="prioridad"
+                        type="checkbox"
+                        className="w-9 h-9 accent-primary"
+                        name="prioridad"
+                        checked={formik.values.prioridad}
+                        onChange={formik.handleChange}
+                      />
+                      {/* <select
+                        className={`formulario ${
+                          formik.touched.prioridad && formik.errors.prioridad
+                            ? "errores"
+                            : ""
+                        }`}
+                        name="prioridad"
+                        value={formik.values.prioridad}
+                        required
+                        onChange={formik.handleChange}
+                      >
+                        <option>seleccione</option>
+                        <option value="baja">Baja</option>
+                        <option value="media">Media</option>
+                        <option value="alta">Alta</option>
+                      </select> */}
                     </div>
                   </div>
                 </div>
@@ -342,7 +342,6 @@ export function Proyecto({ initialValues, id }) {
                     <input
                       id="fecha"
                       min={today}
-                     
                       className={`formulario custom-input-date custom-input-date-1 w-40 rounded ${
                         formik.touched.fecha && formik.errors.fecha
                           ? "errores"
@@ -391,7 +390,9 @@ export function Proyecto({ initialValues, id }) {
 
                   {/* Servicios */}
                   {formik.errors.departamento && (
-                    <div style={{ color: "red" }}>{formik.errors.departamento}</div>
+                    <div style={{ color: "red" }}>
+                      {formik.errors.departamento}
+                    </div>
                   )}
                   <div className="grid grid-cols-3 mt-5 auto-cols-auto gap-4 md:grid-cols-6 lg:grid-cols-6 xl:auto-cols-min">
                     {servicios.map(({ nombre, color, imagen }) => (
@@ -439,9 +440,8 @@ export function Proyecto({ initialValues, id }) {
                     </div>
                     <p className="font-bold text-black dark:text-whiten">50€</p>
                   </div>
-                  
+
                   <div className="grid rid-flow-row-dense md:grid-cols-2 gap-4 lg:grid-cols-3 gap-4">
-                  
                     {/* FOrmulario de diseño */}
                     <FieldArray
                       name="diseno"
@@ -459,7 +459,7 @@ export function Proyecto({ initialValues, id }) {
                                 handleImageRemove("diseno", index);
                               }}
                               handleFileChange={handleFileChange}
-                              images={formik.values.diseno[index].imagenes}
+                              images={images}
                               handleImageRemove={handleImageRemove}
                             />
                           ))}
@@ -486,7 +486,6 @@ export function Proyecto({ initialValues, id }) {
                               images={images}
                               handleImageRemove={handleImageRemove}
                               preciosServicios={preciosServicios}
-                              
                             />
                           ))}
                         </>
@@ -560,7 +559,7 @@ export function Proyecto({ initialValues, id }) {
                                 handleImageRemove("pintura", index);
                               }}
                               handleFileChange={handleFileChange}
-                              images={formik.values.pintura[0].imagenes}
+                              images={images}
                               handleImageRemove={handleImageRemove}
                               FieldArray={FieldArray}
                               preciosServicios={preciosServicios}
@@ -621,7 +620,13 @@ export function Proyecto({ initialValues, id }) {
                 //   Crear Presupuesto
                 // </button>
 
-<button type="button" className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase " onClick={handleCustomSubmit}>Actualizar</button>
+                <button
+                  type="button"
+                  className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "
+                  onClick={handleCustomSubmit}
+                >
+                  Actualizar
+                </button>
               )}
             </div>
           </div>
