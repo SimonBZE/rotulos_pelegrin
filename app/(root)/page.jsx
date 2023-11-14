@@ -6,10 +6,10 @@ import Link from 'next/link'
 
 const menu = [
   {
-    nombre: 'Presupuesto',
+    nombre: 'Presupuestos',
     imagen: './assets/Presupuestos.svg',
     color: '#2fa7ff',
-    link: '/presupuesto'
+    link: '/presupuestos'
   },
 {
     nombre: 'Nuevo Proyecto',

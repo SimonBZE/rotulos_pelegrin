@@ -11,6 +11,9 @@ import { useProject } from "./useProject";
 import { ProjectTabs } from "./components/ProjectTabs";
 import { ProjectMedia } from "./components/ProjectMedia";
 import Link from "next/link";
+import { MultiModal } from "@/components/common/MultiModal";
+import { ModalDuplicar } from "./components/ModalDuplicar";
+import { toast } from "react-toastify";
 
 const fetchData = async (id) => {
   let filter = "?";
@@ -37,17 +40,17 @@ export default function Proyecto({ params }) {
   const [proyecto, setProyecto] = useState({});
   const [loading, setLoading] = useState(true);
 
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const notify = (mensaje, type = "") =>
+    type === "" ? toast(mensaje) : toast[type](mensaje);
+
   const { user } = useAuth();
-  const {
-    depart,
-    departamentosActivos,
-    departamentosActuales,
-    estadoDepartamentos,
-  } = useProject(proyecto);
+  const { depart, departamentosActivos, departamentosActuales, updateProject } =
+    useProject(proyecto);
   // console.log(params.id)
 
-  const duplicar = async () => {
-    
+  const duplicar = async (nombreProyecto) => {
     const procesarSeccion = (seccion) => {
       return (
         proyecto.attributes[seccion]?.map((item) => ({
@@ -69,12 +72,54 @@ export default function Proyecto({ params }) {
         cerrajeria: procesarSeccion("cerrajeria"),
         pintura: procesarSeccion("pintura"),
         montaje: procesarSeccion("montaje"),
+        nombre: nombreProyecto,
       };
 
       await budgetCtrl.createBudget(proyectoDuplicado);
+      notify("Proyecto duplicado", "success");
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const avanzar = () => {
+    const nextDep = departamentosActivos.indexOf(
+      proyecto.attributes.departamento
+    );
+    if (nextDep < 0) {
+      return;
+    }
+    const currentDep = departamentosActivos[nextDep + 1];
+
+    updateProject({ departamento: currentDep });
+
+    setProyecto((prevProyecto) => ({
+      ...prevProyecto,
+      attributes: {
+        ...prevProyecto.attributes,
+        departamento: currentDep,
+      },
+    }));
+  };
+
+  const retroceder = () => {
+    const backDep = departamentosActivos.indexOf(
+      proyecto.attributes.departamento
+    );
+    if (backDep < 0) {
+      return;
+    }
+    const currentDep = departamentosActivos[backDep - 1];
+
+    updateProject({ departamento: currentDep });
+
+    setProyecto((prevProyecto) => ({
+      ...prevProyecto,
+      attributes: {
+        ...prevProyecto.attributes,
+        departamento: currentDep,
+      },
+    }));
   };
 
   useEffect(() => {
@@ -109,7 +154,7 @@ export default function Proyecto({ params }) {
             <div className="flex gap-3 items-center">
               {/* <Image  /> */}
               {/* {JSON.stringify(user?.rol)}*/}
-              {/* {JSON.stringify(departamentosActivos)}  */}
+              {/* {JSON.stringify(departamentosActivos)} */}
               <Image
                 src="/assets/default.svg"
                 alt="default"
@@ -129,6 +174,7 @@ export default function Proyecto({ params }) {
                 <p>Creador: {proyecto.attributes.creador}</p>
               </div>
             </div>
+
             <div className="flex flex-col justify-center items-center gap-3">
               <label
                 htmlFor="priodidad"
@@ -144,9 +190,9 @@ export default function Proyecto({ params }) {
                 checked={proyecto.attributes.prioridad}
                 readOnly
               />
-              
+
               <a
-                onClick={duplicar}
+                onClick={() => setModalOpen(true)}
                 className="rounded-full bg-primary text-white py-1 px-3 uppercase text-sm cursor-pointer"
               >
                 Duplicar
@@ -201,12 +247,37 @@ export default function Proyecto({ params }) {
                   </p>
                 </div>
                 <div className="flex gap-5 items-center">
-                  <a className="bg-danger rounded-full text-white px-2 py-1 cursor-pointer">
-                    Retroceder
-                  </a>
-                  <a className="bg-primary rounded-full text-white px-2 py-1 cursor-pointer">
-                    Avanzar
-                  </a>
+                  {departamentosActivos.indexOf(
+                    proyecto.attributes.departamento
+                  ) === 0 ? (
+                    <a className="rounded-full text-white px-2 py-1 bg-bodydark1">
+                      Retroceder
+                    </a>
+                  ) : (
+                    <a
+                      className="bg-danger rounded-full text-white px-2 py-1 cursor-pointer"
+                      onClick={retroceder}
+                    >
+                      Retroceder
+                    </a>
+                  )}
+
+                  {departamentosActivos.length > 1 &&
+                  departamentosActivos.indexOf(
+                    proyecto.attributes.departamento
+                  ) <
+                    departamentosActivos.length - 1 ? (
+                    <a
+                      className="bg-primary rounded-full text-white px-2 py-1 cursor-pointer"
+                      onClick={() => avanzar()}
+                    >
+                      Avanzar
+                    </a>
+                  ) : (
+                    <a className="rounded-full text-white px-2 py-1 bg-bodydark1">
+                      Avanzar
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -255,6 +326,13 @@ export default function Proyecto({ params }) {
               })}
             </div>
 
+            <MultiModal isOpen={modalOpen} close={() => setModalOpen(false)}>
+              <ModalDuplicar
+                close={() => setModalOpen(false)}
+                duplicar={duplicar}
+              />
+            </MultiModal>
+
             <div className="flex flex-col mt-10">
               <p className="labels">Descripción</p>
               <p>{proyecto.attributes.descripcion}</p>
@@ -263,6 +341,7 @@ export default function Proyecto({ params }) {
           <ProjectTabs
             proyecto={proyecto}
             departamentosActivos={departamentosActivos}
+            updateProject={updateProject}
           />
           {(!!proyecto.attributes.fotos.data?.[0] ||
             !!proyecto.attributes.videos.data?.[0] ||

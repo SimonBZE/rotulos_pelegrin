@@ -1,7 +1,8 @@
 import { GridImages } from "./GridImages";
+import { Progreso } from "./Progreso";
 import { ProjectHeader } from "./ProjectHeader";
 
-export const Diseno = ({ data }) => {
+export const Diseno = ({ data, departamento, departamentoActual }) => {
   return (
     <div className="grid lg:grid-cols-2 gap-5">
       {data.map((item) => (
@@ -13,7 +14,10 @@ export const Diseno = ({ data }) => {
               <p>{item.horas}</p>
             </div>
           </div>
-          <GridImages item={item} className="p-5"/>
+          <GridImages item={item} className="p-5" />
+
+          {departamento === departamentoActual && <Progreso departamento={item} /> }
+          
         </div>
       ))}
     </div>

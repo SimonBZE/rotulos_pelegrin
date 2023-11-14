@@ -16,7 +16,7 @@ export const ProjectMedia = ({ proyecto }) => {
         <p className="labels">Contenido</p>
       </div>
       <div className="grid grid-cols-1 auto-cols-auto gap-4 md:grid-cols-3 lg:grid-cols-3 xl:auto-cols-min p-5">
-        <div>
+        <div className="flex-1">
           <Swiper
             effect={"fade"}
             navigation={true}
@@ -38,12 +38,7 @@ export const ProjectMedia = ({ proyecto }) => {
                             className="w-[70%]"
                           />
                         </div>
-                        <a
-                          onClick={() => handleMediaRemove("audios", index)}
-                          className="absolute top-1 right-1 bg-black text-white px-2 py-1 rounded-full cursor-pointer shadow-whiten"
-                        >
-                          X
-                        </a>
+                        
                       </>
                     </div>
                   </SwiperSlide>
@@ -69,12 +64,7 @@ export const ProjectMedia = ({ proyecto }) => {
                           className="w-full max-h-[150px] min-h-[150px] rounded-xl"
                           controls
                         />
-                        <a
-                          onClick={() => handleMediaRemove("videos", index)}
-                          className="absolute top-1 right-1 bg-black text-white px-2 py-1 rounded-full cursor-pointer shadow-whiten"
-                        >
-                          X
-                        </a>
+                        
                       </>
                     </div>
                   </SwiperSlide>
@@ -100,12 +90,7 @@ export const ProjectMedia = ({ proyecto }) => {
                           className="w-full max-h-[150px] min-h-[150px] rounded-xl object-cover"
                           alt="presupuesto"
                         />
-                        <a
-                          onClick={() => handleMediaRemove("fotos", index)}
-                          className="absolute top-1 right-1 bg-black text-white px-2 py-1 rounded-full cursor-pointer shadow-whiten"
-                        >
-                          X
-                        </a>
+                        
                       </>
                     </div>
                   </SwiperSlide>

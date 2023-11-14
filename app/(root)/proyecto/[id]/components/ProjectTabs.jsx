@@ -4,7 +4,7 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/components/common/Tabs/TabOne";
-import { Cerrajeria, Corte, Diseno, Impresion, Montaje, Pintura } from "./";
+import { Cerrajeria, Corte, Diseno, Impresion, Montaje, Pintura, updateProject } from "./";
 
 const departamentoComponentes = {
   diseno: Diseno,
@@ -15,8 +15,8 @@ const departamentoComponentes = {
   montaje: Montaje,
 };
 
-export const ProjectTabs = ({ departamentosActivos, proyecto }) => {
-  // console.log(proyecto.attributes)
+export const ProjectTabs = ({ departamentosActivos, proyecto, updateProject }) => {
+  
   return (
     <div className="mt-5 bg">
       {/* {JSON.stringify(data)} */}
@@ -36,7 +36,7 @@ export const ProjectTabs = ({ departamentosActivos, proyecto }) => {
           const DepartamentoComponente = departamentoComponentes[departamento];
           return DepartamentoComponente ? (
             <TabsContent key={departamento} value={departamento}>
-              <DepartamentoComponente data={proyecto.attributes[departamento]} />
+              <DepartamentoComponente updateProject={updateProject} data={proyecto.attributes[departamento]}  departamentoActual={proyecto.attributes.departamento} departamento={departamento} />
             </TabsContent>
           ) : null; // O manejar el caso de un departamento no definido
         })}

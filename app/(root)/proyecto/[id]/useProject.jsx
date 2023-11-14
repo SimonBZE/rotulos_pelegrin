@@ -1,10 +1,11 @@
-import {useState} from 'react'
+import { Budget } from "@/api";
+import { useState } from "react";
 
+const budgetCtrl = new Budget();
 
 export const useProject = (proyecto) => {
-  const [nextDep, setNextDep] = useState("")
-  const [prevDep, setPrevDep] = useState("")
-  const [departStatus, setDepartStatus] = useState({})
+  
+  const [departStatus, setDepartStatus] = useState({});
   const [departamentosActivos, setDepartamentosActivos] = useState([]);
 
   const depart = [
@@ -24,24 +25,24 @@ export const useProject = (proyecto) => {
           dep,
         ]);
       }
-    });   
-    
-    estadoDepartamentos()
-  }
+    });
+  };
 
-  const estadoDepartamentos = () => {
-    // console.log('departamentos activos', departamentosActivos)
-  }
-
-  
-
-  
+  const updateProject = async (data) => {
+    console.log(data)
+    try {
+      const res = await budgetCtrl.updateSingleProject(proyecto.id, data);
+      if (!!res.error) throw res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return {
     depart,
     departamentosActivos,
     departStatus,
     departamentosActuales,
-    estadoDepartamentos,
-  }
-}
+    updateProject,
+  };
+};

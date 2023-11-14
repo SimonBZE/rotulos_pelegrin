@@ -1,7 +1,8 @@
 import { GridImages } from "./GridImages";
+import { Progreso } from "./Progreso";
 import { ProjectHeader } from "./ProjectHeader";
 
-export const Cerrajeria = ({ data }) => {
+export const Cerrajeria = ({ data, departamento, departamentoActual }) => {
   
   return (
     <div className="grid lg:grid-cols-2 gap-5">
@@ -66,7 +67,7 @@ export const Cerrajeria = ({ data }) => {
           )}
 
           <GridImages item={item} className="px-3" />
-
+          {departamento === departamentoActual && <Progreso departamento={item} /> }
           {/* {!!item.imagenes.data && <SliderImages imagenes={item.imagenes} />} */}
         </div>
       ))}
