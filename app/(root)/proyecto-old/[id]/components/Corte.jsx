@@ -38,7 +38,7 @@ export const Corte = ({data, departamento, departamentoActual}) => {
         </div>
 
         <GridImages item={item} className="px-3" />
-        {departamento === departamentoActual && <Progreso currentDep={departamento} departamento={item} /> }
+        {departamento === departamentoActual && <Progreso departamento={item} /> }
         {/* {!!item.imagenes.data && <SliderImages imagenes={item.imagenes} />} */}
       </div>
     ))}

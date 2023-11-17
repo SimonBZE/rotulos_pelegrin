@@ -19,7 +19,6 @@ export const Mounting = ({
 
   useEffect(() => {
     const montaje = formik.values.montaje?.[index]?.tiempo_montaje || 0;
-    console.log(montaje);
     const t_desplazamiento =
       formik.values.montaje?.[index]?.desplazamiento || 0;
     const maquinaria = formik.values.montaje?.[index]?.alquiler_maquinaria || 0;

@@ -68,7 +68,7 @@ export const Pintura = ({ data, departamento, departamentoActual }) => {
           )}
 
           <GridImages item={item} className="px-3" />
-          {departamento === departamentoActual && <Progreso departamento={item} /> }
+          {departamento === departamentoActual && <Progreso currentDep={departamento} departamento={item} /> }
           {/* {!!item.imagenes.data && <SliderImages imagenes={item.imagenes} />} */}
         </div>
       ))}

@@ -9,7 +9,8 @@ export const ENV = {
         USERS_ME: "users/me",
         BUDGET: "presupuestos",
         IMAGE_UPLOAD: "upload",
-        PRECIOS_MATERIAL: "material"
+        PRECIOS_MATERIAL: "material",
+        COMENTARIOS_PROYECTO: "mensajes",
     },
     TOKEN: "token",
     PRECIOS:{

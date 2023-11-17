@@ -72,16 +72,20 @@ export function Proyecto({ initialValues, id }) {
       ];
 
       const asignarDepartamento = (formData) => {
-        formData.departamento = "";
-        for (const departamento of departamentos) {
-          if (formData[departamento]?.length > 0) {
-            formData.departamento = departamento;
-            break;
+        if(!!formData.departamento){
+          formData.departamento = "";
+          for (const departamento of departamentos) {
+            if (formData[departamento]?.length > 0) {
+              formData.departamento = departamento;
+              break;
+            }
           }
         }
-        if(formData.departamento === "") notify("Debe de agregar al menos un departamento", "error")
+        if (formData.departamento === "")
+          notify("Debe de agregar al menos un departamento", "error");
       };
 
+      
       asignarDepartamento(formData);
       // Fin
       
@@ -357,7 +361,7 @@ export function Proyecto({ initialValues, id }) {
                       step="3600000"
                       name="hora"
                       className={`formulario w-30 rounded ${
-                        formik.touched.fecha && formik.errors.fecha
+                        formik.touched.hora && formik.errors.hora
                           ? "errores"
                           : ""
                       }`}

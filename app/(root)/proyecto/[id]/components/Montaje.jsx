@@ -1,5 +1,5 @@
 import { GridImages } from "./GridImages";
-import { Progreso } from "./Progreso";
+import { Completar } from "./Completar";
 import { ProjectHeader } from "./ProjectHeader";
 
 export const Montaje = ({ data, departamento, departamentoActual }) => {
@@ -70,8 +70,9 @@ export const Montaje = ({ data, departamento, departamentoActual }) => {
           
 
           <GridImages item={item} className="px-3" />
-          {departamento === departamentoActual && <Progreso departamento={item} /> }
-          {/* {!!item.imagenes.data && <SliderImages imagenes={item.imagenes} />} */}
+          {/* {departamento === departamentoActual && <Progreso currentDep={departamento} departamento={item} /> } */}
+          
+          {departamento === departamentoActual && <Completar currentDep={departamento}  id={item.id} /> }
         </div>
       ))}
     </div>

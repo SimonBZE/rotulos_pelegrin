@@ -2,7 +2,7 @@ import { GridImages } from "./GridImages";
 import { Progreso } from "./Progreso";
 import { ProjectHeader } from "./ProjectHeader";
 
-export const Cerrajeria = ({ data, departamento, departamentoActual }) => {
+export const Pintura = ({ data, departamento, departamentoActual }) => {
   
   return (
     <div className="grid lg:grid-cols-2 gap-5">
@@ -25,8 +25,8 @@ export const Cerrajeria = ({ data, departamento, departamentoActual }) => {
               <p>{item.alto} m</p>
             </div>
             <div className="flex gap-1">
-              <p className="labels">Grosor: </p>
-              <p>{item.grosor} m</p>
+              <p className="labels">M Cuadrados: </p>
+              <p>{item.metro_cuadrados} m</p>
             </div>
           </div>
           <div className="flex px-3 justify-between">
@@ -34,11 +34,12 @@ export const Cerrajeria = ({ data, departamento, departamentoActual }) => {
               <p className="labels">Material: </p>
               <p>{item.material}</p>
             </div>
-            <div className="flex gap-1">
-              <p className="labels">H. fabricación: </p>
-              <p>{item.horas_fabricacion}</p>
+            <div className="flex gap-1 items-center">
+              <p className="labels ">Lijado: </p>
+              {item.lijado ? <div className="w-5 h-5 bg-primary flex items-center justify-center">✔️</div> : <div className="w-5 h-5" style={{border: "solid 1px black"}}></div>}
             </div>
           </div>
+
           {!!item.adicional && (
             <div className="flex px-3">
               <div className="overflow-x-auto  sm:rounded-lg min-w-full">
@@ -67,7 +68,7 @@ export const Cerrajeria = ({ data, departamento, departamentoActual }) => {
           )}
 
           <GridImages item={item} className="px-3" />
-          {departamento === departamentoActual && <Progreso currentDep={departamento} departamento={item} /> }
+          {departamento === departamentoActual && <Progreso departamento={item} /> }
           {/* {!!item.imagenes.data && <SliderImages imagenes={item.imagenes} />} */}
         </div>
       ))}

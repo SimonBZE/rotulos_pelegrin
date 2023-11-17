@@ -16,7 +16,7 @@ export const Diseno = ({ data, departamento, departamentoActual }) => {
           </div>
           <GridImages item={item} className="p-5" />
 
-          {departamento === departamentoActual && <Progreso currentDep={departamento} departamento={item} /> }
+          {departamento === departamentoActual && <Progreso departamento={item} /> }
           
         </div>
       ))}

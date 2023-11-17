@@ -15,7 +15,7 @@ const departamentoComponentes = {
   montaje: Montaje,
 };
 
-export const ProjectTabs = ({ departamentosActivos, proyecto }) => {
+export const ProjectTabs = ({ departamentosActivos, proyecto, updateProject }) => {
   
   return (
     <div className="mt-5 bg">
@@ -36,7 +36,7 @@ export const ProjectTabs = ({ departamentosActivos, proyecto }) => {
           const DepartamentoComponente = departamentoComponentes[departamento];
           return DepartamentoComponente ? (
             <TabsContent key={departamento} value={departamento}>
-              <DepartamentoComponente data={proyecto.attributes[departamento]}  departamentoActual={proyecto.attributes.departamento} departamento={departamento} />
+              <DepartamentoComponente updateProject={updateProject} data={proyecto.attributes[departamento]}  departamentoActual={proyecto.attributes.departamento} departamento={departamento} />
             </TabsContent>
           ) : null; // O manejar el caso de un departamento no definido
         })}

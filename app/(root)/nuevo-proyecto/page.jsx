@@ -34,7 +34,6 @@ import { toast } from "react-toastify";
 
 const budgetCtrl = new Budget();
 
-
 export default function NuevoProyecto() {
   const router = useRouter();
 
@@ -59,9 +58,8 @@ export default function NuevoProyecto() {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (formData) => {
-      
       setLoadingForm(true);
-      
+
       const departamentos = [
         "diseno",
         "impresion",
@@ -72,33 +70,32 @@ export default function NuevoProyecto() {
       ];
 
       const asignarDepartamento = (formData) => {
-        formData.departamento = "";
         for (const departamento of departamentos) {
           if (formData[departamento]?.length > 0) {
             formData.departamento = departamento;
             break;
           }
         }
+
         if (formData.departamento === "")
           notify("Debe de agregar al menos un departamento", "error");
       };
 
-      
       asignarDepartamento(formData);
       // Fin
       formData.creador = user.username;
       formData.idpresupuesto = presupuesto;
-      
-      
-      // departamentos.forEach(departamento => {
-      //   formData[departamento].forEach((item, index) => {
-      //     item.imagenes = item.imagenes[index] || [];
-      //   }); 
-      // })
-      
+      formData.estado = "en cola";
+
+      departamentos.forEach((departamento) => {
+        formData[departamento].forEach((item, index) => {
+          item.imagenes = item.imagenes[index] || [];
+        });
+      });
+
       // formData.diseno.forEach((item, index) => {
       //   item.imagenes = item.imagenes[index] || [];
-      // });      
+      // });
 
       // formData.impresion.forEach((item, index) => {
       //   item.imagenes = item.imagenes[index] || [];
@@ -132,8 +129,6 @@ export default function NuevoProyecto() {
         formData.fotos = [].concat(...files.fotos);
       }
 
-
-      
       try {
         const res = await budgetCtrl.createBudget(formData);
         setLoadingForm(false);
@@ -386,7 +381,7 @@ export default function NuevoProyecto() {
                       step="3600000"
                       name="hora"
                       className={`formulario w-30 rounded ${
-                        formik.touched.fecha && formik.errors.fecha
+                        formik.touched.hora && formik.errors.hora
                           ? "errores"
                           : ""
                       }`}

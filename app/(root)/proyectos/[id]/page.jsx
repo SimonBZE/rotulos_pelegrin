@@ -16,7 +16,8 @@ const depart = [
 
 const cargarProyectos = async (departamento) => {
   const index = depart.indexOf(departamento);
-  const dep = `?populate=*&filters[departamento][$eq]=${departamento}&filters[${departamento}][completado][$eq]=false&filters[aprovacion][$eq]=true`;
+  // const dep = `?populate=*&filters[departamento][$eq]=${departamento}&filters[${departamento}][completado][$eq]=false&filters[aprovacion][$eq]=true`;
+  const dep = `?populate=*&filters[departamento][$eq]=${departamento}&filters[aprovacion][$eq]=true`;
   const nextDepFilter = `?populate=*&filters[departamento][$ne]=${departamento}&filters[${departamento}][completado][$eq]=false&filters[aprovacion][$eq]=true`;
   // const next = index > 0 ? `?populate=*&filters[departamento][$eq]=${depart[index - 1]}&filters[${depart[index - 1]}][completado][$eq]=false&filters[${depart[index - 1]}][aprovacion][$eq]=true` : false;
   const next = index > 0 ? nextDepFilter : false;
