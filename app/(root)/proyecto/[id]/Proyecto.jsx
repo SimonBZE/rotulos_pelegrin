@@ -52,7 +52,7 @@ export default function Proyecto({ params }) {
     }
     departamentosActuales(proyecto);
   }, [proyecto]);
-
+  console.log(proyecto)
   return (
     <>
       {loading ? (
@@ -278,7 +278,8 @@ export default function Proyecto({ params }) {
             <ProjectMedia proyecto={proyecto} />
           )}
           
-          <Mensajes />
+          {(!!proyecto.attributes.mensajes.data?.[0]) && <Mensajes /> }
+          
         </>
       )}
     </>

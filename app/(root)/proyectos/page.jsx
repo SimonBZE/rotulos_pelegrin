@@ -53,12 +53,13 @@ export default function Proyectos() {
       setContadorDepartamento(contador);
     }
   }, [proyectos]);
-
+  // console.log(user.rol)
   return (
     <>
     {/* {JSON.stringify(proyectos)} */}
       <div className="w-full grid grid-cols-2 gap-5 md:grid-cols-3 mt-5">
         {servicios.map((servicio, index) => {
+          
           return (
             <Link key={index} href={`/proyectos/${servicio.departamento}`}>
               <div

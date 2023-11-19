@@ -132,8 +132,22 @@ export const ProjectProvider = ({ children }) => {
   
     if (direccion === "atras") {
       alert("Estás retrocediendo. Por favor, deja un mensaje explicativo.");
-      const data = {"comentario": mensaje,"departamento":nextDep ,"autor":2,"presupuesto":proyecto.id}
-      commentsCtrl.createComment(data)
+      const nuevoMensaje = {"comentario": mensaje,"departamento":nextDep ,"autor":2,"presupuesto":proyecto.id, "motivo":"retroceder"}
+      commentsCtrl.createComment(nuevoMensaje)
+      setProyecto(prevProyecto => ({
+        ...prevProyecto,
+        attributes: {
+          ...prevProyecto.attributes,
+          mensajes: {
+            ...prevProyecto.attributes.mensajes,
+            data: [
+              ...prevProyecto.attributes.mensajes.data,
+              nuevoMensaje  // Agregar el nuevo mensaje al final del arreglo existente
+            ]
+          }
+        }
+      }));
+      notify(`Se ha devuelto el proyecto al departamento de ${nextDep}.`, "success");
       // Aquí podría ir lógica adicional para manejar el retroceso.
     }
   
