@@ -13,6 +13,8 @@ import { MultiModal } from "@/components/common/MultiModal";
 import { ModalDuplicar } from "./components/ModalDuplicar";
 import { useProjectContext } from "@/context/ProjectContext";
 import { Mensajes } from "./components/Mensajes";
+import { ModalRetroceder } from "./components/ModalRetroceder";
+
 
 export default function Proyecto({ params }) {
   const [loading, setLoading] = useState(true);
@@ -31,6 +33,8 @@ export default function Proyecto({ params }) {
   } = useProjectContext();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalBack, setModalBack] = useState(false);
+
 
   const { user } = useAuth();
 
@@ -185,7 +189,7 @@ export default function Proyecto({ params }) {
                   ) : (
                     <a
                       className="bg-danger rounded-full text-white px-2 py-1 cursor-pointer"
-                      onClick={() => retroceder("La impresión ha salido torcida")}
+                      onClick={() => setModalBack(true)}
                     >
                       Retroceder
                     </a>
@@ -262,6 +266,13 @@ export default function Proyecto({ params }) {
               />
             </MultiModal>
 
+            <MultiModal isOpen={modalBack} close = {() => setModalBack(false)}>
+              <ModalRetroceder 
+                close={() => setModalBack(false)}
+                retroceder={retroceder}
+              />
+            </MultiModal>
+
             <div className="flex flex-col mt-10">
               <p className="labels">Descripción</p>
               <p>{proyecto.attributes.descripcion}</p>
@@ -280,6 +291,7 @@ export default function Proyecto({ params }) {
           
           {(!!proyecto.attributes.mensajes.data?.[0]) && <Mensajes /> }
           
+          {/* <Messages /> */}
         </>
       )}
     </>

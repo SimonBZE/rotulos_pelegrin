@@ -131,10 +131,14 @@ export const ProjectProvider = ({ children }) => {
     }
   
     if (direccion === "atras") {
-      alert("Estás retrocediendo. Por favor, deja un mensaje explicativo.");
+      
       const nuevoMensaje = {"comentario": mensaje,"departamento":nextDep ,"autor":2,"presupuesto":proyecto.id, "motivo":"retroceder"}
       commentsCtrl.createComment(nuevoMensaje)
-      setProyecto(prevProyecto => ({
+      
+      // proyecto.attributes.mensajes.data.attributes
+      // const mensaje={attributes:{"comentario": mensaje,"departamento":nextDep ,"autor":2,"presupuesto":proyecto.id, "motivo":"retroceder"}}
+
+      setProyecto((prevProyecto) => ({
         ...prevProyecto,
         attributes: {
           ...prevProyecto.attributes,
@@ -142,7 +146,7 @@ export const ProjectProvider = ({ children }) => {
             ...prevProyecto.attributes.mensajes,
             data: [
               ...prevProyecto.attributes.mensajes.data,
-              nuevoMensaje  // Agregar el nuevo mensaje al final del arreglo existente
+              {attributes:{"comentario": mensaje,"departamento":nextDep ,"autor":2,"presupuesto":proyecto.id, "motivo":"retroceder"}}
             ]
           }
         }
