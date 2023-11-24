@@ -14,7 +14,8 @@ import { ModalDuplicar } from "./components/ModalDuplicar";
 import { useProjectContext } from "@/context/ProjectContext";
 import { Mensajes } from "./components/Mensajes";
 import { ModalRetroceder } from "./components/ModalRetroceder";
-
+import { ModalIncidencia } from "./components/ModalIncidencia";
+import { ModalPausa } from "./components/ModalPausa";
 
 export default function Proyecto({ params }) {
   const [loading, setLoading] = useState(true);
@@ -30,13 +31,34 @@ export default function Proyecto({ params }) {
     retroceder,
     duplicar,
     actualizarEstadoProyecto,
+    manejarCambioAIncidencia
   } = useProjectContext();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalBack, setModalBack] = useState(false);
-
-
+  const [modalIncidencia, setModalIncidencia] = useState(false);
+  const [modalPausa, setModalPausa] = useState(false);
+  const [selectedState, setSelectedState] = useState('');
   const { user } = useAuth();
+
+  // onChange={e => {
+  //   const nuevoEstado = e.target.value;
+  //   actualizarEstadoProyecto(nuevoEstado)
+  // }}
+
+  const handleEstadoChange = (e) => {
+    const nuevoEstado = e.target.value;
+    setSelectedState(nuevoEstado);
+    console.log(nuevoEstado)
+
+    if (nuevoEstado === "incidencia") {
+      setModalIncidencia(true);
+    }  else if (nuevoEstado === "en pausa") {
+      setModalPausa(true);
+    } else {
+      actualizarEstadoProyecto(nuevoEstado);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -56,7 +78,8 @@ export default function Proyecto({ params }) {
     }
     departamentosActuales(proyecto);
   }, [proyecto]);
-  console.log(proyecto)
+
+  console.log(proyecto);
   return (
     <>
       {loading ? (
@@ -77,7 +100,7 @@ export default function Proyecto({ params }) {
                 width={100}
                 height={100}
                 className=" rounded-xl object-contain"
-                priority 
+                priority
               />
               <div className="flex flex-col justify-center">
                 <p className="text-primary font-bold">
@@ -151,18 +174,21 @@ export default function Proyecto({ params }) {
                       color: estado[proyecto.attributes.estado],
                     }}
                     value={proyecto.attributes.estado}
-                    onChange={e => {
-                      const nuevoEstado = e.target.value;
-                      actualizarEstadoProyecto(nuevoEstado)
-                    }}
+                    onChange={handleEstadoChange}
+                    // onChange={e => {
+                    //   const nuevoEstado = e.target.value;
+                    //   actualizarEstadoProyecto(nuevoEstado)
+                    // }}
                   >
-                    {estados.map(
-                      (dep) => (
-                        <option key={dep} value={dep} className="capitalize text-black">
-                          {dep}
-                        </option>
-                      )
-                    )}
+                    {estados.map((dep) => (
+                      <option
+                        key={dep}
+                        value={dep}
+                        className="capitalize text-black"
+                      >
+                        {dep}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -266,10 +292,30 @@ export default function Proyecto({ params }) {
               />
             </MultiModal>
 
-            <MultiModal isOpen={modalBack} close = {() => setModalBack(false)}>
-              <ModalRetroceder 
+            <MultiModal isOpen={modalBack} close={() => setModalBack(false)}>
+              <ModalRetroceder
                 close={() => setModalBack(false)}
                 retroceder={retroceder}
+              />
+            </MultiModal>
+
+            <MultiModal
+              isOpen={modalIncidencia}
+              close={() => setModalIncidencia(false)}
+            >
+              <ModalIncidencia
+                close={() => setModalIncidencia(false)}
+                manejarCambioAIncidencia={manejarCambioAIncidencia}
+              />
+            </MultiModal>
+            
+            <MultiModal
+              isOpen={modalPausa}
+              close={() => setModalPausa(false)}
+            >
+              <ModalPausa
+                close={() => setModalPausa(false)}
+                manejarCambioAIncidencia={manejarCambioAIncidencia}
               />
             </MultiModal>
 
@@ -288,9 +334,9 @@ export default function Proyecto({ params }) {
             !!proyecto.attributes.audios.data?.[0]) && (
             <ProjectMedia proyecto={proyecto} />
           )}
-          
-          {(!!proyecto.attributes.mensajes.data?.[0]) && <Mensajes /> }
-          
+
+          {!!proyecto.attributes.mensajes.data?.[0] && <Mensajes />}
+
           {/* <Messages /> */}
         </>
       )}

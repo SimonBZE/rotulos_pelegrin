@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../globals.css";
 import { Inter } from "next/font/google";
 import Loader from "@/components/common/Loader";
@@ -14,12 +14,21 @@ import "react-toastify/dist/ReactToastify.css";
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+
+  useEffect(() => {
+    
+    if (user?.id) {      
+        setLoading(false);      
+    }
+  }, [user]);
+  
+  
   return (
     <section>
       <AuthProvider>
-        {user?.id ? (
+        {!loading ? (
           <div suppressHydrationWarning={true}>
             <ToastContainer
               position="bottom-right"

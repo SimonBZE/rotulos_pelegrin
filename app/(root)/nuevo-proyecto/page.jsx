@@ -361,7 +361,7 @@ export default function NuevoProyecto() {
                   {/* Date */}
                   <div className="flex gap-2 items-center">
                     <label className="font-bold text-black" htmlFor="fecha">
-                      Fecha
+                      Fecha de entrega
                     </label>
                     <input
                       id="fecha"

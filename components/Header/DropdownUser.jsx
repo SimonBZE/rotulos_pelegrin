@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const {user, logout} = useAuth();
-console.log(user.firstname)
+
   const closeSession = () => {
     logout()
   }
@@ -52,9 +52,9 @@ console.log(user.firstname)
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            {user.firstname}
+            {user?.firstname}
           </span>
-          <span className="block text-xs capitalize">{user.rol}</span>
+          <span className="block text-xs capitalize">{user?.rol}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">

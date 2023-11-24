@@ -3,6 +3,8 @@ import { toast } from "react-toastify";
 
 import { Budget, Projects, Comments } from "@/api";
 
+import { useAuth } from "@/hooks/useAuth";
+
 const ProjectContext = createContext();
 
 export const useProjectContext = () => useContext(ProjectContext);
@@ -22,6 +24,8 @@ export const ProjectProvider = ({ children }) => {
   const [contadorCambiado, setContadorCambiado] = useState(false);
   const budgetCtrl = new Budget();
   const commentsCtrl = new Comments();
+
+  const {user} = useAuth()
 
   const notify = (mensaje, type = "") =>
     type === "" ? toast(mensaje) : toast[type](mensaje);
@@ -132,7 +136,7 @@ export const ProjectProvider = ({ children }) => {
   
     if (direccion === "atras") {
       
-      const nuevoMensaje = {"comentario": mensaje,"departamento":nextDep ,"autor":2,"presupuesto":proyecto.id, "motivo":"retroceder"}
+      const nuevoMensaje = {"comentario": mensaje,"departamento":nextDep ,"autor":user.id,"presupuesto":proyecto.id, "motivo":"retroceder"}
       commentsCtrl.createComment(nuevoMensaje)
       
       // proyecto.attributes.mensajes.data.attributes
@@ -179,7 +183,7 @@ export const ProjectProvider = ({ children }) => {
     if(nuevoEstado === 'terminado' && !departamentoCompletados()) {
       notify("No se puede completar el proyecto: aún hay tareas pendientes.", "error");
       return;
-    }
+    }   
 
     setProyecto( (prevProyecto) => ({
       ...prevProyecto,
@@ -192,6 +196,38 @@ export const ProjectProvider = ({ children }) => {
     updateProject({ estado: nuevoEstado });
 
   }
+
+  const manejarCambioAIncidencia = (mensaje, motivo) => {
+    // Enviar un mensaje de incidencia
+    console.log(motivo)
+    const nuevoMensaje = {
+      "comentario": mensaje,
+      "autor": user.id,
+      "presupuesto": proyecto.id,
+      "motivo": motivo
+    };
+    commentsCtrl.createComment(nuevoMensaje);
+
+    actualizarEstadoProyecto(motivo)
+  
+    // Actualizar el estado del proyecto a incidencia
+    setProyecto((prevProyecto) => ({
+      ...prevProyecto,
+      attributes: {
+        ...prevProyecto.attributes,
+        estado: motivo,
+        mensajes: {
+          ...prevProyecto.attributes.mensajes,
+          data: [
+            ...prevProyecto.attributes.mensajes.data,
+            { attributes: nuevoMensaje }
+          ]
+        }
+      }
+    }));
+  
+    notify("El estado del proyecto ha cambiado a 'Incidencia'", "success");
+  };
 
   const actualizarEstadoProyectoSiNecesario = useCallback(() => {    
       setProyecto((prevProyecto) => ({
@@ -225,6 +261,7 @@ export const ProjectProvider = ({ children }) => {
     retroceder,
     duplicar,
     setContadorCambiado,
+    manejarCambioAIncidencia,
   };
 
   return (

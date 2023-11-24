@@ -26,12 +26,17 @@ const Alert = ({ type, title, message, date, nombre, departamento }) => {
   };
 
   const colors = alertColors[type] || alertColors.warning;
-  console.log(type)
+
+  
+  
   return (
     <div
       className={`flex w-full border-l-6 ${colors?.border} ${colors?.background} px-5 py-5 shadow-md relative`}
     >
-      <div className={`absolute right-3 top-0 uppercase ${colors?.departamento} rounded-full px-2 py-1 mt-[-10px] text-white text-xs`}>{departamento}</div>
+      {departamento && (
+        <div className={`absolute right-3 top-0 uppercase ${colors?.departamento} rounded-full px-2 py-1 mt-[-10px] text-white text-xs`}>{departamento}</div>
+      )}
+      
       <div className="w-full">
         
         <h5 className={`mb-3 text-lg font-semibold ${colors?.textColor}`}>
