@@ -7,10 +7,10 @@ export const initialValues = {
   aprovacion: false,
   prioridad: false,
   fecha: "",
-  hora:"",
+  hora: "",
   descripcion: "",
   puesta_en_marcha: false,
-  departamento:"",
+  departamento: "",
   diseno: [],
   impresion: [],
   corte: [],
@@ -43,27 +43,29 @@ export const printSchema = Yup.object().shape({
   nombre: Yup.string().required("Debe agregar un nombre"),
   ancho: Yup.number()
     .required("Debe agregar un ancho")
-    .moreThan(0, 'Ancho debe ser mayor que 0'),
+    .moreThan(0, "Ancho debe ser mayor que 0"),
   alto: Yup.number()
     .required("Debe de agregar un alto")
-    .moreThan(0, 'Alto debe ser mayor que 0'),
+    .moreThan(0, "Alto debe ser mayor que 0"),
   material: Yup.string().required("Debe elegir un material"),
   laminacion: Yup.string(),
   imagenes: Yup.mixed(),
   precio: Yup.number()
     .required("Precio no puede estar vacio")
     .min(0, "Precio no puede ser negativo"),
-  cantidad: Yup.number().required('Debe poner una cantidad').min(1, 'Debe ser al menos 1 unidad')
+  cantidad: Yup.number()
+    .required("Debe poner una cantidad")
+    .min(1, "Debe ser al menos 1 unidad"),
 });
 
 export const cutSchema = Yup.object().shape({
   nombre: Yup.string().required("Debe agregar un nombre"),
   alto: Yup.number()
     .required("Alto es requerido")
-    .moreThan(0, 'Alto debe ser mayor que 0'),
+    .moreThan(0, "Alto debe ser mayor que 0"),
   ancho: Yup.number()
     .required("Ancho es requerido")
-    .moreThan(0, 'Ancho debe ser mayor que 0'),
+    .moreThan(0, "Ancho debe ser mayor que 0"),
   material: Yup.string().required("Debe de elegir un material"),
   cantidad: Yup.number()
     .required("Corte: Cantidad es requerido")
@@ -85,35 +87,46 @@ export const locksmithSchema = Yup.object().shape({
   nombre: Yup.string().required("Debe agregar un nombre"),
   ancho: Yup.number()
     .required("Ancho es requerido")
-    .moreThan(0, 'Ancho debe ser mayor que 0'),
+    .moreThan(0, "Ancho debe ser mayor que 0"),
   alto: Yup.number()
     .required("Alto es requerido")
-    .moreThan(0, 'Alto debe ser mayor que 0'),
+    .moreThan(0, "Alto debe ser mayor que 0"),
   grosor: Yup.number()
     .required("Grosor es requerido")
-    .moreThan(0, 'Grosor debe ser mayor que 0'),
+    .moreThan(0, "Grosor debe ser mayor que 0"),
   material: Yup.string().required("Debe de elegir un material"),
   horas_fabricacion: Yup.number()
     .required("Es requerido")
     .min(0.1, "Horas no pueden ser inferiores a 1"),
-  cantidad: Yup.number().required('Debe ingresar una cantidad').min(1, 'La cantidad minima es 1')
+  cantidad: Yup.number()
+    .required("Debe ingresar una cantidad")
+    .min(1, "La cantidad minima es 1")
     .required("Cantidad es requerido")
     .min(1, "No puede ser inferior a 1"),
-  precio: Yup.number().required("Debe de tener un precio").min(0, "Precio no puede ser negativo")
+  precio: Yup.number()
+    .required("Debe de tener un precio")
+    .min(0, "Precio no puede ser negativo")
     .required("Cantidad es requerido")
     .min(0, "No se permiten valores negativos"),
   adicional: Yup.array().of(lockAditionalSchema),
   imagenes: Yup.mixed(),
 });
 
+export const paintAditionalSchema = Yup.object().shape({
+  nombre: Yup.string().required("Nombre es requerido"),
+  precio: Yup.number()
+    .required("Precio es requerido")
+    .min(0, "Precio no puede ser negativo"),
+});
+
 export const paintSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre es requerido"),
   ancho: Yup.number()
     .required("Ancho es requedido")
-    .moreThan(0, 'Ancho debe ser mayor que 0'),
+    .moreThan(0, "Ancho debe ser mayor que 0"),
   alto: Yup.number()
     .required("Alto es requerido")
-    .moreThan(0, 'Alto debe ser mayor que 0'),
+    .moreThan(0, "Alto debe ser mayor que 0"),
   lijado: Yup.boolean(),
   material: Yup.string().required("Material es requerido"),
   precio: Yup.number()
@@ -122,6 +135,8 @@ export const paintSchema = Yup.object().shape({
   cantidad: Yup.number()
     .required("Cantidad es requerida")
     .min(1, "La cantidad minima es 1"),
+  adicional: Yup.array().of(lockAditionalSchema),
+  imagenes: Yup.mixed(),
 });
 
 export const mountingAditionalSchema = Yup.object().shape({
@@ -132,8 +147,8 @@ export const mountingAditionalSchema = Yup.object().shape({
 });
 
 export const matriculaMountingSchema = Yup.object().shape({
-  matricula: Yup.string()
-})
+  matricula: Yup.string(),
+});
 
 export const mountingSchema = Yup.object().shape({
   tiempo_montaje: Yup.number()
@@ -147,13 +162,13 @@ export const mountingSchema = Yup.object().shape({
     .required("Debe indicar el total")
     .min(0, "Total no puede ser negativo"),
   cantidad: Yup.number()
-  .required("Cantidad es requerida")
-  .min(1, "La cantidad minima es 1"),
-  alquiler_maquinaria: Yup.number().min(0, 'No puede ser negativo'),
+    .required("Cantidad es requerida")
+    .min(1, "La cantidad minima es 1"),
+  alquiler_maquinaria: Yup.number().min(0, "No puede ser negativo"),
   adicional: Yup.array().of(mountingAditionalSchema),
   matricula: Yup.array().of(matriculaMountingSchema),
   lugar_montaje: Yup.string(),
-  montadores:Yup.array(),
+  montadores: Yup.array(),
   vehiculo: Yup.string(),
   persona_contacto: Yup.string(),
 });
@@ -165,7 +180,7 @@ export const newDesign = {
   precio: 0,
   imagenes: [],
   cantidad: 1,
-  contador:0,
+  contador: 0,
 };
 
 export const newPrint = {
@@ -176,7 +191,7 @@ export const newPrint = {
   imagenes: [],
   precio: 0,
   cantidad: 1,
-  contador:0,
+  contador: 0,
 };
 
 export const newCut = {
@@ -187,7 +202,7 @@ export const newCut = {
   imagenes: [],
   precio: 0,
   cantidad: 1,
-  contador:0,
+  contador: 0,
 };
 
 export const newLockSmith = {
@@ -201,7 +216,7 @@ export const newLockSmith = {
   cantidad: 1,
   precio: 0,
   imagenes: [],
-  contador:0,
+  contador: 0,
 };
 
 export const newLockAditional = {
@@ -215,16 +230,23 @@ export const newPaint = {
   alto: "",
   lijado: false,
   material: "",
+  adicional: [],
   precio: 0,
   cantidad: 1,
-  contador:0,
+  imagenes: [],
+  contador: 0,
+};
+
+export const newPaintAditional = {
+  nombre: "",
+  precio: 0,
 };
 
 export const newMounting = {
   tiempo_montaje: "",
-  matricula:[],
+  matricula: [],
   lugar_montaje: "",
-  montadores:[],
+  montadores: [],
   vehiculo: "",
   persona_contacto: "",
   desplazamiento: "",
@@ -233,7 +255,7 @@ export const newMounting = {
   imagenes: [],
   precio: 0,
   cantidad: 1,
-  contador:0,
+  contador: 0,
 };
 
 export const newMountingAditional = {
@@ -243,12 +265,14 @@ export const newMountingAditional = {
 
 export const matriculaMounting = {
   matricula: "",
-}
+};
 
 export const validationSchema = Yup.object({
   nombre: Yup.string().required("Debe añadir un nombre al presupuesto"),
   cliente: Yup.string().required("Debe añadir el nombre del cliente"),
-  contacto: Yup.string().required("Debe añadir un número de contacto").min(8, 'Debe tener minimo 8 caracteres'),
+  contacto: Yup.string()
+    .required("Debe añadir un número de contacto")
+    .min(8, "Debe tener minimo 8 caracteres"),
   aprovacion: Yup.boolean(),
   prioridad: Yup.boolean(),
   fecha: Yup.date().required("Debe establecer una fecha de entrega"),
@@ -265,5 +289,5 @@ export const validationSchema = Yup.object({
   videos: Yup.mixed(),
   fotos: Yup.mixed(),
   audios: Yup.mixed(),
-  total: Yup.number()
+  total: Yup.number(),
 });

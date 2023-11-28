@@ -36,6 +36,7 @@ export class Budget {
 
       return result;
     } catch (error) {
+      console.log(error)
       return error
     }
   }

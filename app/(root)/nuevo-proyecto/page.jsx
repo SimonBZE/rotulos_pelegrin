@@ -93,29 +93,6 @@ export default function NuevoProyecto() {
         });
       });
 
-      // formData.diseno.forEach((item, index) => {
-      //   item.imagenes = item.imagenes[index] || [];
-      // });
-
-      // formData.impresion.forEach((item, index) => {
-      //   item.imagenes = item.imagenes[index] || [];
-      // });
-
-      // formData.corte.forEach((item, index) => {
-      //   item.imagenes = item.imagenes[index] || [];
-      // });
-
-      // formData.cerrajeria.forEach((item, index) => {
-      //   item.imagenes = item.imagenes[index] || [];
-      // });
-
-      // formData.pintura.forEach((item, index) => {
-      //   item.imagenes = item.imagenes[index] || [];
-      // });
-
-      // formData.montaje.forEach((item, index) => {
-      //   item.imagenes = item.imagenes[index] || [];
-      // });
 
       if (files.videos) {
         formData.videos = [].concat(...files.videos);
@@ -142,8 +119,8 @@ export default function NuevoProyecto() {
         setLoadingForm(false);
 
         // Muestra un mensaje de error usando Toastify
-        notify("No se ha enviado el formulario", "error");
-      }
+        notify("No se ha enviado el formulario", "err");
+      }ro
     },
   });
 

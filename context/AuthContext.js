@@ -1,6 +1,6 @@
 import { useState, createContext, useEffect, useContext } from "react";
 import { Token, User } from "@/api";
-import {useRouter} from 'next/navigation'
+import {useRouter, usePathname  } from 'next/navigation'
 
 const tokenCtrl = new Token();
 const userCtrl = new User();
@@ -13,27 +13,36 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  
   const router = useRouter()
+  const path = usePathname()
 
   useEffect(() => {
     (async () => {
       const token = tokenCtrl.getToken();
 
       if(!token){
-        logout()
+        handleRedirection()
         setLoading(false)
         return;
       }
 
       if(tokenCtrl.hasExpired(token)){
-        logout()
+        handleRedirection()
         return;
       } else{
         await login(token)
       }
     })()
   }, []);
+
+  const handleRedirection = () => {
+    const excludedPaths = ['/change-password', '/reset-password'];
+
+    if (!excludedPaths.includes(path)) {
+      logout();
+    }
+  };
   
 
   const login = async (token) => {
@@ -70,7 +79,8 @@ export function AuthProvider({ children }) {
     user,
     login,
     logout,
-    updateUser
+    updateUser,
+    setUser
   };
 
   // if (loading) return null;

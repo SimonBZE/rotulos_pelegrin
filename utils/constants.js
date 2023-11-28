@@ -5,8 +5,11 @@ export const ENV = {
         AUTH:{
             REGISTER: "auth/local/register",
             LOGIN:"auth/local",
+            RESET_PASSWORD: "auth/forgot-password",
+            CHANGE_PASSWORD: "auth/reset-password",
         },
         USERS_ME: "users/me",
+        USER: "users",
         BUDGET: "presupuestos",
         IMAGE_UPLOAD: "upload",
         PRECIOS_MATERIAL: "material",

@@ -14,6 +14,7 @@ export const Paint = ({
   formik,
   loadingImage,
   preciosServicios,
+  FieldArray
 }) => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -30,8 +31,9 @@ export const Paint = ({
       formik.values?.pintura?.[index].ancho *
         formik.values?.pintura?.[index].alto || 0;
     const lijado = formik.values.pintura?.[index]?.lijado ? 50 : 0;
+    const totalAdicional = formik.values?.pintura?.[index].adicional.reduce( (total, item) => total + item.precio, 0 );
     const newTotal =
-      (material * metros_cuadrados + metros_cuadrados * lijado) *
+      ((material * metros_cuadrados + metros_cuadrados * lijado) + totalAdicional) *
         formik.values?.pintura?.[index].cantidad || 0;
 
     // Actualiza el estado 'total' con el nuevo valor calculado
@@ -146,15 +148,73 @@ export const Paint = ({
               ))}
             </Field>
           </div>
+
+          <FieldArray
+        name={`pintura[${index}].adicional`}
+        render={(arrayHelpersAdicional) => (
+          <div>
+            <div
+              className="my-3"
+              style={{ borderBottom: "1px solid rgba(0,0,0,.1)" }}
+            ></div>
+            <div className="flex gap-2 items-center mb-3 justify-between">
+              <p className="labels w-[50%]">Adicional</p>
+              <p className="labels">Precio</p>
+              <a
+                className="cursor-pointer bg-primary text-white rounded-2xl px-2 py-1"
+                onClick={() =>
+                  arrayHelpersAdicional.push({ nombre: "", precio: 0 })
+                }
+              >
+                Añadir
+              </a>
+            </div>
+            {arrayHelpersAdicional.form.values.pintura[index].adicional.map(
+              (_, adicionalIndex) => (
+                <div key={adicionalIndex} className="mt-5">
+                  <div className="flex gap-2 items-center">
+                    <Field
+                      name={`pintura[${index}].adicional[${adicionalIndex}].nombre`}
+                      placeholder="Nombre"
+                      className={`formulario ${
+                        formik.touched.pintura?.[index]?.adicional?.[adicionalIndex]?.nombre && formik.errors.pintura?.[index]?.adicional?.[adicionalIndex]?.nombre
+                          ? "errores"
+                          : ""
+                      }`}
+                    />
+                    <Field
+                      name={`pintura[${index}].adicional[${adicionalIndex}].precio`}
+                      placeholder="Precio"
+                      type="number"
+                      className={`formulario w-17 ${
+                        formik.touched.pintura?.[index]?.adicional?.[adicionalIndex]?.precio && formik.errors.pintura?.[index]?.adicional?.[adicionalIndex]?.precio
+                          ? "errores"
+                          : ""
+                      }`}
+                    />
+                    <a
+                      href="#"
+                      className="rounded-full px-[8px] py-[3px] text-xs cursor-pointer bg-black text-white"
+                      onClick={() =>
+                        arrayHelpersAdicional.remove(adicionalIndex)
+                      }
+                    >
+                      X
+                    </a>
+                  </div>
+                </div>
+              )
+            )}
+            <div
+              className="my-3"
+              style={{ borderBottom: "1px solid rgba(0,0,0,.1)" }}
+            ></div>
+          </div>
+        )}
+      />
+
           {/* Imagenes */}
-          {/* <ImageViewer
-         serviceName="pintura"
-         index={index}
-         handleFileChange={handleFileChange}
-         images={images}
-         handleImageRemove={handleImageRemove}
-         loadingImage={loadingImage}
-       /> */}
+          
 
           <ImageViewer
             serviceName="pintura"
