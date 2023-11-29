@@ -31,7 +31,7 @@ export const Paint = ({
       formik.values?.pintura?.[index].ancho *
         formik.values?.pintura?.[index].alto || 0;
     const lijado = formik.values.pintura?.[index]?.lijado ? 50 : 0;
-    const totalAdicional = formik.values?.pintura?.[index].adicional.reduce( (total, item) => total + item.precio, 0 );
+    const totalAdicional = formik.values?.pintura?.[index].adicional?.reduce( (total, item) => total + item.precio, 0 );
     const newTotal =
       ((material * metros_cuadrados + metros_cuadrados * lijado) + totalAdicional) *
         formik.values?.pintura?.[index].cantidad || 0;
@@ -169,7 +169,7 @@ export const Paint = ({
                 Añadir
               </a>
             </div>
-            {arrayHelpersAdicional.form.values.pintura[index].adicional.map(
+            {arrayHelpersAdicional.form.values.pintura[index].adicional?.map(
               (_, adicionalIndex) => (
                 <div key={adicionalIndex} className="mt-5">
                   <div className="flex gap-2 items-center">

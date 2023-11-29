@@ -7,6 +7,7 @@ export const ENV = {
             LOGIN:"auth/local",
             RESET_PASSWORD: "auth/forgot-password",
             CHANGE_PASSWORD: "auth/reset-password",
+            CHANGE_PW_LOGED: "auth/change-password",
         },
         USERS_ME: "users/me",
         USER: "users",

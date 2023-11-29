@@ -1,17 +1,157 @@
-import React from 'react'
+"use client";
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  User,
+  Chip,
+  Tooltip,
+  Button,
+  Spinner,
+} from "@nextui-org/react";
+import { CiEdit, CiTrash } from "react-icons/ci";
+import { IoEyeOutline, IoSearch } from "react-icons/io5";
+import { IoMdPersonAdd } from "react-icons/io";
+import { columns, users } from "./data";
+import { useCallback, useEffect, useState } from "react";
+import { User as Empleado } from "@/api/user";
+import { ENV } from "@/utils";
+import { MyInput } from "@/components/ui";
+
+const statusColorMap = {
+  false: "success",
+  true: "danger",
+};
+
+const userCtrl = new Empleado();
 
 export default function Empleados() {
+  const [empleados, setEmpleados] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getUsers = useCallback(async () => {
+    try {
+      const data = await userCtrl.getAll();
+      console.log(data);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getUsers();
+      setEmpleados(data);
+    }
+
+    fetchData();
+  }, []);
+
   return (
-    <div className='w-full h-[80vh] flex justify-center items-center flex-col'>
-       <svg
-      viewBox="0 0 512 512"
-      fill="#000"
-      height="3em"
-      width="3em"
-    >
-      <path d="M240.8 4.8C250.3 10.6 256 20.9 256 32v72h89c3.6-13.8 16.1-24 31-24h88c26.5 0 48 21.5 48 48s-21.5 48-48 48h-88c-14.9 0-27.4-10.2-31-24h-89v72c0 11.1-5.7 21.4-15.2 27.2s-21.2 6.4-31.1 1.4l-192-96C6.8 151.2 0 140.1 0 128s6.8-23.2 17.7-28.6l192-96c9.9-5 21.7-4.4 31.1 1.4zM288 256c0-17.7 14.3-32 32-32h160c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H320c-17.7 0-32-14.3-32-32v-64zM32 384h96c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32v-64c0-17.7 14.3-32 32-32zm192 0h256c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H224c-17.7 0-32-14.3-32-32v-64c0-17.7 14.3-32 32-32z" />
-    </svg>
-      <h1 className='text-4xl text-black font-bold mt-5'>En desarrollo...</h1>
+    <div>
+      {empleados.length < 1 ? (
+       <div className="flex justify-center items-center h-[calc(100vh-140px)]">
+        
+          <Spinner size="xl"/>
+              
+       </div>
+      ) : (
+        <>
+          <div className="flex flex-col justify-between mb-3 xsm:flex-row gap-3">
+            <div>
+              <h2 className="text-title-md font-semibold text-black dark:text-white">
+                Empleados
+              </h2>
+            </div>
+            <div className="flex gap-3">
+              <Button startContent={<IoMdPersonAdd />} color="primary">
+                {" "}
+                Agregar empleado
+              </Button>
+              <MyInput
+                classNames={{
+                  base: "max-w-full sm:max-w-[10rem] h-10",
+                  mainWrapper: "h-full",
+                  input: "text-small",
+                  inputWrapper:
+                    "h-full font-normal text-default-500 bg-white dark:bg-default-500/20",
+                }}
+                placeholder="Buscar empleado"
+                size="sm"
+                startContent={<IoSearch size={18} />}
+                type="search"
+              />
+            </div>
+          </div>
+          <Table aria-label="Example table with custom cells">
+            <TableHeader columns={columns}>
+              {columns.map((column) => (
+                <TableColumn key={column.uid}>{column.name}</TableColumn>
+              ))}
+            </TableHeader>
+            <TableBody items={users}>
+              {empleados.map((user) => (
+                // Usuario
+                <TableRow key={user.id}>
+                  <TableCell>
+                    <User
+                      avatarProps={{ radius: "lg", src: user.foto?.url ? `${ENV.SERVER_HOST}${user.foto?.url}` : "" }}
+                      description={user.email}
+                      name={<p className="labels">{user.firstname} {user.lastname}</p>}
+                    >
+                      {user.email}
+                    </User>
+                  </TableCell>
+                  <TableCell>
+                    {/* Rol */}
+                    <div className="flex flex-col">
+                      <p className="text-bold capitalize text-black">
+                        {user.rol}
+                      </p>
+                      
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {/* estado */}
+                    <Chip
+                      className="capitalize"
+                      color={statusColorMap[user.blocked]}
+                      size="sm"
+                      variant="flat"
+                    >
+                      {!user.blocked ? "Activo" : "Inactivo"}
+                    </Chip>
+                  </TableCell>
+                  <TableCell>
+                    {/* Acciones */}
+                    <div className="relative flex items-center gap-2">
+                      <Tooltip content="Detalles">
+                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                          <IoEyeOutline />
+                        </span>
+                      </Tooltip>
+                      <Tooltip content="Editar empleado">
+                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                          <CiEdit />
+                        </span>
+                      </Tooltip>
+                      <Tooltip color="danger" content="Eliminar empleado">
+                        <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                          <CiTrash />
+                        </span>
+                      </Tooltip>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
+      )}
     </div>
-  )
+  );
 }

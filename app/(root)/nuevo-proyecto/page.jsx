@@ -31,6 +31,8 @@ import Loader from "@/components/common/Loader";
 import { servicios } from "@/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
+import { MyInput } from "@/components/ui";
+import { Input } from "@nextui-org/react";
 
 const budgetCtrl = new Budget();
 
@@ -244,13 +246,13 @@ export default function NuevoProyecto() {
                         <p className="text-primary font-bold">
                           PR{presupuesto}
                         </p>
-                        <input
-                          className={`formulario ${
-                            formik.touched.nombre && formik.errors.nombre
-                              ? "errores"
-                              : ""
-                          }`}
-                          type="text"
+                        
+                        <MyInput
+                          
+                          size={"sm"}
+                          
+                          isInvalid={formik.touched.nombre && formik.errors.nombre ? true : false}
+                          type="text"                          
                           placeholder="Nombre del presupuesto"
                           name="nombre"
                           value={formik.values.nombre}

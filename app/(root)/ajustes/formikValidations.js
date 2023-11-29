@@ -7,6 +7,7 @@ export const validationSchema= Yup.object({
 })
 
 export const passwordValidationSchema = Yup.object({
-    password: Yup.string().required('La contraseña es obligatoria'),
-    password_confirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir').required('La confirmación de la contraseña es obligatoria'),
+    currentPassword: Yup.string().required('La contraseña actual es obligatoria'),
+    password: Yup.string().required('La contraseña es obligatoria').min(6, 'La contraseña debe tener al menos 6 caracteres'),
+    passwordConfirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir').required('La confirmación de la contraseña es obligatoria'),
 })
