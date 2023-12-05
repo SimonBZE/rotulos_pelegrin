@@ -91,11 +91,11 @@ export default function Proyectos() {
           );
         })}
       </div>
-      <div className="flex justify-center mt-5">
+      {/* <div className="flex justify-center mt-5">
         <Link href="#" className="px-5 py-3 bg-primary text-white rounded-full">
           Ver todos
         </Link>
-      </div>
+      </div> */}
     </>
   );
 }

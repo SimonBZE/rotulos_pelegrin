@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import { validationSchema } from "../formikValidations";
 import { useFormik } from "formik";
 import { useAuth } from "@/context/AuthContext";
@@ -44,9 +44,9 @@ export const Informacion = () => {
         </h3>
       </div>
       <div className="p-7">
-        <form onSubmit={formik.handleSubmit}>
+        <form  onSubmit={formik.handleSubmit}>
           <div className="mb-5">
-            <ImageUploader onUpload={onUpload} foto={user.foto} />
+            <ImageUploader onUpload={onUpload} foto={user?.foto} />
           </div>
           <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
             <div className="w-full sm:w-1/2">
@@ -65,7 +65,7 @@ export const Informacion = () => {
                   type="text"
                   name="firstname"
                   placeholder="Nombre"
-                  value={formik.values.firstname}
+                  value={formik.values?.firstname}
                   onChange={formik.handleChange}
                 />
               </div>
@@ -87,7 +87,7 @@ export const Informacion = () => {
                   type="text"
                   name="lastname"
                   placeholder="Apellido"
-                  value={formik.values.lastname}
+                  value={formik.values?.lastname}
                   onChange={formik.handleChange}
                 />
               </div>
@@ -110,7 +110,7 @@ export const Informacion = () => {
                 type="email"
                 name="email"
                 placeholder="correo"
-                value={formik.values.email}
+                value={formik.values?.email}
                 onChange={formik.handleChange}
               />
             </div>

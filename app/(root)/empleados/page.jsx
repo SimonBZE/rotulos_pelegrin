@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
+import {Skeleton} from "@nextui-org/react";
 import {
   Table,
   TableHeader,
@@ -81,102 +82,94 @@ export default function Empleados() {
   }, []);
 
   return (
-    <div>
-      {empleados.length < 1 ? (
-        <div className="flex justify-center items-center h-[calc(100vh-140px)]">
-          <Spinner size="xl" />
+    <>
+      <div className="flex flex-col justify-between mb-3 xsm:flex-row gap-3">
+        <div>
+          <h2 className="text-title-md font-semibold text-black dark:text-white">
+            Empleados
+          </h2>
         </div>
-      ) : (
-        <>
-          <div className="flex flex-col justify-between mb-3 xsm:flex-row gap-3">
-            <div>
-              <h2 className="text-title-md font-semibold text-black dark:text-white">
-                Empleados
-              </h2>
-            </div>
-            <div className="flex gap-3 items-center">
-              <AgregarEmpleado getUsers={getUsers} />
-              {/* <Input
+        <div className="flex gap-3 items-center">
+          <AgregarEmpleado getUsers={getUsers} />
+          {/* <Input
                 className="w-50"
                 placeholder="Buscar empleado"
                 size="sm"
                 startContent={<IoSearch size={18} />}
                 type="search"
               /> */}
-            </div>
-          </div>
-          <Table aria-label="Example table with custom cells">
-            <TableHeader columns={columns}>
-              {columns.map((column) => (
-                <TableColumn key={column.uid}>{column.name}</TableColumn>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {empleados.map((empleado) => (
-                // Usuario
-                <TableRow key={empleado.id}>
-                  <TableCell>
-                    <User
-                      avatarProps={{
-                        radius: "lg",
-                        src: empleado.foto?.url
-                          ? `${ENV.SERVER_HOST}${empleado.foto?.url}`
-                          : "",
-                      }}
-                      description={empleado.email}
-                      name={
-                        <p className="labels">
-                          {empleado.firstname} {empleado.lastname}
-                        </p>
-                      }
-                    >
-                      {empleado.email}
-                    </User>
-                  </TableCell>
-                  <TableCell>
-                    {/* Rol */}
-                    <div className="flex flex-col">
-                      <p className="text-bold capitalize text-black">
-                        {empleado.rol}
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {/* estado */}
-                    <Chip
-                      className="capitalize"
-                      color={statusColorMap[empleado.blocked]}
-                      size="sm"
-                      variant="flat"
-                    >
-                      {!empleado.blocked ? "Activo" : "Inactivo"}
-                    </Chip>
-                  </TableCell>
-                  <TableCell>
-                    {/* Acciones */}
-                    <div className="relative flex items-center gap-2">
-                      {/* <Tooltip content="Detalles">
+        </div>
+      </div>
+      <Table aria-label="Example table with custom cells">
+        <TableHeader columns={columns}>
+          {columns.map((column) => (
+            <TableColumn key={column.uid}>{column.name}</TableColumn>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {empleados.map((empleado) => (
+            // Usuario
+            <TableRow key={empleado.id}>
+              <TableCell>
+                <User
+                  avatarProps={{
+                    radius: "lg",
+                    src: empleado.foto?.url
+                      ? `${ENV.SERVER_HOST}${empleado.foto?.url}`
+                      : "",
+                  }}
+                  description={empleado.email}
+                  name={
+                    <p className="labels">
+                      {empleado.firstname} {empleado.lastname}
+                    </p>
+                  }
+                >
+                  {empleado.email}
+                </User>
+              </TableCell>
+              <TableCell>
+                {/* Rol */}
+                <div className="flex flex-col">
+                  <p className="text-bold capitalize text-black">
+                    {empleado.rol}
+                  </p>
+                </div>
+              </TableCell>
+              <TableCell>
+                {/* estado */}
+                <Chip
+                  className="capitalize"
+                  color={statusColorMap[empleado.blocked]}
+                  size="sm"
+                  variant="flat"
+                >
+                  {!empleado.blocked ? "Activo" : "Inactivo"}
+                </Chip>
+              </TableCell>
+              <TableCell>
+                {/* Acciones */}
+                <div className="relative flex items-center gap-2">
+                  {/* <Tooltip content="Detalles">
                         <span className="text-xl text-default-400 cursor-pointer active:opacity-50">
                           <IoEyeOutline />
                         </span>
                       </Tooltip> */}
 
-                      <EditarEmpleado id={empleado.id} getUsers={getUsers} />
+                  <EditarEmpleado id={empleado.id} getUsers={getUsers} />
 
-                      {user?.id === empleado.id ? null : (
-                        <ConfirmarEliminarEmpleado
-                          eliminarEmpleado={eliminarEmpleado}
-                          id={empleado.id}
-                        />
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </>
-      )}
-    </div>
+                  {user?.id === empleado.id ? null : (
+                    <ConfirmarEliminarEmpleado
+                      eliminarEmpleado={eliminarEmpleado}
+                      id={empleado.id}
+                    />
+                  )}
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
   );
 }

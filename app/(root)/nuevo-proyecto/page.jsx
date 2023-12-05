@@ -314,23 +314,7 @@ export default function NuevoProyecto() {
                         name="prioridad"
                         checked={formik.values.prioridad}
                         onChange={formik.handleChange}
-                      />
-                      {/* <select
-                        className={`formulario ${
-                          formik.touched.prioridad && formik.errors.prioridad
-                            ? "errores"
-                            : ""
-                        }`}
-                        name="prioridad"
-                        value={formik.values.prioridad}
-                        required
-                        onChange={formik.handleChange}
-                      >
-                        <option>seleccione</option>
-                        <option value="baja">Baja</option>
-                        <option value="media">Media</option>
-                        <option value="alta">Alta</option>
-                      </select> */}
+                      />                      
                     </div>
                   </div>
                 </div>

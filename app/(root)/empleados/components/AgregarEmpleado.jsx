@@ -23,9 +23,7 @@ export const AgregarEmpleado = ({ getUsers }) => {
         Agregar empleado
       </Button>
       <Modal
-       style={{
-        zIndex: 10,
-      }}
+       
         backdrop="blur"
         isOpen={isOpen}
         onOpenChange={onOpenChange}

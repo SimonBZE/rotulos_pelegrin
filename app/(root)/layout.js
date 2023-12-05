@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import "../globals.css";
-import { Inter } from "next/font/google";
 import Loader from "@/components/common/Loader";
 
 import Sidebar from "@/components/Sidebar";
@@ -17,13 +16,12 @@ export default function RootLayout({ children }) {
   // const [loading, setLoading] = useState(true);
   const { user, setLoading, loading } = useAuth();
 
-  useEffect(() => {        
-    if (user?.id) {      
-        setLoading(false);      
+  useEffect(() => {
+    if (user?.id) {
+      setLoading(false);
     }
   }, [user]);
-  
-  
+
   return (
     <section>
       <AuthProvider>
@@ -57,10 +55,13 @@ export default function RootLayout({ children }) {
                   {/* <!-- ===== Content Area Start ===== --> */}
                   <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                     {/* <!-- ===== Header Start ===== --> */}
+                    
                     <Header
                       sidebarOpen={sidebarOpen}
                       setSidebarOpen={setSidebarOpen}
                     />
+
+                    
                     {/* <!-- ===== Header End ===== --> */}
 
                     {/* <!-- ===== Main Content Start ===== --> */}

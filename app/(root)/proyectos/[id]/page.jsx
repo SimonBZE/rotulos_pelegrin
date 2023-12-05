@@ -66,7 +66,7 @@ const Departamentos = ({ params }) => {
   return (
     <div>
       {/* {JSON.stringify(proximosProyectos)} */}
-      <div className="flex justify-between items-center mb-5 p-5">
+      <div className="flex flex-col gap-5 sm:flex-row justify-between items-center mb-5 p-5">
         <div className="flex items-center gap-3">
           <Image
             className="w-[40px] h-[40px]"
