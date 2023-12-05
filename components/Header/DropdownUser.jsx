@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { useAuth } from "@/hooks/useAuth";
 
+import { useAuth } from "@/hooks/useAuth";
+import { Avatar } from "@nextui-org/react";
+import { ENV } from "@/utils";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const {user, logout} = useAuth();
-
+  const { user, logout } = useAuth();
+  
   const closeSession = () => {
-    logout()
-  }
+    logout();
+  };
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -57,14 +58,14 @@ const DropdownUser = () => {
           <span className="block text-xs capitalize">{user?.rol}</span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
-          <Image
-            width={112}
-            height={112}
-            src={"/images/user/user-01.png"}
-            alt="User"
-          />
-        </span>
+        <Avatar
+          src={
+            user?.foto
+              ? `${ENV.SERVER_HOST}${user.foto.formats?.thumbnail.url}`
+              : ""
+          }
+          size="lg"
+        />
 
         <svg
           className="hidden fill-current sm:block"
@@ -93,7 +94,7 @@ const DropdownUser = () => {
         }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
-          <li>
+          {/* <li>
             <Link
               href="#"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
@@ -117,8 +118,8 @@ const DropdownUser = () => {
               </svg>
               Mi perfil
             </Link>
-          </li>
-          <li>
+          </li> */}
+          {/* <li>
             <Link
               href="#"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
@@ -138,7 +139,7 @@ const DropdownUser = () => {
               </svg>
               Mis proyectos
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               href="/ajustes"
@@ -165,7 +166,10 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button onClick={closeSession} className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          onClick={closeSession}
+          className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+        >
           <svg
             className="fill-current"
             width="22"

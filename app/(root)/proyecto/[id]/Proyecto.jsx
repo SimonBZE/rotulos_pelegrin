@@ -79,7 +79,7 @@ export default function Proyecto({ params }) {
     departamentosActuales(proyecto);
   }, [proyecto]);
 
-  console.log(proyecto);
+  // console.log(proyecto);
   return (
     <>
       {loading ? (
@@ -329,9 +329,9 @@ export default function Proyecto({ params }) {
             departamentosActivos={departamentosActivos}
             updateProject={updateProject}
           />
-          {(!!proyecto.attributes.fotos.data?.[0] ||
-            !!proyecto.attributes.videos.data?.[0] ||
-            !!proyecto.attributes.audios.data?.[0]) && (
+          {(!!proyecto.attributes.fotos?.data?.[0] ||
+            !!proyecto.attributes.videos?.data?.[0] ||
+            !!proyecto.attributes.audios?.data?.[0]) && (
             <ProjectMedia proyecto={proyecto} />
           )}
 

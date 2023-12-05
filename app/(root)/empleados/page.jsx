@@ -1,4 +1,5 @@
 "use client";
+import { useCallback, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -8,57 +9,83 @@ import {
   TableCell,
   User,
   Chip,
-  Tooltip,
-  Button,
   Spinner,
 } from "@nextui-org/react";
-import { CiEdit, CiTrash } from "react-icons/ci";
+
 import { IoEyeOutline, IoSearch } from "react-icons/io5";
-import { IoMdPersonAdd } from "react-icons/io";
-import { columns, users } from "./data";
-import { useCallback, useEffect, useState } from "react";
+
 import { User as Empleado } from "@/api/user";
 import { ENV } from "@/utils";
-import { MyInput } from "@/components/ui";
+import { AgregarEmpleado } from "./components/AgregarEmpleado";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/useToast";
+import { ConfirmarEliminarEmpleado } from "./components/ConfirmarEliminarEmpleado";
+import { EditarEmpleado } from "./components/EditarEmpleado";
 
 const statusColorMap = {
   false: "success",
   true: "danger",
 };
 
+const columns = [
+  { name: "NOMBRE", uid: "name" },
+  { name: "ROL", uid: "role" },
+  { name: "ESTADO", uid: "status" },
+  { name: "ACCIONES", uid: "actions" },
+];
+
 const userCtrl = new Empleado();
 
 export default function Empleados() {
   const [empleados, setEmpleados] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const router = useRouter();
+  const { user } = useAuth();
+
+  const { notify } = useToast();
 
   const getUsers = useCallback(async () => {
     try {
       const data = await userCtrl.getAll();
-      console.log(data);
-      return data;
+      setEmpleados(data);
+    } catch (error) {
+      return error;
+    }
+  }, []);
+
+  const eliminarEmpleado = useCallback(async (id) => {
+    if (user.id === id) {
+      notify("No puedes eliminar tu propio usuario", "error");
+      return;
+    }
+    try {
+      const data = await userCtrl.deleteUser(id);
+      getUsers();
     } catch (error) {
       return error;
     }
   }, []);
 
   useEffect(() => {
+    if (user?.rol !== "administrador") {
+      router.push("/");
+    }
+  }, []);
+
+  useEffect(() => {
     async function fetchData() {
       const data = await getUsers();
-      setEmpleados(data);
     }
-
     fetchData();
   }, []);
 
   return (
     <div>
       {empleados.length < 1 ? (
-       <div className="flex justify-center items-center h-[calc(100vh-140px)]">
-        
-          <Spinner size="xl"/>
-              
-       </div>
+        <div className="flex justify-center items-center h-[calc(100vh-140px)]">
+          <Spinner size="xl" />
+        </div>
       ) : (
         <>
           <div className="flex flex-col justify-between mb-3 xsm:flex-row gap-3">
@@ -67,24 +94,15 @@ export default function Empleados() {
                 Empleados
               </h2>
             </div>
-            <div className="flex gap-3">
-              <Button startContent={<IoMdPersonAdd />} color="primary">
-                {" "}
-                Agregar empleado
-              </Button>
-              <MyInput
-                classNames={{
-                  base: "max-w-full sm:max-w-[10rem] h-10",
-                  mainWrapper: "h-full",
-                  input: "text-small",
-                  inputWrapper:
-                    "h-full font-normal text-default-500 bg-white dark:bg-default-500/20",
-                }}
+            <div className="flex gap-3 items-center">
+              <AgregarEmpleado getUsers={getUsers} />
+              {/* <Input
+                className="w-50"
                 placeholder="Buscar empleado"
                 size="sm"
                 startContent={<IoSearch size={18} />}
                 type="search"
-              />
+              /> */}
             </div>
           </div>
           <Table aria-label="Example table with custom cells">
@@ -93,57 +111,64 @@ export default function Empleados() {
                 <TableColumn key={column.uid}>{column.name}</TableColumn>
               ))}
             </TableHeader>
-            <TableBody items={users}>
-              {empleados.map((user) => (
+            <TableBody>
+              {empleados.map((empleado) => (
                 // Usuario
-                <TableRow key={user.id}>
+                <TableRow key={empleado.id}>
                   <TableCell>
                     <User
-                      avatarProps={{ radius: "lg", src: user.foto?.url ? `${ENV.SERVER_HOST}${user.foto?.url}` : "" }}
-                      description={user.email}
-                      name={<p className="labels">{user.firstname} {user.lastname}</p>}
+                      avatarProps={{
+                        radius: "lg",
+                        src: empleado.foto?.url
+                          ? `${ENV.SERVER_HOST}${empleado.foto?.url}`
+                          : "",
+                      }}
+                      description={empleado.email}
+                      name={
+                        <p className="labels">
+                          {empleado.firstname} {empleado.lastname}
+                        </p>
+                      }
                     >
-                      {user.email}
+                      {empleado.email}
                     </User>
                   </TableCell>
                   <TableCell>
                     {/* Rol */}
                     <div className="flex flex-col">
                       <p className="text-bold capitalize text-black">
-                        {user.rol}
+                        {empleado.rol}
                       </p>
-                      
                     </div>
                   </TableCell>
                   <TableCell>
                     {/* estado */}
                     <Chip
                       className="capitalize"
-                      color={statusColorMap[user.blocked]}
+                      color={statusColorMap[empleado.blocked]}
                       size="sm"
                       variant="flat"
                     >
-                      {!user.blocked ? "Activo" : "Inactivo"}
+                      {!empleado.blocked ? "Activo" : "Inactivo"}
                     </Chip>
                   </TableCell>
                   <TableCell>
                     {/* Acciones */}
                     <div className="relative flex items-center gap-2">
-                      <Tooltip content="Detalles">
-                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                      {/* <Tooltip content="Detalles">
+                        <span className="text-xl text-default-400 cursor-pointer active:opacity-50">
                           <IoEyeOutline />
                         </span>
-                      </Tooltip>
-                      <Tooltip content="Editar empleado">
-                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                          <CiEdit />
-                        </span>
-                      </Tooltip>
-                      <Tooltip color="danger" content="Eliminar empleado">
-                        <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                          <CiTrash />
-                        </span>
-                      </Tooltip>
+                      </Tooltip> */}
+
+                      <EditarEmpleado id={empleado.id} getUsers={getUsers} />
+
+                      {user?.id === empleado.id ? null : (
+                        <ConfirmarEliminarEmpleado
+                          eliminarEmpleado={eliminarEmpleado}
+                          id={empleado.id}
+                        />
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>

@@ -62,3 +62,13 @@ export const estados = [
   "incidencia",
   "en pausa",
 ];
+
+export const roles = [
+  "diseno",
+  "impresion",
+  "corte",
+  "cerrajeria",
+  "pintura",
+  "montaje",
+  "administrador",
+];

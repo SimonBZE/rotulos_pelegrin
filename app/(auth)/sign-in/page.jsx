@@ -9,12 +9,11 @@ import { Auth } from "@/api/auth";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const authCtrl = new Auth();
 
-
-
-function page() {
+function Page() {
   const router = useRouter();
   const { login, user } = useAuth();
 
@@ -26,7 +25,7 @@ function page() {
       try {
         const response = await authCtrl.login(formValue);
         login(response.jwt);
-        
+
         router.push("/");
 
         // router.push('/')
@@ -36,18 +35,21 @@ function page() {
     },
   });
 
-  
-  if (user) {
-    router.push("/");
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [router, user]);
+  // if (user) {
+  //   router.push("/");
+  //   return null;
+  // }
 
-  const notify = (mensaje, type = "") => type === "" ? toast(mensaje) : toast[type](mensaje);
-  
+  const notify = (mensaje, type = "") =>
+    type === "" ? toast(mensaje) : toast[type](mensaje);
 
   return (
     <div className="px-5 flex min-h-full flex-1 flex-col justify-center py-12 lg:px-8">
-      
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <h1 className="text-center text-2xl text-gray-500 mb-5 text-black">
           Bienvenido
@@ -136,4 +138,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

@@ -5,7 +5,7 @@ export const Pricing = ({ index, service, formik, total }) => {
   
   return (
     <div className="flex justify-between mt-4 items-center">
-      <div>
+      <div className="flex items-center">
         <label htmlFor="cantidad" className="labels ml-2">
           Und.
         </label>
@@ -21,7 +21,7 @@ export const Pricing = ({ index, service, formik, total }) => {
           placeholder="cantidad"
         />
       </div>
-      <div>
+      <div className="flex items-center">
         <Field
           // className="formulario w-16 h-9 bg-transparent border-[#00000000] border-b-[#00000030]"
           className={`formulario w-22 ml-2 ${

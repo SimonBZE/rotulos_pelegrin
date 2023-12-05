@@ -40,13 +40,34 @@ export class Projects {
       };
       const url = `${ENV.API_URL}/${ENV.ENDPOINTS.BUDGET}/${id}${filters}`;
       const response = await fetch(url, options)
-      console.log(response.status)
-      // if (response.status !== 200) throw result;
+      
+      if (response.status !== 200) throw result;
       const result = await response.json();
       return result
     } catch (error) {
       console.log('Error al conectar')
-      // throw error;
+      return error
+    }
+    
+  }
+
+  async getPresupuestos(token) {
+    try {
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: `bearer ${token}`
+        }
+      };
+      const url = `${ENV.API_URL}/${ENV.ENDPOINTS.BUDGET}`;
+      const response = await fetch(url, options)
+      
+      if (response.status !== 200) throw result;
+      const result = await response.json();
+      return result
+    } catch (error) {
+      console.log('Error al conectar')
+      return error
     }
     
   }

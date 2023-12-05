@@ -18,7 +18,7 @@ export class User {
 
   async getMe() {
     try {
-      const url = `${ENV.API_URL}/${ENV.ENDPOINTS.USERS_ME}`;
+      const url = `${ENV.API_URL}/${ENV.ENDPOINTS.USERS_ME}?populate=foto`;
 
       const response = await authFetch(url);
       const result = await response.json();
@@ -76,4 +76,66 @@ export class User {
       return error;
     }
   }
+
+  async createUser(data) {
+    try {
+      const url = `${ENV.API_URL}/${ENV.ENDPOINTS.USER}`
+      const params = {
+        method: 'POST',
+        headers:{
+            'Content-Type':'application/json',
+        },
+        body: JSON.stringify(data),
+    };
+
+      const response = await authFetch(url, params);
+      const result = await response.json();
+      
+      if(response.status !== 200) throw result;
+
+      return result;
+
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async deleteUser(id) {
+    try {
+      const url = `${ENV.API_URL}/${ENV.ENDPOINTS.USER}/${id}`
+      const params = {
+        method: 'DELETE',
+        headers:{
+            'Content-Type':'application/json',
+        },
+    };
+
+      const response = await authFetch(url, params);
+      const result = await response.json();
+      
+      if(response.status !== 200) throw result;
+
+      return result;
+
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getUser(id) {
+    try {
+      const url = `${ENV.API_URL}/${ENV.ENDPOINTS.USER}/${id}?populate=foto`
+
+      const response = await authFetch(url);
+      const result = await response.json();
+      
+      if(response.status !== 200) throw result;
+
+      return result;
+
+    } catch (error) {
+      return error;
+    }
+  }
+
 }

@@ -33,7 +33,7 @@ export const ProjectProvider = ({ children }) => {
   const fetchData = useCallback(async (id) => {
     let filter = "?";
     const media =
-      "populate[fotos][populate][0]=*&populate[audios][populate][0]=*&populate[videos][populate][0]=*";
+      "populate[fotos]=*&populate[videos]=*&populate[audios]=*";
     const diseno = "&populate[diseno][populate][0]=imagenes";
     const impresion = "&populate[impresion][populate][0]=imagenes";
     const corte = "&populate[corte][populate][0]=imagenes";
@@ -45,7 +45,7 @@ export const ProjectProvider = ({ children }) => {
       const mensajes = `&populate[mensajes][0]=*&populate[mensajes][populate][1]=media&populate[mensajes][populate][2]=autor`
 
     filter +=
-      media + diseno + impresion + corte + cerrajeria + pintura + montaje + mensajes;
+     media + diseno + impresion + corte + cerrajeria + pintura + montaje + mensajes;
     const projectsCtrl = new Projects();
     const res = await projectsCtrl.getSingleBudget(id, filter);
     return res;

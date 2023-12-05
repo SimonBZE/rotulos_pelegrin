@@ -5,11 +5,12 @@ import { useAuth } from "@/context/AuthContext";
 import { User } from "@/api/user";
 import { toast } from "react-toastify";
 import { FiUser, FiMail } from "react-icons/fi";
+import { ImageUploader } from "@/components/ui";
 
 const userCtrl = new User();
 
 export const Informacion = () => {
-  const { user, setUser } = useAuth();
+  const { user, reloadUser } = useAuth();
 
   const formik = useFormik({
     initialValues: user,
@@ -17,19 +18,21 @@ export const Informacion = () => {
     onSubmit: async (formValue) => {
       try {
         const response = await userCtrl.updateMe(formValue, user.id);
-        console.log(response);
 
         if (response.error) {
           throw new Error(response.error);
         }
-
-        setUser(formValue);
+        reloadUser();
       } catch (error) {
         notify("El correo ya existe, por favor ingrese otro correo", "error");
         console.log(error);
       }
     },
   });
+
+  const onUpload = (data) => {
+    formik.values.foto = data;
+  };
 
   const notify = (mensaje, type = "") =>
     type === "" ? toast(mensaje) : toast[type](mensaje);
@@ -42,6 +45,9 @@ export const Informacion = () => {
       </div>
       <div className="p-7">
         <form onSubmit={formik.handleSubmit}>
+          <div className="mb-5">
+            <ImageUploader onUpload={onUpload} foto={user.foto} />
+          </div>
           <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
             <div className="w-full sm:w-1/2">
               <label
@@ -97,7 +103,7 @@ export const Informacion = () => {
             </label>
             <div className="relative">
               <span className="absolute left-4.5 top-4">
-              <FiMail />
+                <FiMail />
               </span>
               <input
                 className="formulario-icon"

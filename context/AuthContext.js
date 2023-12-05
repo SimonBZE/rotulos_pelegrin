@@ -49,6 +49,12 @@ export function AuthProvider({ children }) {
     try {
       tokenCtrl.setToken(token);
       const response = await userCtrl.getMe();
+      
+      // if(response.error.status === 401){
+      //   logout();
+      //   throw error
+      // }
+      
       setUser(response);
       setToken(token);
       setLoading(false);
@@ -74,13 +80,29 @@ export function AuthProvider({ children }) {
     })
   }
 
+  const loadUser = async () => {
+    try {
+      const data = await userCtrl.getMe();
+      setUser(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const reloadUser = async () => {
+    loadUser();
+  };
+
   const data = {
     accessToken: token,
     user,
     login,
     logout,
     updateUser,
-    setUser
+    setUser,
+    reloadUser,
+    loading,
+    setLoading
   };
 
   // if (loading) return null;

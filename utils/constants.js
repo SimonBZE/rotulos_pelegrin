@@ -13,6 +13,7 @@ export const ENV = {
         USER: "users",
         BUDGET: "presupuestos",
         IMAGE_UPLOAD: "upload",
+        IMAGE_DELETE: "upload/files",
         PRECIOS_MATERIAL: "material",
         COMENTARIOS_PROYECTO: "mensajes",
     },

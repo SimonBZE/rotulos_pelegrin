@@ -76,4 +76,6 @@ const Counter = memo(({ start, max, id, currentDep }) => {
   );
 });
 
+Counter.displayName = "Counter"; // Asignando el nombre de visualización
+
 export default Counter;

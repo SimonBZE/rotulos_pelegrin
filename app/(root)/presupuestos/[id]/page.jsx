@@ -11,7 +11,7 @@ const fetchData = async (id, token) => {
 
   let filter = "?";
   const media =
-    "populate[fotos][populate][0]=*&populate[audios][populate][0]=*&populate[videos][populate][0]=*";
+    "populate[fotos]=*&populate[videos]=*&populate[audios]=*";
   const diseno = "&populate[diseno][populate][0]=imagenes";
   const impresion = "&populate[impresion][populate][0]=imagenes";
   const corte = "&populate[corte][populate][0]=imagenes";

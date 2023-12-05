@@ -1,7 +1,7 @@
 import { useProjectContext } from "@/context/ProjectContext";
 import { useState, useEffect, memo } from "react";
 
-export const Completar = memo(({ id, currentDep }) => {
+const Completar = memo(({ id, currentDep }) => {
   const [completed, setCompleted] = useState(false);
   const { updateProject, setProyecto, proyecto } = useProjectContext();
 
@@ -57,3 +57,7 @@ export const Completar = memo(({ id, currentDep }) => {
   // ...
 
 });
+
+Completar.displayName = "Completar";
+
+export { Completar}

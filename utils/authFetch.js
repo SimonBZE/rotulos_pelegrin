@@ -3,7 +3,7 @@ import { Token } from "@/api";
 export async function authFetch(url, params) {
   const tokenCtrl = new Token();
   const token = tokenCtrl.getToken();
-
+  
   const logout = () => {
     tokenCtrl.removeToken();
     window.location.replace("/sign-in");
@@ -23,8 +23,11 @@ export async function authFetch(url, params) {
         },
       };
 
-      try {
-        return await fetch(url, paramsTemp);
+      try {        
+        const data = await fetch(url, paramsTemp);
+        
+        return data
+        
       } catch (error) {
         return error;
       }

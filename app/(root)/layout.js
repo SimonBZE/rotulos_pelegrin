@@ -14,11 +14,10 @@ import "react-toastify/dist/ReactToastify.css";
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  // const [loading, setLoading] = useState(true);
+  const { user, setLoading, loading } = useAuth();
 
-  useEffect(() => {
-    
+  useEffect(() => {        
     if (user?.id) {      
         setLoading(false);      
     }
