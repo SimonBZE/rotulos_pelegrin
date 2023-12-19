@@ -112,8 +112,9 @@ export function Proyecto({ initialValues, id }) {
 
         if(!!res.error) throw res
 
-        notify("Proyecto creado actualizado", "success");
-        router.push(`/proyecto/${id}`)
+        notify("Proyecto actualizado", "success");
+        // router.push(`/proyecto/${id}`)
+        router.back()
         
       } catch (error) {
         

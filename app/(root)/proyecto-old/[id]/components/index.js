@@ -1,6 +1,0 @@
-export * from './Cerrajeria'
-export * from './Corte'
-export * from './Diseno'
-export * from './Impresion'
-export * from './Montaje'
-export * from './Pintura'

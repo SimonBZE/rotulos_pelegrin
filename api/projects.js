@@ -1,5 +1,6 @@
 import { ENV, authFetch } from "@/utils";
 
+
 export class Projects {
   async getBudgets(filters = "") {
     try {
@@ -51,7 +52,7 @@ export class Projects {
     
   }
 
-  async getPresupuestos(token) {
+  async getPresupuestos(token, filters = "") {
     try {
       const options = {
         method: 'GET',
@@ -59,11 +60,13 @@ export class Projects {
           Authorization: `bearer ${token}`
         }
       };
-      const url = `${ENV.API_URL}/${ENV.ENDPOINTS.BUDGET}`;
+      const url = `${ENV.API_URL}/${ENV.ENDPOINTS.BUDGET}/${filters}`;
       const response = await fetch(url, options)
+
       
       if (response.status !== 200) throw result;
       const result = await response.json();
+      
       return result
     } catch (error) {
       console.log('Error al conectar')

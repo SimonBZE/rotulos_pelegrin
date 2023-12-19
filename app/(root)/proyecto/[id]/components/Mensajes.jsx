@@ -143,7 +143,7 @@ export const Mensajes = () => {
                     <div
                       className={`flex flex-wrap gap-3 mb-3 p-3 ${
                         user.username ===
-                        mensaje.attributes.autor.data.attributes.username
+                        mensaje.attributes.autor.data?.attributes.username
                           ? "justify-end"
                           : "justify-start"
                       }`}
@@ -191,7 +191,7 @@ export const Mensajes = () => {
                       message={mensaje.attributes.comentario}
                       nombre={
                         mensaje.attributes.autor.data?.attributes?.firstname
-                          ? `${mensaje.attributes.autor.data.attributes.firstname} ${mensaje.attributes.autor.data.attributes.lastname}`
+                          ? `${mensaje.attributes.autor.data?.attributes.firstname} ${mensaje.attributes.autor.data.attributes.lastname}`
                           : "Yo"
                       }
                       
@@ -200,7 +200,7 @@ export const Mensajes = () => {
                   ) : (
                     <>
                       {user.username ===
-                      mensaje.attributes.autor.data.attributes.username ? (
+                      mensaje.attributes.autor.data?.attributes.username ? (
                         <div className="ml-auto max-w-125">
                           <div className="mb-2.5 rounded-2xl rounded-br-none bg-primary py-3 px-5">
                             <p className="text-white">
@@ -214,8 +214,8 @@ export const Mensajes = () => {
                       ) : (
                         <div className="max-w-125">
                           <p className="mb-2.5 text-sm font-medium">
-                            {mensaje.attributes.autor.data.attributes.firstname}{" "}
-                            {mensaje.attributes.autor.data.attributes.lastname}
+                            {mensaje.attributes.autor.data?.attributes.firstname}{" "}
+                            {mensaje.attributes.autor.data?.attributes.lastname}
                           </p>
                           <div className="mb-2.5 rounded-2xl rounded-tl-none bg-gray py-3 px-5 dark:bg-boxdark-2">
                             <p>{mensaje.attributes.comentario}</p>

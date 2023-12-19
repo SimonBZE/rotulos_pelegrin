@@ -24,8 +24,7 @@ export default function RootLayout({ children }) {
 
   return (
     <section>
-      <AuthProvider>
-        {!loading ? (
+      <AuthProvider>        
           <div suppressHydrationWarning={true}>
             <ToastContainer
               position="bottom-right"
@@ -40,9 +39,7 @@ export default function RootLayout({ children }) {
               theme="light"
             />
             <div className="dark:bg-boxdark-2 dark:text-bodydark">
-              {loading ? (
-                <Loader />
-              ) : (
+              
                 <div className="flex h-screen overflow-hidden">
                   {/* <!-- ===== Sidebar Start ===== --> */}
 
@@ -74,14 +71,10 @@ export default function RootLayout({ children }) {
                   </div>
                   {/* <!-- ===== Content Area End ===== --> */}
                 </div>
-              )}
+              
             </div>
-          </div>
-        ) : (
-          <div className="flex justify-center items-center min-h-screen">
-            <Loader tamano={"50px"} />
-          </div>
-        )}
+          </div>                  
+        
       </AuthProvider>
     </section>
   );

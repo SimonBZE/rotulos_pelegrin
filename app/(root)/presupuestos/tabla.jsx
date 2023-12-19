@@ -1,6 +1,7 @@
 "use client";
-
-import { useState } from "react";
+import { Projects } from "@/api";
+import { use, useEffect, useState } from "react";
+import { useDebouncedCallback } from 'use-debounce'
 import {
   Table,
   TableHeader,
@@ -8,30 +9,83 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Tab,
-  Pagination,
+  Chip,
   Tooltip,
+  Spinner,
 } from "@nextui-org/react";
 import { IoEyeOutline } from "react-icons/io5";
 import { CiEdit, CiTrash } from "react-icons/ci";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Paginacion } from "./components/Paginacion";
+import { TopContent } from "./components/TopContant";
+import { Factura } from "./components";
 
-export function Tabla({ data, meta }) {
-  const [presupuestos, setPresupuestos] = useState(data);
-  const [paginacion, setPaginacion] = useState(meta);
+const buildFilters = (page, query, status, estado) => {
+  const filters = new URLSearchParams();
 
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const { replace } = useRouter();
+  if (page) {
+    filters.append('pagination[page]', page);
+    
+  }
 
-  console.log(searchParams.get("search"));
+  if (query) {
+    filters.append('filters[id][$contains]', query.replace(/\D/g, ""));
+    return filters.toString();
+  }
 
-  const createPageUrl = (page) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", page);
-    console.log(`${pathname}?${params.toString()}`);
-    replace(`${pathname}?${params.toString()}`);
-  };
+  if (status) {
+    filters.append('filters[aprovacion]', status);
+  }
+
+  if (Array.isArray(estado)) {
+    estado.forEach(e => filters.append('filters[estado][$contains]', e));
+  } else if (estado) {
+    filters.append('filters[estado][$contains]', estado);
+  }
+
+  return filters.toString();
+};
+
+const fetchData = async (token, page, query, status, estado) => {
+  const filters = buildFilters(page, query, status, estado);
+
+  const projectsCtrl = new Projects();
+  const res = await projectsCtrl.getPresupuestos(token, `?${filters}`);
+  return res;
+};
+
+const colores = {
+  "en cola": "default",
+  "en curso": "secondary",
+  "incidencia": "danger",
+  "en pausa": "warning",
+  "terminado": "success",
+};
+
+export function Tabla({ token, page, query, status, estado }) {
+  const [presupuestos, setPresupuestos] = useState([]);
+  const [paginacion, setPaginacion] = useState([]);
+  const [cargando, setCargando] = useState(true);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    async function getData() {
+      setCargando(true);
+      const { data: presupuestos, meta: paginacion } = await fetchData(
+        token.value,
+        page,
+        query,
+        status,
+        estado
+      );
+      setPresupuestos(presupuestos);
+      setPaginacion(paginacion.pagination);
+      setCargando(false);
+    }
+
+    getData();
+  }, [page, query, status, estado]);
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -39,28 +93,16 @@ export function Tabla({ data, meta }) {
       new Date(dateString)
     );
   };
-  
+
   return (
     <Table
       aria-label="Todos los presupuestos, aprovados y sin aprovar"
+      topContent={<TopContent query={query} status={status} estado={estado} cantidad={presupuestos.length} />}
+      topContentPlacement="outside"
       bottomContent={
-        paginacion.pageCount > 0 ? (
-          <div className="flex w-full justify-center">
-            <Pagination
-              isCompact
-              showControls
-              showShadow
-              color="primary"
-              page={paginacion.page}
-              total={paginacion.pageCount}
-              onChange={(page) => {
-                setPaginacion({ ...paginacion, page: page }),
-                  createPageUrl(page);
-              }}
-            />
-          </div>
-        ) : null
+        paginacion.pageCount > 0 ? <Paginacion paginacion={paginacion} /> : null
       }
+      bottomContentPlacement="outside"
     >
       <TableHeader>
         <TableColumn>ID</TableColumn>
@@ -69,10 +111,16 @@ export function Tabla({ data, meta }) {
         <TableColumn>Fecha de entrega</TableColumn>
         <TableColumn>Aprovado</TableColumn>
         <TableColumn>Total</TableColumn>
+        <TableColumn>Estado</TableColumn>
         <TableColumn>Acciones</TableColumn>
       </TableHeader>
-      <TableBody emptyContent={"No rows to display."}>
-        {presupuestos.map((presupuesto) => (
+      <TableBody
+        items={presupuestos?.id ?? []}
+        emptyContent={<p>No hay presupuestos</p>}
+        isLoading={cargando}
+        loadingContent={<Spinner />}
+      >
+        {presupuestos?.map((presupuesto) => (
           <TableRow key={presupuesto.id}>
             <TableCell>
               {presupuesto.attributes.idpresupuesto}
@@ -91,22 +139,26 @@ export function Tabla({ data, meta }) {
               )}
             </TableCell>
             <TableCell>{presupuesto.attributes.total} €</TableCell>
+            <TableCell className="capitalize">
+              <Chip
+                size="sm"
+                color={`${colores[[presupuesto.attributes.estado]]}`}
+              >
+                {presupuesto.attributes.estado}
+              </Chip>
+            </TableCell>
             <TableCell className="flex gap-3">
-              <Tooltip content="Ver factura">
-                <span className="text-xl text-default-500 cursor-pointer">
-                  <IoEyeOutline />
-                </span>
-              </Tooltip>
+              <Factura />
               <Tooltip content="Editar presupuesto">
-                <span className="text-xl text-primary cursor-pointer  ">
+                <span
+                  className="text-xl text-primary cursor-pointer"
+                  onClick={() => router.push(`/presupuestos/${presupuesto.id}`)}
+                >
                   <CiEdit />
                 </span>
               </Tooltip>
               <Tooltip color="danger" content="Eliminar presupuesto">
-                <span
-                  
-                  className="text-xl text-danger cursor-pointer"
-                >
+                <span className="text-xl text-danger cursor-pointer">
                   <CiTrash />
                 </span>
               </Tooltip>
