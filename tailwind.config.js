@@ -1,5 +1,5 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
-const {nextui} = require("@nextui-org/react");
+const { nextui } = require("@nextui-org/react");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -8,49 +8,16 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
   ],
   darkMode: "class",
   theme: {
+    
     fontFamily: {
       satoshi: ["Satoshi", "sans-serif"],
-    },
-    colors: {
-      current: "currentColor",
-      transparent: "transparent",
-      white: "#FFFFFF",
-      black: "#000",
-      "black-2": "#010101",
-      body: "#64748B",
-      bodydark: "#AEB7C0",
-      bodydark1: "#DEE4EE",
-      bodydark2: "#8A99AF",
-      primary: "#dab405",
-      secondary: "#80CAEE",
-      stroke: "#E2E8F0",
-      gray: "#EFF4FB",
-      graydark: "#333A48",
-      "gray-2": "#F7F9FC",
-      "gray-3": "#FAFAFA",
-      whiten: "#F1F5F9",
-      whiter: "#F5F7FD",
-      boxdark: "#24303F",
-      "boxdark-2": "#1A222C",
-      strokedark: "#2E3A47",
-      "form-strokedark": "#3d4d60",
-      "form-input": "#1d2a39",
-      "meta-1": "#DC3545",
-      "meta-2": "#EFF2F7",
-      "meta-3": "#10B981",
-      "meta-4": "#313D4A",
-      "meta-5": "#259AE6",
-      "meta-6": "#FFBA00",
-      "meta-7": "#FF6766",
-      "meta-8": "#F0950C",
-      "meta-9": "#E5E7EB",
-      success: "#219653",
-      danger: "#D34053",
-      warning: "#FFA70B",
-    },
+    },      
+    
     screens: {
       "2xsm": "375px",
       xsm: "425px",
@@ -58,6 +25,44 @@ module.exports = {
       ...defaultTheme.screens,
     },
     extend: {
+      colors: {
+        current: "currentColor",
+        transparent: "transparent",
+        white: "#FFFFFF",
+        black: "#000",
+        "black-2": "#010101",
+        body: "#64748B",
+        bodydark: "#AEB7C0",
+        bodydark1: "#DEE4EE",
+        bodydark2: "#8A99AF",
+        primary: "#dab405",
+        secondary: "#7828c8",
+        stroke: "#E2E8F0",
+        gray: "#EFF4FB",
+        graydark: "#333A48",
+        "gray-2": "#F7F9FC",
+        "gray-3": "#FAFAFA",
+        whiten: "#F1F5F9",
+        whiter: "#F5F7FD",
+        boxdark: "#24303F",
+        "boxdark-2": "#1A222C",
+        strokedark: "#2E3A47",
+        "form-strokedark": "#3d4d60",
+        "form-input": "#1d2a39",
+        "meta-1": "#DC3545",
+        "meta-2": "#EFF2F7",
+        "meta-3": "#10B981",
+        "meta-4": "#313D4A",
+        "meta-5": "#259AE6",
+        "meta-6": "#FFBA00",
+        "meta-7": "#FF6766",
+        "meta-8": "#F0950C",
+        "meta-9": "#E5E7EB",
+        success: "#17c964",
+        danger: "#f31260",
+        warning: "#f5a524",
+      },
+
       fontSize: {
         "title-xxl": ["44px", "55px"],
         "title-xl": ["36px", "45px"],
@@ -298,4 +303,3 @@ module.exports = {
     }),
   ],
 };
- 

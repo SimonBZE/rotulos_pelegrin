@@ -23,7 +23,7 @@ import { Suspense } from "react";
 //   return res;
 // };
 
-export default async function page({ searchParams: { page, query, status, estado } }) {
+export default async function page({ searchParams: { page, query, status, estado, fecha, fechaEnd } }) {
   const cookiesList = cookies();
   if (!cookiesList.has("token")) {
     return;
@@ -32,8 +32,8 @@ export default async function page({ searchParams: { page, query, status, estado
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Tabla page={page} query={query} status={status} token={token} estado={estado} />
+      <Suspense fallback={<div>Cargando..</div>}>
+        <Tabla page={page} query={query} status={status} token={token} estado={estado} fecha={fecha} fechaEnd={fechaEnd}/>
       </Suspense>
     </>
   );

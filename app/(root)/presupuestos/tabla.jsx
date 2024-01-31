@@ -1,7 +1,7 @@
 "use client";
 import { Projects } from "@/api";
 import { use, useEffect, useState } from "react";
-import { useDebouncedCallback } from 'use-debounce'
+import { useDebouncedCallback } from "use-debounce";
 import {
   Table,
   TableHeader,
@@ -20,34 +20,46 @@ import { Paginacion } from "./components/Paginacion";
 import { TopContent } from "./components/TopContant";
 import { Factura } from "./components";
 
-const buildFilters = (page, query, status, estado) => {
+const buildFilters = (page, query, status, estado, fecha, fechaEnd) => {
   const filters = new URLSearchParams();
 
   if (page) {
-    filters.append('pagination[page]', page);
-    
+    filters.append("pagination[page]", page);
   }
 
   if (query) {
-    filters.append('filters[id][$contains]', query.replace(/\D/g, ""));
+    filters.append("filters[id][$contains]", query.replace(/\D/g, ""));
     return filters.toString();
   }
 
   if (status) {
-    filters.append('filters[aprovacion]', status);
+    filters.append("filters[aprovacion]", status);
+  }
+
+  if (fecha) {
+    filters.append("filters[createdAt][$gte]", fecha);
+    filters.append("filters[createdAt][$lte]", fechaEnd);
   }
 
   if (Array.isArray(estado)) {
-    estado.forEach(e => filters.append('filters[estado][$contains]', e));
+    estado.forEach((e) => filters.append("filters[estado][$contains]", e));
   } else if (estado) {
-    filters.append('filters[estado][$contains]', estado);
+    filters.append("filters[estado][$contains]", estado);
   }
 
   return filters.toString();
 };
 
-const fetchData = async (token, page, query, status, estado) => {
-  const filters = buildFilters(page, query, status, estado);
+const fetchData = async (
+  token,
+  page,
+  query,
+  status,
+  estado,
+  fecha,
+  fechaEnd
+) => {
+  const filters = buildFilters(page, query, status, estado, fecha, fechaEnd);
 
   const projectsCtrl = new Projects();
   const res = await projectsCtrl.getPresupuestos(token, `?${filters}`);
@@ -57,12 +69,12 @@ const fetchData = async (token, page, query, status, estado) => {
 const colores = {
   "en cola": "default",
   "en curso": "secondary",
-  "incidencia": "danger",
+  incidencia: "danger",
   "en pausa": "warning",
-  "terminado": "success",
+  terminado: "success",
 };
 
-export function Tabla({ token, page, query, status, estado }) {
+export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
   const [presupuestos, setPresupuestos] = useState([]);
   const [paginacion, setPaginacion] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -77,7 +89,9 @@ export function Tabla({ token, page, query, status, estado }) {
         page,
         query,
         status,
-        estado
+        estado,
+        fecha,
+        fechaEnd
       );
       setPresupuestos(presupuestos);
       setPaginacion(paginacion.pagination);
@@ -85,7 +99,7 @@ export function Tabla({ token, page, query, status, estado }) {
     }
 
     getData();
-  }, [page, query, status, estado]);
+  }, [page, query, status, estado, fecha]);
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -97,7 +111,16 @@ export function Tabla({ token, page, query, status, estado }) {
   return (
     <Table
       aria-label="Todos los presupuestos, aprovados y sin aprovar"
-      topContent={<TopContent query={query} status={status} estado={estado} cantidad={presupuestos.length} />}
+      topContent={
+        <TopContent
+          query={query}
+          status={status}
+          estado={estado}
+          fecha={fecha}
+          fechaEnd={fechaEnd}
+          cantidad={presupuestos.length}
+        />
+      }
       topContentPlacement="outside"
       bottomContent={
         paginacion.pageCount > 0 ? <Paginacion paginacion={paginacion} /> : null
@@ -158,7 +181,7 @@ export function Tabla({ token, page, query, status, estado }) {
                 </span>
               </Tooltip>
               <Tooltip color="danger" content="Eliminar presupuesto">
-                <span className="text-xl text-danger cursor-pointer">
+                <span className="text-xl text-[#f31260] cursor-pointer">
                   <CiTrash />
                 </span>
               </Tooltip>

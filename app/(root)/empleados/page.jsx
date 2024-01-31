@@ -91,23 +91,16 @@ export default function Empleados() {
         </div>
         <div className="flex gap-3 items-center">
           <AgregarEmpleado getUsers={getUsers} />
-          {/* <Input
-                className="w-50"
-                placeholder="Buscar empleado"
-                size="sm"
-                startContent={<IoSearch size={18} />}
-                type="search"
-              /> */}
         </div>
       </div>
-      <Table aria-label="Example table with custom cells">
+      <Table aria-label="Tabla de empleados">
         <TableHeader columns={columns}>
           {columns.map((column) => (
             <TableColumn key={column.uid}>{column.name}</TableColumn>
           ))}
         </TableHeader>
         <TableBody>
-          {empleados.map((empleado) => (
+          {empleados?.map((empleado) => (
             // Usuario
             <TableRow key={empleado.id}>
               <TableCell>
