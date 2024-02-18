@@ -1,21 +1,21 @@
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  useDisclosure,
-  Tooltip,
-} from "@nextui-org/react";
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    useDisclosure,
+    Tooltip,
+  } from "@nextui-org/react";
 
+  import { ModalEditarCliente } from './ModalEditarCliente'
 
-import { FormEditarEmpleado } from "./FormEditarEmpleado";
-import { CiEdit } from "react-icons/ci";
+  import { CiEdit } from "react-icons/ci";
 
-export const EditarEmpleado = ({ getUsers, id }) => {
+export const EditarCliente = ({id, getClients}) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
-    <div>
-      <Tooltip content="Editar empleado">
+    <>
+    <Tooltip content="Editar cliente">
         <a onClick={() => onOpen()} className="cursor-pointer text-xl">
           <CiEdit />
         </a>
@@ -31,15 +31,15 @@ export const EditarEmpleado = ({ getUsers, id }) => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Agregar empleado
+                Editar cliente
               </ModalHeader>
               <ModalBody>
-                <FormEditarEmpleado onClose={onClose} getUsers={getUsers} id={id} />
+                <ModalEditarCliente id={id} getClients={getClients} onClose={onClose} />
               </ModalBody>
             </>
           )}
         </ModalContent>
       </Modal>
-    </div>
-  );
-};
+    </>
+  )
+}

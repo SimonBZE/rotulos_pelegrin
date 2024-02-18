@@ -11,7 +11,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 
 import { ModalClientes } from "./ModalClientes";
 
-export const AgregarCliente = ({ getUsers }) => {
+export const AgregarCliente = ({ getClients }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <div>
@@ -37,7 +37,7 @@ export const AgregarCliente = ({ getUsers }) => {
                 Agregar cliente
               </ModalHeader>
               <ModalBody>
-                <ModalClientes onClose={onClose} getUsers={getUsers} />
+                <ModalClientes onClose={onClose} getClients={getClients} />
               </ModalBody>
             </>
           )}

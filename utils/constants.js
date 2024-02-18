@@ -12,6 +12,7 @@ export const ENV = {
         USERS_ME: "users/me",
         USER: "users",
         BUDGET: "presupuestos",
+        CLIENT:"clientes",
         IMAGE_UPLOAD: "upload",
         IMAGE_DELETE: "upload/files",
         PRECIOS_MATERIAL: "material",

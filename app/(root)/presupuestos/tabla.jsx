@@ -1,7 +1,7 @@
 "use client";
 import { Projects } from "@/api";
-import { use, useEffect, useState } from "react";
-import { useDebouncedCallback } from "use-debounce";
+import { useEffect, useState } from "react";
+
 import {
   Table,
   TableHeader,
@@ -13,12 +13,13 @@ import {
   Tooltip,
   Spinner,
 } from "@nextui-org/react";
-import { IoEyeOutline } from "react-icons/io5";
+
 import { CiEdit, CiTrash } from "react-icons/ci";
 import { useRouter } from "next/navigation";
-import { Paginacion } from "./components/Paginacion";
+import { Paginacion } from "@/components/common/Paginacion";
 import { TopContent } from "./components/TopContant";
 import { Factura } from "./components";
+import { useDebouncedCallback } from "use-debounce";
 
 const buildFilters = (page, query, status, estado, fecha, fechaEnd) => {
   const filters = new URLSearchParams();
@@ -81,8 +82,8 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
 
   const router = useRouter();
 
-  useEffect(() => {
-    async function getData() {
+  const getData = useDebouncedCallback(
+    async ()  => {
       setCargando(true);
       const { data: presupuestos, meta: paginacion } = await fetchData(
         token.value,
@@ -96,7 +97,10 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
       setPresupuestos(presupuestos);
       setPaginacion(paginacion.pagination);
       setCargando(false);
-    }
+    }, 500 )
+
+  useEffect(() => {
+    
 
     getData();
   }, [page, query, status, estado, fecha]);

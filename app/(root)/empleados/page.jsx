@@ -10,10 +10,9 @@ import {
   TableCell,
   User,
   Chip,
-  Spinner,
 } from "@nextui-org/react";
 
-import { IoEyeOutline, IoSearch } from "react-icons/io5";
+
 
 import { User as Empleado } from "@/api/user";
 import { ENV } from "@/utils";

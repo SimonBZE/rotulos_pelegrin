@@ -64,7 +64,7 @@ export default function Proyectos() {
             <Link key={index} href={`/proyectos/${servicio.departamento}`}>
               <div
                 style={{ backgroundColor: servicio.color + "20" }}
-                className={`rounded-xl p-5 relative ${user?.rol === servicio.nombre || user.rol === "administrador" ? 'cursor-pointer' : 'cursor-default'}`}
+                className={`rounded-xl p-5 relative ${user?.rol === servicio.nombre || user?.rol === "administrador" ? 'cursor-pointer' : 'cursor-default'}`}
               >
                 {user?.rol === servicio.nombre || user?.rol === "administrador" ? '' : <div className="absolute right-3 top-3 bg-black text-white rounded-full py-1 px-2 text-xs">Sin permisos</div>}
                 

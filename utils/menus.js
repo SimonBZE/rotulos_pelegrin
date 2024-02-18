@@ -72,3 +72,10 @@ export const roles = [
   "montaje",
   "administrador",
 ];
+
+export const TipoCliente = [
+  "empresa",
+  "persona"
+]
+
+

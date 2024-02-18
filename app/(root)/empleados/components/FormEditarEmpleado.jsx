@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { Button, Select, SelectItem, Input, user } from "@nextui-org/react";
+import { useEffect, useState } from "react";
+import { Button, Select, SelectItem, Input } from "@nextui-org/react";
 import { useFormik } from "formik";
 import { initialValues, validationSchema } from "./FormikValidationsEditarEmpleado";
-import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { User } from "@/api/user";
 import { toast } from "react-toastify";
 import { ImageUploader } from "@/components/ui";
@@ -12,8 +11,7 @@ import { roles } from "@/utils/menus";
 const userCtrl = new User();
 
 export const FormEditarEmpleado = ({ onClose, getUsers, id }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const toggleVisibility = () => setIsVisible(!isVisible);
+
   const [empleado, setEmpleado] = useState({});
 
   const getUser = async () => {
