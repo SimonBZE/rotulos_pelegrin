@@ -9,19 +9,31 @@ import { paises } from "@/utils/paises"
 
 const clientCtrl = new Client();
 
-export const ModalClientes = ({ onClose, getClients }) => {
+export const ModalClientes = ({ onClose, getClients = "", actualizarCliente = ""}) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (formData) => {
       try {
         const data = await clientCtrl.createClient(formData);
+
+        
         if (data.error) {
           console.log(data);
           throw error;
         }
         notify("Se ha creado el usuario", "success");
-        getClients();
+        if(getClients !=="") {
+          getClients();
+        }
+
+        if(actualizarCliente !== ""){
+          actualizarCliente(data.data)
+
+        }
+          
+        
+
         onClose();
       } catch (error) {
         console.log(error);

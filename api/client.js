@@ -20,7 +20,7 @@ export class Client {
     async getClient(id){
 
       try{
-          const url = `${ENV.API_URL}/${ENV.ENDPOINTS.CLIENT}/${id}?populate=direccion`;
+          const url = `${ENV.API_URL}/${ENV.ENDPOINTS.CLIENT}/${id}?populate=*`;
   
           const response = await authFetch(url);
           const result = await response.json();

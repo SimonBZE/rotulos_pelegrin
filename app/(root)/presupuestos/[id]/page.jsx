@@ -10,8 +10,8 @@ const fetchData = async (id, token) => {
   }
 
   let filter = "?";
-  const media =
-    "populate[fotos]=*&populate[videos]=*&populate[audios]=*";
+  const client = "populate[client]=*";
+  const media = "&populate[fotos]=*&populate[videos]=*&populate[audios]=*";
   const diseno = "&populate[diseno][populate][0]=imagenes";
   const impresion = "&populate[impresion][populate][0]=imagenes";
   const corte = "&populate[corte][populate][0]=imagenes";
@@ -21,9 +21,18 @@ const fetchData = async (id, token) => {
   const montaje =
     "&populate[montaje][populate][0]=imagenes&populate[montaje][populate][1]=adicional&populate[montaje][populate][2]=matricula&populate[montaje][populate][3]=montadores";
 
-  filter += media + diseno + impresion + corte + cerrajeria + pintura + montaje;
+  filter +=
+    client +
+    media +
+    diseno +
+    impresion +
+    corte +
+    cerrajeria +
+    pintura +
+    montaje;
   const projectsCtrl = new Projects();
   const res = await projectsCtrl.getPresupuesto(id, filter, token);
+  console.log(res);
   return res;
 };
 
@@ -34,14 +43,60 @@ export default async function Presupuesto({ params }) {
   }
 
   const token = cookiesList.get("token");
+  
+  let cliente = {};
 
   let initialValues = {};
   const data = await fetchData(params.id, token.value).then(({ data }) => {
     // console.log(data.attributes?.cerrajeria?.[0]?.adicional);
+    // client: {
+    //   data: {
+    //     id: 14,
+    //     attributes: {
+    //       tipo: 'empresa',
+    //       nombre: 'Rotulos Pelegrin',
+    //       documento: 'B288776483',
+    //       createdAt: '2024-02-14T20:50:31.617Z',
+    //       updatedAt: '2024-02-14T20:50:31.617Z',
+    //       publishedAt: '2024-02-14T20:50:31.607Z',
+    //       telefono: 60093247,
+    //       correo: 'contacto@rolutlospelegrin.com',
+    //       pais: 'España',
+    //       calle: '',
+    //       ciudad: 'Murcia',
+    //       region: 'Murcia',
+    //       cp: '30010'
+    //     }
+    //   }
+    // },
+    cliente = {
+      id: data.attributes.client.data?.id || "",
+      tipo: data.attributes.client.data?.attributes?.tipo || "",
+      nombre: data.attributes.client.data?.attributes?.nombre || "",
+      documento: data.attributes.client.data?.attributes?.documento || "",
+      telefono: data.attributes.client.data?.attributes?.telefono || "",
+      correo: data.attributes.client.data?.attributes?.correo || "",
+      pais: data.attributes.client.data?.attributes?.pais || "",
+      calle: data.attributes.client.data?.attributes?.calle || "",
+      ciudad: data.attributes.client.data?.attributes?.ciudad || "",
+      region: data.attributes.client.data?.attributes?.region || "",
+      cp: data.attributes.client.data?.attributes?.cp || "",
+    }
+    
+
     initialValues = {
-      nombre: data.attributes.nombre,
-      cliente: data.attributes.cliente,
-      contacto: data.attributes.contacto,
+      client: {
+        tipo: data.attributes.client.data?.attributes?.tipo,
+        nombre: data.attributes.client.data?.attributes?.nombre,
+        documento: data.attributes.client.data?.attributes?.documento,
+        telefono: data.attributes.client.data?.attributes?.telefono,
+        correo: data.attributes.client.data?.attributes?.correo,
+        pais: data.attributes.client.data?.attributes?.pais,
+        calle: data.attributes.client.data?.attributes?.calle,
+        ciudad: data.attributes.client.data?.attributes?.ciudad,
+        region: data.attributes.client.data?.attributes?.region,
+        cp: data.attributes.client.data?.attributes?.cp,
+      },
       aprovacion: data.attributes.aprovacion,
       prioridad: data.attributes.prioridad,
       fecha: data.attributes.fecha,
@@ -146,7 +201,8 @@ export default async function Presupuesto({ params }) {
         })
       ),
       cerrajeria: data.attributes.cerrajeria.map(
-        ({id,
+        ({
+          id,
           precio,
           cantidad,
           horas_fabricacion,
@@ -158,7 +214,7 @@ export default async function Presupuesto({ params }) {
           contador,
           nombre,
           imagenes,
-          adicional
+          adicional,
         }) => ({
           id: id,
           nombre: nombre,
@@ -168,14 +224,14 @@ export default async function Presupuesto({ params }) {
           material: material,
           horas_fabricacion: horas_fabricacion,
           adicional: !!adicional
-          ? adicional.map(({id, nombre, precio}) => {
-              return {
-                id, 
-                nombre, 
-                precio
-              };
-            })
-          : [],
+            ? adicional.map(({ id, nombre, precio }) => {
+                return {
+                  id,
+                  nombre,
+                  precio,
+                };
+              })
+            : [],
           cantidad: cantidad,
           precio: precio,
           contador: contador,
@@ -191,11 +247,12 @@ export default async function Presupuesto({ params }) {
         })
       ),
       pintura: data.attributes.pintura.map(
-        ({id,
+        ({
+          id,
           precio,
-          cantidad,          
+          cantidad,
           ancho,
-          alto,          
+          alto,
           material,
           completado,
           contador,
@@ -224,7 +281,8 @@ export default async function Presupuesto({ params }) {
         })
       ),
       montaje: data.attributes.montaje.map(
-        ({id,
+        ({
+          id,
           completado,
           matricula,
           vehiculo,
@@ -240,32 +298,32 @@ export default async function Presupuesto({ params }) {
           id: id,
           completado,
           tiempo_montaje,
-          matricula:!!matricula
-          ? matricula.map(({id, matricula}) => {
-              return {
-                id, 
-                matricula
-              };
-            })
-          : [],
+          matricula: !!matricula
+            ? matricula.map(({ id, matricula }) => {
+                return {
+                  id,
+                  matricula,
+                };
+              })
+            : [],
           lugar_montaje,
-          montadores:[],
+          montadores: [],
           vehiculo: vehiculo,
           persona_contacto,
           desplazamiento,
           alquiler_maquinaria,
           adicional: !!adicional
-          ? adicional.map((item) => {
-              return {
-                id: item.id,
-                nombre: item.nombre,
-                precio: item.precio
-              };
-            })
-          : [],
+            ? adicional.map((item) => {
+                return {
+                  id: item.id,
+                  nombre: item.nombre,
+                  precio: item.precio,
+                };
+              })
+            : [],
           precio: 0,
           cantidad: 1,
-          contador:0,
+          contador: 0,
           imagenes: !!imagenes.data
             ? imagenes.data.map((imagen) => {
                 return {
@@ -277,31 +335,31 @@ export default async function Presupuesto({ params }) {
         })
       ),
       videos: !!data.attributes.videos.data
-      ? data.attributes.videos.data.map((video) => {
-          return {
-            id: video.id,
-            url: video.attributes.url,
-          };
-        })
-      : [],
+        ? data.attributes.videos.data.map((video) => {
+            return {
+              id: video.id,
+              url: video.attributes.url,
+            };
+          })
+        : [],
       fotos: !!data.attributes.fotos.data
-      ? data.attributes.fotos.data.map((foto) => {
-          return {
-            id: foto.id,
-            url: foto.attributes.url,
-          };
-        })
-      : [],
+        ? data.attributes.fotos.data.map((foto) => {
+            return {
+              id: foto.id,
+              url: foto.attributes.url,
+            };
+          })
+        : [],
       audios: !!data.attributes.audios.data
-      ? data.attributes.audios.data.map((audio) => {
-          return {
-            id: audio.id,
-            url: audio.attributes.url,
-          };
-        })
-      : [],
+        ? data.attributes.audios.data.map((audio) => {
+            return {
+              id: audio.id,
+              url: audio.attributes.url,
+            };
+          })
+        : [],
     };
   });
 
-  return <Proyecto initialValues={initialValues} id={params.id} />;
+  return <Proyecto initialValues={initialValues} id={params.id} cliente={cliente} />;
 }

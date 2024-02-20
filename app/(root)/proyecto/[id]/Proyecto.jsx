@@ -94,14 +94,14 @@ export default function Proyecto({ params }) {
               {/* <Image  /> */}
               {/* {JSON.stringify(user?.rol)}*/}
               {/* {JSON.stringify(departamentosActivos)} */}
-              <Image
+              {/* <Image
                 src="/assets/default.svg"
                 alt="default"
                 width={100}
                 height={100}
                 className=" rounded-xl object-contain"
                 priority
-              />
+              /> */}
               <div className="flex flex-col justify-center">
                 <p className="text-primary font-bold">
                   {proyecto.attributes.idpresupuesto}
@@ -110,7 +110,7 @@ export default function Proyecto({ params }) {
                 <p className="font-bold text-black">
                   {proyecto.attributes.nombre}
                 </p>
-                <p>{proyecto.attributes.cliente}</p>
+                <p>{proyecto.attributes.client.data.attributes.nombre}</p>
                 <p>Creador: {proyecto.attributes.creador}</p>
               </div>
             </div>

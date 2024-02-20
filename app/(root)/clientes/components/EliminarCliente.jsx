@@ -14,7 +14,7 @@ export const EliminarCliente = ({eliminarCliente, id}) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <Tooltip color="danger" content="Eliminar empleado">
+      <Tooltip color="danger" content="Eliminar cliente">
         <a
           onClick={() => onOpen()}
           className="text-xl text-danger cursor-pointer active:opacity-50"

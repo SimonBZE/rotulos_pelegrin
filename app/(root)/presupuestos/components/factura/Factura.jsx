@@ -11,6 +11,7 @@ import {
   Link,
   Tooltip,
 } from "@nextui-org/react";
+import Image from "next/image";
 
 import { IoEyeOutline } from "react-icons/io5";
 
@@ -27,7 +28,11 @@ export const Factura = () => {
           <IoEyeOutline />
         </span>
       </Tooltip>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="full" scrollBehavior="outside">
+      <Modal 
+      classNames={{
+        backdrop: "bg-white"
+      }}
+      isOpen={isOpen} onOpenChange={onOpenChange} height="full" size="full" scrollBehavior="outside">
         <ModalContent>
           {(onClose) => (
             <>
@@ -40,57 +45,30 @@ export const Factura = () => {
                       {/* <!-- Grid --> */}
                       <div className="flex justify-between">
                         <div>
-                          <svg
-                            className="w-10 h-10"
-                            width="26"
-                            height="26"
-                            viewBox="0 0 26 26"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M1 26V13C1 6.37258 6.37258 1 13 1C19.6274 1 25 6.37258 25 13C25 19.6274 19.6274 25 13 25H12"
-                              className="stroke-blue-600 dark:stroke-white"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            />
-                            <path
-                              d="M5 26V13.16C5 8.65336 8.58172 5 13 5C17.4183 5 21 8.65336 21 13.16C21 17.6666 17.4183 21.32 13 21.32H12"
-                              className="stroke-blue-600 dark:stroke-white"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            />
-                            <circle
-                              cx="13"
-                              cy="13.0214"
-                              r="5"
-                              fill="currentColor"
-                              className="fill-blue-600 dark:fill-white"
-                            />
-                          </svg>
+                          <Image src="/assets/Pelegrin-design.svg" width={200} height={15} alt="Pelegrin Design" className="w-full h-[15]" />
 
-                          <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600 dark:text-white">
+                          {/* <h1 className="mt-2 text-lg md:text-xl font-semibold text-blue-600 dark:text-white">
                             Preline Inc.
-                          </h1>
+                          </h1> */}
                         </div>
                         {/* <!-- Col --> */}
 
                         <div className="text-end">
                           <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 dark:text-gray-200">
-                            Invoice #
+                            Factura #
                           </h2>
                           <span className="mt-1 block text-gray-500">
-                            3682303
+                          DICM180
                           </span>
 
                           <div className="mt-4 not-italic text-gray-800 dark:text-gray-200">
-                            45 Roker Terrace
+                          <b>ROTULOS PELEGRIN, S.L</b>
+                          <br />
+                          CL. PARAGUAY PARC.9/14
                             <br />
-                            Latheronwheel
+                            Alcantarilla, 30820
                             <br />
-                            KW5 8NW, London
-                            <br />
-                            United Kingdom
+                            Murcia - España
                             <br />
                           </div>
                         </div>
@@ -102,17 +80,17 @@ export const Factura = () => {
                       <div className="mt-8 grid sm:grid-cols-2 gap-3">
                         <div>
                           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                            Bill to:
+                            Facturado a:
                           </h3>
                           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                             Sara Williams
                           </h3>
                           <div className="mt-2 not-italic text-gray-500">
-                            280 Suzanne Throughway,
+                            Calle Pintor Pedro Flores, 8,
                             <br />
-                            Breannabury, OR 45801,
+                            30002, Murcia,
                             <br />
-                            United States
+                            España
                             <br />
                           </div>
                         </div>
@@ -123,20 +101,20 @@ export const Factura = () => {
                           <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
                             <dl className="grid sm:grid-cols-5 gap-x-3">
                               <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
-                                Invoice date:
+                                Fecha de creación:
                               </dt>
                               <dd className="col-span-2 text-gray-500">
-                                03/10/2018
+                                03/2/2024
                               </dd>
                             </dl>
-                            <dl className="grid sm:grid-cols-5 gap-x-3">
+                            {/* <dl className="grid sm:grid-cols-5 gap-x-3">
                               <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
-                                Due date:
+                                Fecha de vencimiento:
                               </dt>
                               <dd className="col-span-2 text-gray-500">
-                                03/11/2018
+                                03/11/2024
                               </dd>
-                            </dl>
+                            </dl> */}
                           </div>
                           {/* <!-- End Grid --> */}
                         </div>
@@ -149,16 +127,16 @@ export const Factura = () => {
                         <div className="border border-gray-200 p-4 rounded-lg space-y-4 dark:border-gray-700">
                           <div className="hidden sm:grid sm:grid-cols-5">
                             <div className="sm:col-span-2 text-xs font-medium text-gray-500 uppercase">
-                              Item
+                              Descripción
                             </div>
                             <div className="text-start text-xs font-medium text-gray-500 uppercase">
-                              Qty
+                              Cant
                             </div>
                             <div className="text-start text-xs font-medium text-gray-500 uppercase">
-                              Rate
+                              Dto.
                             </div>
                             <div className="text-end text-xs font-medium text-gray-500 uppercase">
-                              Amount
+                              Precio
                             </div>
                           </div>
 
@@ -167,34 +145,34 @@ export const Factura = () => {
                           <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                             <div className="col-span-full sm:col-span-2">
                               <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
-                                Item
+                                Descripción
                               </h5>
                               <p className="font-medium text-gray-800 dark:text-gray-200">
-                                Design UX and UI
+                                Rotulacion impresion digital en puerta
                               </p>
                             </div>
                             <div>
                               <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
-                                Qty
+                              Dto
                               </h5>
                               <p className="text-gray-800 dark:text-gray-200">
-                                1
+                                2
                               </p>
                             </div>
                             <div>
                               <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
-                                Rate
+                              Precio
                               </h5>
                               <p className="text-gray-800 dark:text-gray-200">
-                                5
+                                0
                               </p>
                             </div>
                             <div>
                               <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
-                                Amount
+                              Precio
                               </h5>
                               <p className="sm:text-end text-gray-800 dark:text-gray-200">
-                                $500
+                                120,00€
                               </p>
                             </div>
                           </div>
@@ -207,7 +185,7 @@ export const Factura = () => {
                                 Item
                               </h5>
                               <p className="font-medium text-gray-800 dark:text-gray-200">
-                                Web project
+                                Limpieza y rotulación
                               </p>
                             </div>
                             <div>
@@ -223,7 +201,7 @@ export const Factura = () => {
                                 Rate
                               </h5>
                               <p className="text-gray-800 dark:text-gray-200">
-                                24
+                                0
                               </p>
                             </div>
                             <div>
@@ -231,47 +209,14 @@ export const Factura = () => {
                                 Amount
                               </h5>
                               <p className="sm:text-end text-gray-800 dark:text-gray-200">
-                                $1250
+                                20,00€
                               </p>
                             </div>
                           </div>
 
                           <div className="sm:hidden border-b border-gray-200 dark:border-gray-700"></div>
 
-                          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-                            <div className="col-span-full sm:col-span-2">
-                              <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
-                                Item
-                              </h5>
-                              <p className="font-medium text-gray-800 dark:text-gray-200">
-                                SEO
-                              </p>
-                            </div>
-                            <div>
-                              <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
-                                Qty
-                              </h5>
-                              <p className="text-gray-800 dark:text-gray-200">
-                                1
-                              </p>
-                            </div>
-                            <div>
-                              <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
-                                Rate
-                              </h5>
-                              <p className="text-gray-800 dark:text-gray-200">
-                                6
-                              </p>
-                            </div>
-                            <div>
-                              <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
-                                Amount
-                              </h5>
-                              <p className="sm:text-end text-gray-800 dark:text-gray-200">
-                                $2000
-                              </p>
-                            </div>
-                          </div>
+                          
                         </div>
                       </div>
                       {/* <!-- End Table --> */}
@@ -286,45 +231,38 @@ export const Factura = () => {
                                 Subtotal:
                               </dt>
                               <dd className="col-span-2 text-gray-500">
-                                $2750.00
+                                140,00€
                               </dd>
                             </dl>
 
                             <dl className="grid sm:grid-cols-5 gap-x-3">
                               <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
-                                Total:
+                                DTO:
                               </dt>
                               <dd className="col-span-2 text-gray-500">
-                                $2750.00
+                                0,00€
                               </dd>
                             </dl>
 
                             <dl className="grid sm:grid-cols-5 gap-x-3">
                               <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
-                                Tax:
+                                IVA:
                               </dt>
                               <dd className="col-span-2 text-gray-500">
-                                $39.00
+                                29,40€
                               </dd>
                             </dl>
 
                             <dl className="grid sm:grid-cols-5 gap-x-3">
                               <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
-                                Amount paid:
+                                Total
                               </dt>
                               <dd className="col-span-2 text-gray-500">
-                                $2789.00
+                                169,40€
                               </dd>
                             </dl>
 
-                            <dl className="grid sm:grid-cols-5 gap-x-3">
-                              <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
-                                Due balance:
-                              </dt>
-                              <dd className="col-span-2 text-gray-500">
-                                $0.00
-                              </dd>
-                            </dl>
+                            
                           </div>
                           {/* <!-- End Grid --> */}
                         </div>
@@ -333,24 +271,23 @@ export const Factura = () => {
 
                       <div className="mt-8 sm:mt-12">
                         <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                          Thank you!
+                          FORMA DE PAGO
                         </h4>
                         <p className="text-gray-500">
-                          If you have any questions concerning this invoice, use
-                          the following contact information:
+                          IBAN ES09 2100 8270 9813 0008 2841
                         </p>
                         <div className="mt-2">
                           <p className="block text-sm font-medium text-gray-800 dark:text-gray-200">
-                            example@site.com
+                            NOTA: Los medios de elevacion y permisos administrativos, corren por cuenta del cliente y no van presupuetados. Válidez de este presupuesto 10 días
                           </p>
                           <p className="block text-sm font-medium text-gray-800 dark:text-gray-200">
-                            +1 (062) 109-9222
+                            administracion@pelegrindesign.com
                           </p>
                         </div>
                       </div>
 
                       <p className="mt-5 text-sm text-gray-500">
-                        © 2022 Preline.
+                        {/* © 2022 Preline. */}
                       </p>
                     </div>
                     {/* <!-- End Card --> */}
@@ -377,7 +314,7 @@ export const Factura = () => {
                           <polyline points="7 10 12 15 17 10" />
                           <line x1="12" x2="12" y1="15" y2="3" />
                         </svg>
-                        Invoice PDF
+                        Descargar PDF
                       </a>
                       <a
                         className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
@@ -399,7 +336,7 @@ export const Factura = () => {
                           <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
                           <rect width="12" height="8" x="6" y="14" />
                         </svg>
-                        Print
+                        Imprimir
                       </a>
                     </div>
                     {/* <!-- End Buttons --> */}
@@ -408,11 +345,11 @@ export const Factura = () => {
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>
-                  Close
+                  Cerrar
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                {/* <Button color="primary" onPress={onClose}>
                   Sign in
-                </Button>
+                </Button> */}
               </ModalFooter>
             </>
           )}

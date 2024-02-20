@@ -31,6 +31,7 @@ import Loader from "@/components/common/Loader";
 import { servicios } from "@/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
+import { SearchClient } from "@/components/clientes/SearchClient";
 
 const budgetCtrl = new Budget();
 
@@ -93,7 +94,6 @@ export default function NuevoProyecto() {
         });
       });
 
-
       if (files.videos) {
         formData.videos = [].concat(...files.videos);
       }
@@ -120,7 +120,8 @@ export default function NuevoProyecto() {
 
         // Muestra un mensaje de error usando Toastify
         notify("No se ha enviado el formulario", "err");
-      }ro
+      }
+      ro;
     },
   });
 
@@ -239,12 +240,16 @@ export default function NuevoProyecto() {
                       <div className="error-message">{errors.campo}</div>
                     ) : null}
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                       <div>
                         <p className="text-primary font-bold">
                           PR{presupuesto}
                         </p>
-                        <input
+                        <div className="w-full min-w-75">
+                          <SearchClient formik={formik}/>
+                        </div>
+
+                        {/* <input
                           className={`formulario ${
                             formik.touched.nombre && formik.errors.nombre
                               ? "errores"
@@ -255,27 +260,42 @@ export default function NuevoProyecto() {
                           name="nombre"
                           value={formik.values.nombre}
                           onChange={formik.handleChange}
-                        />
+                        /> */}
                       </div>
                       {/* <p className="font-bold text-base">PLACA METACRILATO</p> */}
-                      <div className="flex flex-col items-end justify-end">
-                        <label htmlFor="aprovacion" className="ml-2 labels">
-                          Aprovación
-                        </label>
-                        <input
-                          id="aprovacion"
-                          type="checkbox"
-                          className="w-9 h-9 accent-primary"
-                          name="aprovacion"
-                          checked={formik.values.aprovacion}
-                          onChange={formik.handleChange}
-                        />
+                      <div className="flex sm:flex-col gap-3">
+                        <div className="flex flex-col sm:items-end items-center">
+                          <label htmlFor="aprovacion" className="ml-2 labels">
+                            Aprovación
+                          </label>
+                          <input
+                            id="aprovacion"
+                            type="checkbox"
+                            className="w-9 h-9 accent-primary"
+                            name="aprovacion"
+                            checked={formik.values.aprovacion}
+                            onChange={formik.handleChange}
+                          />
+                        </div>
+                        <div className="flex flex-col items-end">
+                          <label htmlFor="aprovacion" className="ml-2 labels">
+                            Prioridad
+                          </label>
+                          <input
+                            id="prioridad"
+                            type="checkbox"
+                            className="w-9 h-9 accent-primary"
+                            name="prioridad"
+                            checked={formik.values.prioridad}
+                            onChange={formik.handleChange}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex justify-between items-center mt-2">
-                    <div className="flex flex-col gap-2">
+                    {/* <div className="flex flex-col gap-2">
                       <input
                         type="text"
                         className={`formulario ${
@@ -301,10 +321,10 @@ export default function NuevoProyecto() {
                         value={formik.values.contacto}
                         onChange={formik.handleChange}
                       />
-                    </div>
+                    </div> */}
 
                     <div className="flex flex-col items-end justify-end">
-                      <label htmlFor="aprovacion" className="ml-2 labels">
+                      {/* <label htmlFor="aprovacion" className="ml-2 labels">
                         Prioridad
                       </label>
                       <input
@@ -314,7 +334,7 @@ export default function NuevoProyecto() {
                         name="prioridad"
                         checked={formik.values.prioridad}
                         onChange={formik.handleChange}
-                      />                      
+                      /> */}
                     </div>
                   </div>
                 </div>

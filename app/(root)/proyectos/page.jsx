@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 
+
+
 const fetchData = async () => {
   const filter =
     "?filters[$or][0][estado][$eq]=en%20curso&filters[$or][0][estado][$eq]=en%20pausa&filters[$or][0][estado][$eq]=incidencia&filters[$or][0][estado][$eq]=en%20cola";
@@ -19,7 +21,6 @@ import { servicios } from "@/utils";
 
 export default function Proyectos() {
   const { user } = useAuth();
-
 
   const [proyectos, setProyectos] = useState({});
   const [contadorDepartamento, setContadorDepartamento] = useState({});
@@ -56,18 +57,28 @@ export default function Proyectos() {
   // console.log(user.rol)
   return (
     <>
-    {/* {JSON.stringify(proyectos)} */}
+      {/* {JSON.stringify(proyectos)} */}
       <div className="w-full grid grid-cols-2 gap-5 md:grid-cols-3 mt-5">
         {servicios.map((servicio, index) => {
-          
           return (
             <Link key={index} href={`/proyectos/${servicio.departamento}`}>
               <div
                 style={{ backgroundColor: servicio.color + "20" }}
-                className={`rounded-xl p-5 relative ${user?.rol === servicio.nombre || user?.rol === "administrador" ? 'cursor-pointer' : 'cursor-default'}`}
+                className={`rounded-xl p-5 relative ${
+                  user?.rol === servicio.nombre || user?.rol === "administrador"
+                    ? "cursor-pointer"
+                    : "cursor-default"
+                }`}
               >
-                {user?.rol === servicio.nombre || user?.rol === "administrador" ? '' : <div className="absolute right-3 top-3 bg-black text-white rounded-full py-1 px-2 text-xs">Sin permisos</div>}
-                
+                {user?.rol === servicio.nombre ||
+                user?.rol === "administrador" ? (
+                  ""
+                ) : (
+                  <div className="absolute right-3 top-3 bg-black text-white rounded-full py-1 px-2 text-xs">
+                    Sin permisos
+                  </div>
+                )}
+
                 <Image
                   className="w-[60px] h-[60px]"
                   src={servicio.imagen}

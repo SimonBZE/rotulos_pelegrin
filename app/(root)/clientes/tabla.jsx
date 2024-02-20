@@ -19,7 +19,7 @@ import { EditarCliente } from "@/components/clientes/EditarCliente";
 import { TopContent } from "./components/TopContent";
 import { useDebouncedCallback } from "use-debounce";
 import { Paginacion } from "@/components/common/Paginacion";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const clientCtrl = new Client();
 
@@ -28,8 +28,6 @@ const buildFilters = (query, tipo, page) => {
   if (tipo && tipo !== "") {
     filters.append("filters[tipo][$contains]", tipo);
   }
-
-  console.log(page);
   // if (page) {
   //   filters.append("pagination[page]", page);
   // }
@@ -73,7 +71,7 @@ export function Tabla({ query, tipo, page }) {
     setClientes(clientes);
     setPaginacion(pagination.pagination);
     setCargando(false);
-  }, 300);
+  }, 1000);
 
   const eliminarCliente = useCallback(async (id) => {
     try {

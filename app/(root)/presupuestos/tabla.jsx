@@ -24,6 +24,8 @@ import { useDebouncedCallback } from "use-debounce";
 const buildFilters = (page, query, status, estado, fecha, fechaEnd) => {
   const filters = new URLSearchParams();
 
+  filters.append("populate[client]","*")
+
   if (page) {
     filters.append("pagination[page]", page);
   }
@@ -61,7 +63,7 @@ const fetchData = async (
   fechaEnd
 ) => {
   const filters = buildFilters(page, query, status, estado, fecha, fechaEnd);
-
+  
   const projectsCtrl = new Projects();
   const res = await projectsCtrl.getPresupuestos(token, `?${filters}`);
   return res;
@@ -113,6 +115,8 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
   };
 
   return (
+    <>
+    {/* {JSON.stringify(presupuestos)} */}
     <Table
       aria-label="Todos los presupuestos, aprovados y sin aprovar"
       topContent={
@@ -131,6 +135,7 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
       }
       bottomContentPlacement="outside"
     >
+      
       <TableHeader>
         <TableColumn>ID</TableColumn>
         <TableColumn>Cliente</TableColumn>
@@ -153,7 +158,7 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
               {presupuesto.attributes.idpresupuesto}
               {presupuesto.id}
             </TableCell>
-            <TableCell>{presupuesto.attributes.cliente}</TableCell>
+            <TableCell>{presupuesto.attributes.client.data?.attributes?.nombre}</TableCell>
             <TableCell>
               {formatDate(presupuesto.attributes.publishedAt)}
             </TableCell>
@@ -194,5 +199,6 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
         ))}
       </TableBody>
     </Table>
+    </>
   );
 }

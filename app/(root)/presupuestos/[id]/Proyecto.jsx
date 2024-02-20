@@ -31,10 +31,11 @@ import Loader from "@/components/common/Loader";
 import { servicios } from "@/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
+import { SearchClient } from "@/components/clientes/SearchClient";
 
 const budgetCtrl = new Budget();
 
-export function Proyecto({ initialValues, id }) {
+export function Proyecto({ initialValues, id, cliente }) {
   
   const router = useRouter();
   
@@ -50,8 +51,6 @@ export function Proyecto({ initialValues, id }) {
   const [presupuesto, setPresupuesto] = useState();
 
   const [preciosServicios, setPreciosServicios] = useState({})
-
-  const {user} = useAuth();
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -248,7 +247,7 @@ export function Proyecto({ initialValues, id }) {
                         <p className="text-primary font-bold">
                           PR{presupuesto}{id}
                         </p>
-                        <input
+                        {/* <input
                           className={`formulario ${
                             formik.touched.nombre && formik.errors.nombre
                               ? "errores"
@@ -259,7 +258,10 @@ export function Proyecto({ initialValues, id }) {
                           name="nombre"
                           value={formik.values.nombre}
                           onChange={formik.handleChange}
-                        />
+                        /> */}
+                        <div className="w-full min-w-75">
+                          <SearchClient formik={formik} cliente={cliente}/>
+                        </div>
                       </div>
                       {/* <p className="font-bold text-base">PLACA METACRILATO</p> */}
                       <div className="flex flex-col items-end justify-end">
@@ -280,7 +282,7 @@ export function Proyecto({ initialValues, id }) {
 
                   <div className="flex justify-between items-center mt-2">
                     <div className="flex flex-col gap-2">
-                      <input
+                      {/* <input
                         type="text"
                         className={`formulario ${
                           formik.touched.cliente && formik.errors.cliente
@@ -291,9 +293,9 @@ export function Proyecto({ initialValues, id }) {
                         name="cliente"
                         value={formik.values.cliente}
                         onChange={formik.handleChange}
-                      />
+                      /> */}
 
-                      <input
+                      {/* <input
                         type="string"
                         className={`formulario ${
                           formik.touched.contacto && formik.errors.contacto
@@ -304,7 +306,7 @@ export function Proyecto({ initialValues, id }) {
                         name="contacto"
                         value={formik.values.contacto}
                         onChange={formik.handleChange}
-                      />
+                      /> */}
                     </div>
 
                     <div className="flex flex-col items-end justify-end">

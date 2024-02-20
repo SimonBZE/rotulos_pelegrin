@@ -9,6 +9,7 @@ import {
 } from "@nextui-org/react";
 import { IoChevronDown, IoSearch } from "react-icons/io5";
 import { useEffect, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 
 const TipoCliente = [
   "persona",
@@ -21,11 +22,13 @@ export const TopContent = ({ query, tipo, paginacion }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  console.log(paginacion)
-
   const onSearchChange = (query) => {
     const params = new URLSearchParams(searchParams);
-    console.log(params.toString())
+
+    if(paginacion.pageCount >= 1 || paginacion.page > paginacion.pageCount){
+      params.delete("page")
+    }
+
     if (query.trim().length > 0) {
       params.set("query", query.trim());      
     } else {
@@ -59,14 +62,13 @@ export const TopContent = ({ query, tipo, paginacion }) => {
 
   useEffect(() => {
     
-    if (tipo.join('')) {
+    if (tipo) {
       selectedValue(new Set(tipo));
     }
   }, []);
 
   return (
     <>
-    {JSON.stringify(paginacion)}
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
           <Input
@@ -74,14 +76,16 @@ export const TopContent = ({ query, tipo, paginacion }) => {
             className="w-full sm:max-w-[44%]"
             placeholder="Buscar cliente"
             startContent={<IoSearch />}
-            value={query || ""}
+            defaultValue={query || ""}
             onValueChange={onSearchChange}
             classNames={{
               inputWrapper: "h-[40px]",
             }}
           />
 
-          <Dropdown>
+          <p>Total clientes: {paginacion.total}</p>
+
+          {/* <Dropdown>
             <DropdownTrigger className="hidden sm:flex">
               <Button
                 endContent={<IoChevronDown className="text-small" />}
@@ -104,7 +108,7 @@ export const TopContent = ({ query, tipo, paginacion }) => {
                   </DropdownItem>
                 ))}
             </DropdownMenu>
-          </Dropdown>
+          </Dropdown> */}
         </div>
         <div className="flex gap-3"></div>
       </div>

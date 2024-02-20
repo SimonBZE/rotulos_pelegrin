@@ -1,9 +1,7 @@
 import * as Yup from "yup";
 
 export const initialValues = {
-  nombre: "",
-  cliente: "",
-  contacto: "",
+  client: "",
   aprovacion: false,
   prioridad: false,
   fecha: "",
@@ -268,11 +266,7 @@ export const matriculaMounting = {
 };
 
 export const validationSchema = Yup.object({
-  nombre: Yup.string().required("Debe añadir un nombre al presupuesto"),
-  cliente: Yup.string().required("Debe añadir el nombre del cliente"),
-  contacto: Yup.string()
-    .required("Debe añadir un número de contacto")
-    .min(8, "Debe tener minimo 8 caracteres"),
+  client: Yup.number().required("Debe agregar un cliente"),  
   aprovacion: Yup.boolean(),
   prioridad: Yup.boolean(),
   fecha: Yup.date().required("Debe establecer una fecha de entrega"),

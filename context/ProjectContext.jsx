@@ -31,7 +31,7 @@ export const ProjectProvider = ({ children }) => {
     type === "" ? toast(mensaje) : toast[type](mensaje);
 
   const fetchData = useCallback(async (id) => {
-    let filter = "?";
+    let filter = "?populate[client]=*&";
     const media =
       "populate[fotos]=*&populate[videos]=*&populate[audios]=*";
     const diseno = "&populate[diseno][populate][0]=imagenes";
@@ -48,6 +48,7 @@ export const ProjectProvider = ({ children }) => {
      media + diseno + impresion + corte + cerrajeria + pintura + montaje + mensajes;
     const projectsCtrl = new Projects();
     const res = await projectsCtrl.getSingleBudget(id, filter);
+    console.log(res)
     return res;
   }, []);
 

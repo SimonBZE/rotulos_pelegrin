@@ -15,7 +15,7 @@ import { paises } from "@/utils/paises"
 
 const clientCtrl = new Client();
 
-export const ModalEditarCliente = ({ onClose, id, getClients:updateClient }) => {
+export const ModalEditarCliente = ({ onClose, id, getClients:updateClient = 0, actualizarCliente = 0 }) => {
   const [cliente, setCliente] = useState({});
 
   const getClient = async () => {
@@ -52,7 +52,14 @@ export const ModalEditarCliente = ({ onClose, id, getClients:updateClient }) => 
     onSubmit: async (formData) => {
       try {
         const data = await clientCtrl.updateClient(formData, id);
-        updateClient()
+        if(updateClient !== 0){
+          updateClient()
+        }
+
+        if(actualizarCliente !== 0){
+          actualizarCliente(data.data)
+        }
+        
         onClose();    
         notify("Cliente actualizado", "success");
         
