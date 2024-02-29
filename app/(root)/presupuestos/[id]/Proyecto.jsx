@@ -15,7 +15,6 @@ import {
 } from "../../nuevo-proyecto/components";
 import { Budget } from "@/api";
 import {
-  
   newPaint,
   newLockSmith,
   newDesign,
@@ -23,7 +22,7 @@ import {
   newCut,
   newMounting,
   validationSchema,
-} from "./utils/formikValidations";
+} from "@/app/(root)/nuevo-proyecto/utils/formikValidations";
 import { useFormik, FormikProvider, FieldArray } from "formik";
 import useImageUpload from "@/hooks/useImageUploadFormik";
 import { useFilesUpload } from "@/hooks/useFilesUpload";
@@ -36,9 +35,8 @@ import { SearchClient } from "@/components/clientes/SearchClient";
 const budgetCtrl = new Budget();
 
 export function Proyecto({ initialValues, id, cliente }) {
-  
   const router = useRouter();
-  
+
   const {
     files,
     handleMultimediaChange,
@@ -50,7 +48,7 @@ export function Proyecto({ initialValues, id, cliente }) {
 
   const [presupuesto, setPresupuesto] = useState();
 
-  const [preciosServicios, setPreciosServicios] = useState({})
+  const [preciosServicios, setPreciosServicios] = useState({});
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -58,9 +56,8 @@ export function Proyecto({ initialValues, id, cliente }) {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (formData) => {
-      
       setLoadingForm(true);
-      
+
       const departamentos = [
         "diseno",
         "impresion",
@@ -71,7 +68,7 @@ export function Proyecto({ initialValues, id, cliente }) {
       ];
 
       const asignarDepartamento = (formData) => {
-        if(!!formData.departamento){
+        if (!!formData.departamento) {
           formData.departamento = "";
           for (const departamento of departamentos) {
             if (formData[departamento]?.length > 0) {
@@ -84,13 +81,10 @@ export function Proyecto({ initialValues, id, cliente }) {
           notify("Debe de agregar al menos un departamento", "error");
       };
 
-      
       asignarDepartamento(formData);
       // Fin
-      
-      formData.idpresupuesto = presupuesto;
 
-      
+      formData.idpresupuesto = presupuesto;
 
       if (files.videos) {
         formData.videos = [].concat(...files.videos);
@@ -105,27 +99,23 @@ export function Proyecto({ initialValues, id, cliente }) {
       }
 
       try {
-        
         const res = await budgetCtrl.updateSingleProject(id, formData);
         setLoadingForm(false);
 
-        if(!!res.error) throw res
+        if (!!res.error) throw res;
 
         notify("Proyecto actualizado", "success");
         // router.push(`/proyecto/${id}`)
-        router.back()
-        
+        router.back();
       } catch (error) {
-        
         setLoadingForm(false);
-        
+
         // Muestra un mensaje de error usando Toastify
         notify("Error al actualizar el proyecto", "error");
-
       }
     },
   });
-  
+
   const {
     images,
     handleFileChange,
@@ -150,16 +140,23 @@ export function Proyecto({ initialValues, id, cliente }) {
     updatePresupuesto();
   }, [formik.values]);
 
-  useEffect( () => {
+  useEffect(() => {
+    setFiles({
+      ...files,
+      audios: initialValues?.audios,
+      videos: initialValues?.videos,
+      fotos: initialValues?.fotos
+    })
+  }, [])
+
+  useEffect(() => {
     const getPrices = async () => {
-      const precios = await budgetCtrl.getPrecios()
-      setPreciosServicios(precios.data.attributes)
-    }
+      const precios = await budgetCtrl.getPrecios();
+      setPreciosServicios(precios.data.attributes);
+    };
 
-
-    getPrices()
-  }, [] )
-  
+    getPrices();
+  }, []);
 
   // Agrega el servicio seleccionado en el FormArray de formik
   const handleServiceClick = (serviceName) => {
@@ -202,14 +199,18 @@ export function Proyecto({ initialValues, id, cliente }) {
     }
   };
 
-  const notify = (mensaje, type = "") => type === "" ? toast(mensaje) : toast[type](mensaje);
+  const notify = (mensaje, type = "") =>
+    type === "" ? toast(mensaje) : toast[type](mensaje);
 
   const handleCustomSubmit = () => {
     // Primero, forzamos la validación de Formik
-    formik.validateForm().then(errors => {
+    formik.validateForm().then((errors) => {
       // Si hay errores, mostramos un toast y no enviamos el formulario
       if (Object.keys(errors).length > 0) {
-        notify("Hay errores en el formulario. Por favor, corrígelos antes de enviar.", "error");
+        notify(
+          "Hay errores en el formulario. Por favor, corrígelos antes de enviar.",
+          "error"
+        );
         formik.handleSubmit();
       } else {
         // Si no hay errores, enviamos el formulario
@@ -218,21 +219,19 @@ export function Proyecto({ initialValues, id, cliente }) {
     });
   };
 
-  
-
   return (
     <>
-     
       {/* {JSON.stringify(formik.values.diseno[0].imagenes)} */}
       {/* {JSON.stringify(user)}  */}
       {/* {JSON.stringify(proyecto)} */}
       {/* {JSON.stringify(formik.values)} */}
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
-          <div className="2xl:h-[calc(100vh-120px)] 2xl:flex mt-[-40px]">
-            <div className="2xl:flex-1 2xl:flex 2xl:overflow-hidden">
-              <div className="p-3 2xl:flex-1 2xl:overflow-y-scroll">
+          <div className="2xl:h-[calc(100vh-120px)] 2xl:flex mt-[-40px] ">
+            <div className="2xl:flex-1 2xl:flex 2xl:overflow-hidden ">
+              <div className="p-3 2xl:flex-1 2xl:overflow-y-scroll ">
                 <div className="mt-5 px-5">
+                  
                   <div>
                     <h2 className="text-title-md font-semibold text-black dark:text-white">
                       PRESUPUESTO
@@ -242,104 +241,74 @@ export function Proyecto({ initialValues, id, cliente }) {
                       <div className="error-message">{errors.campo}</div>
                     ) : null}
 
-                    <div className="flex items-center justify-between">
-                      <div>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex flex-col gap-3">
                         <p className="text-primary font-bold">
-                          PR{presupuesto}{id}
+                          PR{presupuesto}
                         </p>
-                        {/* <input
-                          className={`formulario ${
-                            formik.touched.nombre && formik.errors.nombre
-                              ? "errores"
-                              : ""
-                          }`}
-                          type="text"
-                          placeholder="Nombre del presupuesto"
-                          name="nombre"
-                          value={formik.values.nombre}
-                          onChange={formik.handleChange}
-                        /> */}
                         <div className="w-full min-w-75">
-                          <SearchClient formik={formik} cliente={cliente}/>
+                          {formik.errors.client ? (
+                            <label className="text-danger">
+                              Debe seleccionar un cliente
+                            </label>
+                          ) : (
+                            ""
+                          )}
+                          <SearchClient formik={formik} cliente={cliente} />
+                        </div>
+                        <div>
+                          <label htmlFor="nombre" className="ml-2 labels">
+                            Nombre del proyecto
+                          </label>
+                          <input
+                            type="text"
+                            id="nombre"
+                            name="nombre"
+                            value={formik.values.nombre}
+                            className={`formulario ${
+                              formik.touched.nombre && formik.errors.nombre
+                                ? "errores"
+                                : ""
+                            }`}
+                            checked={formik.values.nombre}
+                            onChange={formik.handleChange}
+                            placeholder="Nombre proyecto"
+                          />
                         </div>
                       </div>
                       {/* <p className="font-bold text-base">PLACA METACRILATO</p> */}
-                      <div className="flex flex-col items-end justify-end">
-                        <label htmlFor="aprovacion" className="ml-2 labels">
-                          Aprovación
-                        </label>
-                        <input
-                          id="aprovacion"
-                          type="checkbox"
-                          className="w-9 h-9 accent-primary"
-                          name="aprovacion"
-                          checked={formik.values.aprovacion}
-                          onChange={formik.handleChange}
-                        />
+                      <div className="flex sm:flex-col gap-3">
+                        <div className="flex flex-col sm:items-end items-center">
+                          <label htmlFor="aprovacion" className="ml-2 labels">
+                            Aprovación
+                          </label>
+                          <input
+                            id="aprovacion"
+                            type="checkbox"
+                            className="w-9 h-9 accent-primary"
+                            name="aprovacion"
+                            checked={formik.values.aprovacion}
+                            onChange={formik.handleChange}
+                          />
+                        </div>
+                        <div className="flex flex-col items-end">
+                          <label htmlFor="aprovacion" className="ml-2 labels">
+                            Prioridad
+                          </label>
+                          <input
+                            id="prioridad"
+                            type="checkbox"
+                            className="w-9 h-9 accent-primary"
+                            name="prioridad"
+                            checked={formik.values.prioridad}
+                            onChange={formik.handleChange}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-
-                  <div className="flex justify-between items-center mt-2">
-                    <div className="flex flex-col gap-2">
-                      {/* <input
-                        type="text"
-                        className={`formulario ${
-                          formik.touched.cliente && formik.errors.cliente
-                            ? "errores"
-                            : ""
-                        }`}
-                        placeholder="Cliente"
-                        name="cliente"
-                        value={formik.values.cliente}
-                        onChange={formik.handleChange}
-                      /> */}
-
-                      {/* <input
-                        type="string"
-                        className={`formulario ${
-                          formik.touched.contacto && formik.errors.contacto
-                            ? "errores"
-                            : ""
-                        }`}
-                        placeholder="Contacto"
-                        name="contacto"
-                        value={formik.values.contacto}
-                        onChange={formik.handleChange}
-                      /> */}
-                    </div>
-
-                    <div className="flex flex-col items-end justify-end">
-                      <label htmlFor="aprovacion" className="ml-2 labels">
-                        Prioridad
-                      </label>
-                      <input
-                        id="prioridad"
-                        type="checkbox"
-                        className="w-9 h-9 accent-primary"
-                        name="prioridad"
-                        checked={formik.values.prioridad}
-                        onChange={formik.handleChange}
-                      />
-                      {/* <select
-                        className={`formulario ${
-                          formik.touched.prioridad && formik.errors.prioridad
-                            ? "errores"
-                            : ""
-                        }`}
-                        name="prioridad"
-                        value={formik.values.prioridad}
-                        required
-                        onChange={formik.handleChange}
-                      >
-                        <option>seleccione</option>
-                        <option value="baja">Baja</option>
-                        <option value="media">Media</option>
-                        <option value="alta">Alta</option>
-                      </select> */}
-                    </div>
-                  </div>
                 </div>
+               
                 <div className="rounded-xl mt-5 p-5 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                   {/* Date */}
                   <div className="flex gap-2 items-center">
@@ -602,6 +571,7 @@ export function Proyecto({ initialValues, id, cliente }) {
                     />
                   </div>
                 </div>
+                
                 <Contenido
                   handleMultimediaChange={handleMultimediaChange}
                   files={files}
@@ -620,12 +590,7 @@ export function Proyecto({ initialValues, id, cliente }) {
                   <Loader tamano="30px" /> Validando...
                 </a>
               ) : (
-                // <button
-                //   type="submit"
-                //   className="w-full bg-primary mt-5 p-3 rounded-xl text-white uppercase "
-                // >
-                //   Crear Presupuesto
-                // </button>
+                
 
                 <button
                   type="button"

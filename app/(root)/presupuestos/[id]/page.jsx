@@ -97,6 +97,7 @@ export default async function Presupuesto({ params }) {
         region: data.attributes.client.data?.attributes?.region,
         cp: data.attributes.client.data?.attributes?.cp,
       },
+      nombre: data.attributes.nombre,
       aprovacion: data.attributes.aprovacion,
       prioridad: data.attributes.prioridad,
       fecha: data.attributes.fecha,

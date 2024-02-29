@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 
 export const initialValues = {
+  nombre: "",
   client: "",
   aprovacion: false,
   prioridad: false,
@@ -266,6 +267,7 @@ export const matriculaMounting = {
 };
 
 export const validationSchema = Yup.object({
+  nombre: Yup.string().required("El nombre de proyecto es obligatorio"),
   client: Yup.number().required("Debe agregar un cliente"),  
   aprovacion: Yup.boolean(),
   prioridad: Yup.boolean(),

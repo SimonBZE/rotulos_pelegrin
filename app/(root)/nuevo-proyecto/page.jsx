@@ -241,26 +241,30 @@ export default function NuevoProyecto() {
                     ) : null}
 
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                      <div>
+                      <div className="flex flex-col gap-3">
                         <p className="text-primary font-bold">
                           PR{presupuesto}
                         </p>
                         <div className="w-full min-w-75">
+                          { formik.errors.client ? <label className="text-danger">Debe seleccionar un cliente</label> : "" }
                           <SearchClient formik={formik}/>
                         </div>
-
-                        {/* <input
-                          className={`formulario ${
-                            formik.touched.nombre && formik.errors.nombre
-                              ? "errores"
-                              : ""
-                          }`}
-                          type="text"
-                          placeholder="Nombre del presupuesto"
-                          name="nombre"
-                          value={formik.values.nombre}
-                          onChange={formik.handleChange}
-                        /> */}
+                        <div>
+                          <label htmlFor="nombre" className="ml-2 labels">Nombre del proyecto</label>
+                          <input 
+                            type="text" 
+                            id="nombre"
+                            name="nombre"
+                            className={`formulario ${
+                              formik.touched.nombre && formik.errors.nombre
+                                ? "errores"
+                                : ""
+                            }`}
+                            checked={formik.values.nombre}
+                            onChange={formik.handleChange}
+                            placeholder="Nombre proyecto"
+                          />
+                        </div>
                       </div>
                       {/* <p className="font-bold text-base">PLACA METACRILATO</p> */}
                       <div className="flex sm:flex-col gap-3">
@@ -295,46 +299,10 @@ export default function NuevoProyecto() {
                   </div>
 
                   <div className="flex justify-between items-center mt-2">
-                    {/* <div className="flex flex-col gap-2">
-                      <input
-                        type="text"
-                        className={`formulario ${
-                          formik.touched.cliente && formik.errors.cliente
-                            ? "errores"
-                            : ""
-                        }`}
-                        placeholder="Cliente"
-                        name="cliente"
-                        value={formik.values.cliente}
-                        onChange={formik.handleChange}
-                      />
-
-                      <input
-                        type="string"
-                        className={`formulario ${
-                          formik.touched.contacto && formik.errors.contacto
-                            ? "errores"
-                            : ""
-                        }`}
-                        placeholder="Contacto"
-                        name="contacto"
-                        value={formik.values.contacto}
-                        onChange={formik.handleChange}
-                      />
-                    </div> */}
+                    
 
                     <div className="flex flex-col items-end justify-end">
-                      {/* <label htmlFor="aprovacion" className="ml-2 labels">
-                        Prioridad
-                      </label>
-                      <input
-                        id="prioridad"
-                        type="checkbox"
-                        className="w-9 h-9 accent-primary"
-                        name="prioridad"
-                        checked={formik.values.prioridad}
-                        onChange={formik.handleChange}
-                      /> */}
+                      
                     </div>
                   </div>
                 </div>
