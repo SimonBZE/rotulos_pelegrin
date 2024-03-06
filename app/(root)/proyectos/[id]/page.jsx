@@ -52,11 +52,11 @@ const Departamentos = ({ params }) => {
 
     if (orden === "mas recientes") {
       proyectosOrdenados.sort(
-        (a, b) => new Date(b.attributes.fecha) - new Date(a.attributes.fecha)
+        (a, b) => new Date(b.attributes?.fecha) - new Date(a.attributes?.fecha)
       );
     } else if (orden === "mas antiguos") {
       proyectosOrdenados.sort(
-        (a, b) => new Date(a.attributes.fecha) - new Date(b.attributes.fecha)
+        (a, b) => new Date(a.attributes?.fecha) - new Date(b.attributes?.fecha)
       );
     }
 
@@ -90,7 +90,7 @@ const Departamentos = ({ params }) => {
       </div>
 
       {ordenarProyectos().map((proyecto, index) => {
-        if (proyecto.attributes.departamento !== params.id) {
+        if (proyecto.attributes?.departamento !== params.id) {
           return;
         }
 
@@ -109,7 +109,7 @@ const Departamentos = ({ params }) => {
         // Esta funcion muestra los proximos proyectos que van a llegar, pero solo muestra los que se encuentran justo en el departamento anterior al actual
         //Si el departamento es igual al departamento actual se sale del ciclo
         if (
-          proyecto.attributes.departamento === params.id ||
+          proyecto.attributes?.departamento === params.id ||
           params.id === "diseno"
         ) {
           return;
@@ -118,14 +118,14 @@ const Departamentos = ({ params }) => {
         let validador = {}; // En esta variable se almacenan los departamentos, al finalizar se ve algo así {corte: 2, cerrajeria: 3, montaje: 5}
         depart.forEach((dep, index) => {
           // La respuesta de la api almacena cada proyecto en un [], si este está vácio significa que no hay tareas asiganadas al departamento, si está lleno se almacena el nombre del departamento y el index en validador
-          if (proximosProyectos.attributes[dep].length > 0)
+          if (proximosProyectos.attributes?.[dep].length > 0)
             validador[dep] = index;
         });
 
         const propiedades = Object.keys(validador);
         // dado que se van almacenando los departamento en orden en el arreglo significa que si el departamento actual +1 es igual al departamento de departamento del encargado, significa que cuando avancen la tarea será el siguiente, por eso quiero que se muestre
         if (
-          propiedades.indexOf(proximosProyectos.attributes.departamento) + 1 <
+          propiedades.indexOf(proximosProyectos.attributes?.departamento) + 1 <
           propiedades.indexOf(params.id)
         )
           return;
@@ -139,7 +139,7 @@ const Departamentos = ({ params }) => {
           <CardProjects
             key={index}
             proyecto={proximosProyectos}
-            params={proyecto.attributes.departamento}
+            params={proyecto.attributes?.departamento}
           />
         );
       })}
@@ -150,19 +150,19 @@ const Departamentos = ({ params }) => {
           </h3>
           {proximosProyectos.map((proyecto) => {
             const proyectosActivos = depart.filter(
-              (departamento) => proyecto.attributes[departamento]?.length > 0
+              (departamento) => proyecto.attributes?.[departamento]?.length > 0
             );
 
             const indexDep = proyectosActivos.indexOf(
-              proyecto.attributes.departamento
+              proyecto.attributes?.departamento
             );
 
             if (proyectosActivos[indexDep + 1] === params.id) {
               return (
                 <CardProjects
-                  key={proyecto.id || proyecto.attributes.nombre}
+                  key={proyecto.id || proyecto.attributes?.nombre}
                   proyecto={proyecto}
-                  params={proyecto.attributes.departamento}
+                  params={proyecto.attributes?.departamento}
                 />
               );
             }
