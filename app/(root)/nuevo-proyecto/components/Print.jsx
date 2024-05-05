@@ -91,6 +91,7 @@ export const Print = ({
               </label>
               <Field
                 type="number"
+                min="0"
                 id="ancho"
                 // className="formulario w-14"
                 className={`formulario w-full ${
@@ -108,6 +109,7 @@ export const Print = ({
               </label>
               <Field
                 type="number"
+                min="0"
                 id="alto"
                 className={`formulario w-full ${
                   formik.touched.impresion?.[index]?.alto &&

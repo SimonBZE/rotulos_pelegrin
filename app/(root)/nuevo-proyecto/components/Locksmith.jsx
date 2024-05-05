@@ -68,6 +68,7 @@ export const Locksmith = ({
           </label>
           <Field
             type="number"
+            min="0"
             id="ancho"
             className={`formulario w-full ${
               formik.touched.cerrajeria?.[index]?.ancho && formik.errors.cerrajeria?.[index]?.ancho
@@ -83,6 +84,7 @@ export const Locksmith = ({
           </label>
           <Field
             type="number"
+            min="0"
             id="alto"
             className={`formulario w-full ${
               formik.touched.cerrajeria?.[index]?.alto && formik.errors.cerrajeria?.[index]?.alto
@@ -98,6 +100,7 @@ export const Locksmith = ({
           </label>
           <Field
             type="number"
+            min="0"
             id="grosor"
             className={`formulario w-full ${
               formik.touched.cerrajeria?.[index]?.grosor && formik.errors.cerrajeria?.[index]?.grosor
@@ -140,6 +143,7 @@ export const Locksmith = ({
         </label>
         <Field
           type="number"
+          min="0"
           id="horas_fabricacion"
           className={`formulario w-16 ${
             formik.touched.cerrajeria?.[index]?.horas_fabricacion && formik.errors.cerrajeria?.[index]?.horas_fabricacion
@@ -187,6 +191,7 @@ export const Locksmith = ({
                       name={`cerrajeria[${index}].adicional[${adicionalIndex}].precio`}
                       placeholder="Precio"
                       type="number"
+                      min="0"
                       className={`formulario w-17 ${
                         formik.touched.cerrajeria?.[index]?.adicional?.[adicionalIndex]?.precio && formik.errors.cerrajeria?.[index]?.adicional?.[adicionalIndex]?.precio
                           ? "errores"

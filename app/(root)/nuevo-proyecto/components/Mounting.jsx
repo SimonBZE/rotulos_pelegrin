@@ -49,6 +49,7 @@ export const Mounting = ({
 
         <Field
           type="number"
+          min="0"
           id="tiempo_montaje"
           className={`formulario w-18 ${
             formik.touched.montaje?.[index]?.tiempo_montaje &&
@@ -65,6 +66,7 @@ export const Mounting = ({
         </label>
         <Field
           type="number"
+          min="0"
           id="desplazamiento"
           className={`formulario w-18 ${
             formik.touched.montaje?.[index]?.desplazamiento &&
@@ -81,6 +83,7 @@ export const Mounting = ({
         </label>
         <Field
           type="number"
+          min="0"
           id="alquiler_maquinaria"
           className={`formulario w-18 ${
             formik.touched.montaje?.[index]?.alquiler_maquinaria &&
@@ -133,6 +136,7 @@ export const Mounting = ({
                       name={`montaje[${index}].adicional[${adicionalIndex}].precio`}
                       placeholder="Precio"
                       type="number"
+                      min="0"
                       className={`formulario w-19 ${
                         formik.touched.montaje?.[index]?.adicional?.[
                           adicionalIndex

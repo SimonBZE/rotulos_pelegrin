@@ -48,7 +48,7 @@ export const ProjectProvider = ({ children }) => {
      media + diseno + impresion + corte + cerrajeria + pintura + montaje + mensajes;
     const projectsCtrl = new Projects();
     const res = await projectsCtrl.getSingleBudget(id, filter);
-    console.log(res)
+    
     return res;
   }, []);
 
@@ -86,11 +86,14 @@ export const ProjectProvider = ({ children }) => {
         pintura: procesarSeccion("pintura"),
         montaje: procesarSeccion("montaje"),
         nombre: nombreProyecto,
+        aprovacion: false,
+        estado_departamento: "pendiente",
       };
 
       await budgetCtrl.createBudget(proyectoDuplicado);
       notify("Proyecto duplicado", "success");
     } catch (error) {
+      notify("Error al duplicar el proyecto", "error");
       console.log(error);
     }
   };

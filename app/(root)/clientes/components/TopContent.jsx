@@ -1,15 +1,10 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
   Input,
 } from "@nextui-org/react";
-import { IoChevronDown, IoSearch } from "react-icons/io5";
+import {  IoSearch } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import { useDebouncedCallback } from "use-debounce";
+
 
 const TipoCliente = [
   "persona",

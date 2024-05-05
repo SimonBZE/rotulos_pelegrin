@@ -47,25 +47,55 @@ const Departamentos = ({ params }) => {
   }, [params.id]);
 
   // Función para ordenar los proyectos según la opción seleccionada
+  // const ordenarProyectos = () => {
+  //   let proyectosOrdenados = [...proyectos];
+
+  //   if (orden === "mas recientes") {
+  //     proyectosOrdenados.sort(
+  //       (a, b) => new Date(b.attributes?.fecha) - new Date(a.attributes?.fecha)
+  //     );
+  //   } else if (orden === "mas antiguos") {
+  //     proyectosOrdenados.sort(
+  //       (a, b) => new Date(a.attributes?.fecha) - new Date(b.attributes?.fecha)
+  //     );
+  //   }
+
+  //   return proyectosOrdenados;
+  // };
+
   const ordenarProyectos = () => {
-    let proyectosOrdenados = [...proyectos];
-
-    if (orden === "mas recientes") {
-      proyectosOrdenados.sort(
-        (a, b) => new Date(b.attributes?.fecha) - new Date(a.attributes?.fecha)
-      );
-    } else if (orden === "mas antiguos") {
-      proyectosOrdenados.sort(
-        (a, b) => new Date(a.attributes?.fecha) - new Date(b.attributes?.fecha)
-      );
-    }
-
-    return proyectosOrdenados;
+    // Primero se separan los proyectos en dos grupos: con prioridad y sin prioridad
+    let proyectosConPrioridad = proyectos.filter(
+      (proyecto) => proyecto.attributes.prioridad === true
+    );
+    let proyectosSinPrioridad = proyectos.filter(
+      (proyecto) => proyecto.attributes.prioridad === false
+    );
+  
+    // Función para ordenar por fecha
+    const ordenarPorFecha = (lista) => {
+      if (orden === "mas recientes") {
+        return lista.sort(
+          (a, b) => new Date(b.attributes.fecha) - new Date(a.attributes.fecha)
+        );
+      } else {
+        return lista.sort(
+          (a, b) => new Date(a.attributes.fecha) - new Date(b.attributes.fecha)
+        );
+      }
+    };
+  
+    // Aplicamos el ordenamiento por fecha a ambos grupos
+    proyectosConPrioridad = ordenarPorFecha(proyectosConPrioridad);
+    proyectosSinPrioridad = ordenarPorFecha(proyectosSinPrioridad);
+  
+    // Concatenamos los proyectos con prioridad al inicio y los sin prioridad al final
+    return [...proyectosConPrioridad, ...proyectosSinPrioridad];
   };
 
   return (
     <div>
-      {/* {JSON.stringify(proximosProyectos)} */}
+      {/* {JSON.stringify(proyectos)} */}
       <div className="flex flex-col gap-5 sm:flex-row justify-between items-center mb-5 p-5">
         <div className="flex items-center gap-3">
           <Image

@@ -80,6 +80,7 @@ export const Paint = ({
               </label>
               <Field
                 type="number"
+                min="0"
                 id="ancho"
                 className={`formulario w-full ${
                   formik.touched.pintura?.[index]?.ancho &&
@@ -96,6 +97,7 @@ export const Paint = ({
               </label>
               <Field
                 type="number"
+                min="0"
                 id="alto"
                 className={`formulario w-full ${
                   formik.touched.pintura?.[index]?.alto &&
@@ -186,6 +188,7 @@ export const Paint = ({
                       name={`pintura[${index}].adicional[${adicionalIndex}].precio`}
                       placeholder="Precio"
                       type="number"
+                      min="0"
                       className={`formulario w-17 ${
                         formik.touched.pintura?.[index]?.adicional?.[adicionalIndex]?.precio && formik.errors.pintura?.[index]?.adicional?.[adicionalIndex]?.precio
                           ? "errores"

@@ -76,13 +76,13 @@ function Page() {
                 }`}
                 // className={`px-6 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${formik.errors.identifier && formik.touched.identifier ? 'border-danger' : null}`}
               />
-              <Image
+              {/* <Image
                 className="absolute right-3 top-[8px] w-5 h-5"
                 src="/assets/user-icon.svg"
                 alt="icono contraseña"
                 width={30}
                 height={30}
-              />
+              /> */}
             </div>
           </div>
 
@@ -102,13 +102,13 @@ function Page() {
                 }`}
                 // className={`px-6 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${formik.errors.password && formik.touched.password ? 'border-danger' : null}`}
               />
-              <Image
+              {/* <Image
                 className="absolute right-3 top-[10px] w-6"
                 src="/assets/password-icon.svg"
                 alt="icono contraseña"
                 width={30}
                 height={30}
-              />
+              /> */}
             </div>
           </div>
 

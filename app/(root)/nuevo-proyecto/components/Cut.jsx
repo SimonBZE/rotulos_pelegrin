@@ -67,6 +67,7 @@ export const Cut = ({
           </label>
           <Field
             type="number"
+            min="0"
             className={`formulario w-full ${
               formik.touched.corte?.[index]?.ancho && formik.errors.corte?.[index]?.ancho
                 ? "errores"
@@ -81,6 +82,7 @@ export const Cut = ({
           </label>
           <Field
             type="number"
+            min="0"
             className={`formulario w-full ${
               formik.touched.corte?.[index]?.alto && formik.errors.corte?.[index]?.alto
                 ? "errores"

@@ -64,6 +64,7 @@ export const Design = ({
                 : ""
             }`}
             type="number"
+            min="0"
             name={`diseno[${index}].horas`}
           />
         </div>
@@ -78,6 +79,7 @@ export const Design = ({
                 : ""
             }`}
             type="number"
+            min="0"
             name={`diseno[${index}].unidades`}
           />
         </div>

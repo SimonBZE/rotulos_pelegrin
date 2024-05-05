@@ -6,6 +6,8 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Input,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { IoSearch, IoChevronDown, IoAddOutline } from "react-icons/io5";
 import Datepicker from "react-tailwindcss-datepicker";
@@ -36,18 +38,29 @@ export const TopContent = ({ query, status, estado, cantidad, fecha:date = "", f
     endDate: fechaEnd,
   });
 
-  const handleValueChange = (newFecha ) => {
+  const handleValueChange = (newFecha) => {
     // console.log("newValue:", newFecha);
     const params = new URLSearchParams(searchParams);
     setFecha(newFecha);
-    if(!!newFecha.startDate){
-      console.log("no hay fecha")
-      params.set("fecha", newFecha.startDate)
-      params.set("fechaEnd", newFecha.endDate)
-    }else{      
+    
+    if (!!newFecha.startDate) {
+      // Convertir endDate a objeto Date
+      let endDate = new Date(newFecha.endDate);
+      
+      // Sumar un día
+      endDate.setDate(endDate.getDate() + 1);
+      
+      // Convertir de vuelta a string en formato YYYY-MM-DD
+      const endDateString = endDate.toISOString().split('T')[0];
+      
+      params.set("fecha", newFecha.startDate);
+      // Usar endDateString que ya tiene un día sumado
+      params.set("fechaEnd", endDateString);
+    } else {      
       params.delete("fecha");
-      params.delete("fechaEnd")
+      params.delete("fechaEnd");
     }
+  
     router.replace(`${pathname}?${params.toString()}`);
   };
 
@@ -111,10 +124,25 @@ export const TopContent = ({ query, status, estado, cantidad, fecha:date = "", f
     <>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
+          <Select
+            label="ID / Nombre"
+            className="max-w-[100px]"
+            variant="flat"
+            classNames={{
+              inputWrapper: "h-[40px]",
+            }}
+          >
+            <SelectItem value="id">
+              id
+            </SelectItem>
+            <SelectItem value="nombre">
+              Nombre
+            </SelectItem>
+          </Select>
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Buscar por ID"
+            placeholder="Buscar por ID o nombre del proyecto"
             startContent={<IoSearch />}
             value={query || ""}
             onValueChange={onSearchChange}
