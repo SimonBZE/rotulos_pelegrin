@@ -57,6 +57,7 @@ export function Tabla({ query, tipo, page }) {
   const [clientes, setClientes] = useState();
   const [cargando, setCargando] = useState(true);
   const [paginacion, setPaginacion] = useState([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const getClients = useDebouncedCallback(async () => {
@@ -86,6 +87,11 @@ export function Tabla({ query, tipo, page }) {
     getClients();
   }, [query, tipo, page, router]);
 
+  
+  const reloadCliente = async () => {
+    getClients()
+    setLoading(false);
+};
 
   return (
     <>
@@ -147,11 +153,15 @@ export function Tabla({ query, tipo, page }) {
                 </TableCell>
                 <TableCell className="flex gap-3">
                   <Tooltip content="Ver cliente">
-                    <span className="text-xl text-default-500 cursor-pointer p-0 m-0">
+                    <span className="text-xl text-default-500 cursor-pointer p-0 m-0"
+                    
+                    onClick={() =>
+                      router.push(`/clientes/${cliente.id}`)
+                    }>
                       <IoEyeOutline />
                     </span>
                   </Tooltip>
-                  <EditarCliente id={cliente.id} getClients={getClients} />
+                  <EditarCliente id={cliente.id} actualizarCliente={reloadCliente} />
                   <EliminarCliente
                     eliminarCliente={eliminarCliente}
                     id={cliente.id}

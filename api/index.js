@@ -5,3 +5,4 @@ export * from './budget';
 export * from './imageApi'
 export * from './projects';
 export * from './comments';
+export * from './client'

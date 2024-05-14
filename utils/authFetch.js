@@ -5,8 +5,10 @@ export async function authFetch(url, params) {
   const token = tokenCtrl.getToken();
   
   const logout = () => {
+    if (typeof window !== 'undefined') {
     tokenCtrl.removeToken();
     window.location.replace("/sign-in");
+    }
   };
 
   if (!token) {

@@ -11,7 +11,8 @@ import {
 } from "@nextui-org/react";
 import { IoSearch, IoChevronDown, IoAddOutline } from "react-icons/io5";
 import Datepicker from "react-tailwindcss-datepicker";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, use } from "react";
+import { useDebouncedCallback } from "use-debounce";
 
 const statusOptions = [
   { name: "Aprovado", uid: "aprovado" },
@@ -29,6 +30,7 @@ const estadoProyecto = [
 export const TopContent = ({ query, status, estado, cantidad, fecha:date = "", fechaEnd = "" }) => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [estadoFilter, setEstadoFilter] = useState("all");
+  const [busqueda, setBusqueda] = useState(query)
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -64,15 +66,15 @@ export const TopContent = ({ query, status, estado, cantidad, fecha:date = "", f
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  const onSearchChange = (query) => {
+  const onSearchChange = useDebouncedCallback((query) => {
     const params = new URLSearchParams(searchParams);
     if (query.trim().length > 0) {
       params.set("query", query.trim());
     } else {
       params.delete("query");
     }
-    router.replace(`${pathname}?${params.toString()}`);
-  };
+    router.replace(`${pathname}?${params.toString()}`)
+  }, 1000)
 
   const onEstadoChange = (estado) => {
     const params = new URLSearchParams(searchParams);
@@ -120,32 +122,24 @@ export const TopContent = ({ query, status, estado, cantidad, fecha:date = "", f
     }
   }, []);
 
+  useEffect(() => {
+    if(busqueda !== query){
+      onSearchChange(busqueda)
+    }
+  }, [busqueda])
+
   return (
     <>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
-          <Select
-            label="ID / Nombre"
-            className="max-w-[100px]"
-            variant="flat"
-            classNames={{
-              inputWrapper: "h-[40px]",
-            }}
-          >
-            <SelectItem value="id">
-              id
-            </SelectItem>
-            <SelectItem value="nombre">
-              Nombre
-            </SelectItem>
-          </Select>
+          
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
             placeholder="Buscar por ID o nombre del proyecto"
             startContent={<IoSearch />}
-            value={query || ""}
-            onValueChange={onSearchChange}
+            value={busqueda || ""}
+            onValueChange={value => setBusqueda(value)}
             classNames={{
               inputWrapper: "h-[40px]",
             }}

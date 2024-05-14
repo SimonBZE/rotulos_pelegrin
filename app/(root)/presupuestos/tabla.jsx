@@ -20,7 +20,9 @@ import { Paginacion } from "@/components/common/Paginacion";
 import { TopContent } from "./components/TopContant";
 // import { Factura } from "./components";
 import { useDebouncedCallback } from "use-debounce";
-
+import {colores} from "@/utils"
+import { EliminarPresupuesto } from "@/components/Presupuestos/EliminarPresupuesto";
+const projectsCtrl = new Projects();
 const buildFilters = (page, query, status, estado, fecha, fechaEnd) => {
   const filters = new URLSearchParams();
 
@@ -33,10 +35,9 @@ const buildFilters = (page, query, status, estado, fecha, fechaEnd) => {
   if (query) {
     // Suponiendo que `query` puede ser un nombre o un ID
     const numericQuery = query.replace(/\D/g, ""); // Extraer números para el ID
-    const textQuery = query; // Usar la consulta tal cual para el nombre
 
     // Añadir un filtro OR
-    filters.append("filters[$or][0][id][$contains]", query);
+    filters.append("filters[$or][0][id][$contains]", numericQuery);
     filters.append("filters[$or][1][nombre][$contains]", query);
 
     return filters.toString();
@@ -60,6 +61,8 @@ const buildFilters = (page, query, status, estado, fecha, fechaEnd) => {
   return filters.toString();
 };
 
+
+
 const fetchData = async (
   token,
   page,
@@ -71,18 +74,13 @@ const fetchData = async (
 ) => {
   const filters = buildFilters(page, query, status, estado, fecha, fechaEnd);
 
-  const projectsCtrl = new Projects();
+  
   const res = await projectsCtrl.getPresupuestos(token, `?${filters}`);
   return res;
 };
 
-const colores = {
-  "en cola": "default",
-  "en curso": "secondary",
-  incidencia: "danger",
-  "en pausa": "warning",
-  terminado: "success",
-};
+
+
 
 export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
   const [presupuestos, setPresupuestos] = useState([]);
@@ -91,7 +89,7 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
 
   const router = useRouter();
 
-  const getData = useDebouncedCallback(async () => {
+  const getData = async () => {
     setCargando(true);
     const { data: presupuestos, meta: paginacion } = await fetchData(
       token.value,
@@ -105,7 +103,7 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
     setPresupuestos(presupuestos);
     setPaginacion(paginacion.pagination);
     setCargando(false);
-  }, 1000);
+  }
 
   useEffect(() => {
     getData();
@@ -117,6 +115,17 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
       new Date(dateString)
     );
   };
+
+  const eliminarPresupuesto = async (id) => {
+    try {
+      
+      const data = await projectsCtrl.deleteBudget(id);
+      console.log(data)
+      getData();
+    } catch (error) {
+      return error;
+    }
+  }
 
   return (
     <>
@@ -214,11 +223,9 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
                     <CiEdit />
                   </span>
                 </Tooltip>
-                <Tooltip color="danger" content="Eliminar presupuesto">
-                  <span className="text-xl text-[#f31260] cursor-pointer">
-                    <CiTrash />
-                  </span>
-                </Tooltip>
+               
+                <EliminarPresupuesto id={presupuesto.id} getData={getData} eliminarPresupuesto={eliminarPresupuesto} />
+                
               </TableCell>
             </TableRow>
           ))}

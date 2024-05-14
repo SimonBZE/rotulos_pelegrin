@@ -44,6 +44,14 @@ export const colors = {
   "prioridad": "ffc2c2",
 };
 
+export const colores = {
+  "en cola": "default",
+  "en curso": "secondary",
+  incidencia: "danger",
+  "en pausa": "warning",
+  terminado: "success",
+};
+
 export const estado = {
   "pendiente": "gray",
   "en proceso": "#00e05a",

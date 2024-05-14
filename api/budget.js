@@ -56,6 +56,32 @@ export class Budget {
     
   }
 
+  async deleteBudget(id){
+    const params = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": 'application/json',        
+      },
+    };
+
+    const url = `${ENV.API_URL}/${ENV.ENDPOINTS.BUDGET}/${id}`;
+
+    try {
+      const response = await authFetch(url, params);
+      const result = await response.json();
+      
+      if (response.status !== 200){
+        console.log('Error al eliminar')
+        throw result;
+      } 
+
+      return result;
+    } catch (error) {      
+      throw error;
+    }
+
+  }
+
   async updateSingleProject(id, values) {
     
     const params = {
