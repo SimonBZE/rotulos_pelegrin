@@ -12,6 +12,12 @@ const nextConfig = {
           port: '3000',
           // pathname: '',
         },
+        {
+          protocol: 'http',
+          hostname: 'rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app',
+          port: '3000',
+          // pathname: '',
+        },
       ],
       formats: ['image/avif', 'image/webp'],
     },
