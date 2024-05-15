@@ -1,6 +1,5 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import {Skeleton} from "@nextui-org/react";
 import {
   Table,
   TableHeader,
@@ -65,7 +64,7 @@ export default function Empleados() {
     } catch (error) {
       return error;
     }
-  }, []);
+  }, [getUsers, notify, user.id]);
 
   useEffect(() => {
     if (user?.rol !== "administrador") {

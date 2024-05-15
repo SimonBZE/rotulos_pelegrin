@@ -1,7 +1,7 @@
 "use client";
 
 import { Client } from "@/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -32,7 +32,7 @@ const Cliente = ({ id }) => {
 
   const router = useRouter();
 
-  const fetchCliente = async () => {
+  const fetchCliente = useCallback(async () => {
     try {
       setLoading(true); // Activa el indicador de carga
       const result = await clientCtrl.getClienteTest(id);
@@ -48,9 +48,9 @@ const Cliente = ({ id }) => {
       setLoading(false); // Desactiva el indicador de carga independientemente del resultado
       
     }
-  };
+  }, [id]);
 
-  const reloadCliente = async () => {
+  const reloadCliente = useCallback(async () => {
     setLoading(true);
     try {
         const result = await clientCtrl.getClienteTest(id);
@@ -65,11 +65,11 @@ const Cliente = ({ id }) => {
     } finally {
         setLoading(false);
     }
-};
+}, [id]);
 
   useEffect(() => {
     fetchCliente();
-  }, [id]); // Dependencia id para reaccionar a cambios del id
+  }, [id, fetchCliente]); // Dependencia id para reaccionar a cambios del id
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };

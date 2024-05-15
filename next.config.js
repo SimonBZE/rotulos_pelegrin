@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: false,
-  };
+    output: "export"
+,  };
   
   module.exports = {
     images: {
@@ -14,14 +15,14 @@ const nextConfig = {
         },
         {
           protocol: 'http',
-          hostname: 'rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app',
-          port: '3000',
+          hostname: 'proyectos.pelegrindesign.com',
+          // port: '3000',
           // pathname: '',
         },
         {
           protocol: 'http',
           hostname: 'https://rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app',
-          port: '3000',
+          // port: '3000',
           // pathname: '',
         },
       ],

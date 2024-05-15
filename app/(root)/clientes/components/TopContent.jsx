@@ -60,7 +60,7 @@ export const TopContent = ({ query, tipo, paginacion }) => {
     if (tipo) {
       selectedValue(new Set(tipo));
     }
-  }, []);
+  }, [tipo]);
 
   return (
     <>

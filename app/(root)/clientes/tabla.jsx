@@ -81,11 +81,11 @@ export function Tabla({ query, tipo, page }) {
     } catch (error) {
       return error;
     }
-  }, []);
+  }, [getClients]);
 
   useEffect(() => {
     getClients();
-  }, [query, tipo, page, router]);
+  }, [query, tipo, page, router, getClients]);
 
   
   const reloadCliente = async () => {
