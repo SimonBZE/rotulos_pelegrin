@@ -35,7 +35,7 @@ export const Contenido = ({
     if (audioURL !== "") {
       uploadAudioFromBlob(audioURL, "audios");
     }
-  }, [audioURL, uploadAudioFromBlob]);
+  }, [audioURL]);
 
   const handleMediaRemove = (mediaType, index) => {
     setFiles((prevFiles) => {

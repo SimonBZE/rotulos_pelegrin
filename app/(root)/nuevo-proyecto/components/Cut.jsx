@@ -23,9 +23,14 @@ export const Cut = ({
     if(!preciosServicios?.corte) {
       return
     } 
-    const material = preciosServicios.corte.material[formik.values?.corte?.[index].material] || 0;    
-    const metros_cuadrados = formik.values?.corte?.[index].ancho * formik.values?.corte?.[index].alto || 0;    
-    const newTotal = ((material) * metros_cuadrados) * formik.values?.corte?.[index].cantidad || 0;
+    // const material = preciosServicios.corte.material[formik.values?.corte?.[index].material] || 0;    
+    // const metros_cuadrados = formik.values?.corte?.[index].ancho * formik.values?.corte?.[index].alto || 0;    
+    // const newTotal = ((material) * metros_cuadrados) * formik.values?.corte?.[index].cantidad || 0;
+
+    const corte = formik.values?.corte?.[index];
+    const material = preciosServicios.corte.material[corte?.material] || 0;
+    const metrosCuadrados = (corte?.ancho || 0) * (corte?.alto || 0);
+    const newTotal = (material * metrosCuadrados * (corte?.cantidad || 0)) || 0;
 
     // Actualiza el estado 'total' con el nuevo valor calculado
     setTotal(newTotal);
@@ -36,7 +41,7 @@ export const Cut = ({
       setLoading(false)
     }
 
-  }, [preciosServicios, formik.values.corte[index]]);
+  }, [preciosServicios, formik.values.corte[index], loading, index, formik.values.corte]);
   
   return (
     <>

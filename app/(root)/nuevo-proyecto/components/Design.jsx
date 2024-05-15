@@ -16,18 +16,25 @@ export const Design = ({
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const newTotal =
-      formik.values?.diseno?.[index].horas *
-      ENV.PRECIOS.DISENO *
-      formik.values?.diseno?.[index].unidades *
-      formik.values?.diseno?.[index].cantidad;
+    // const newTotal =
+    //   formik.values?.diseno?.[index].horas *
+    //   ENV.PRECIOS.DISENO *
+    //   formik.values?.diseno?.[index].unidades *
+    //   formik.values?.diseno?.[index].cantidad;
+
+    const diseno = formik.values?.diseno?.[index];
+    const horas = diseno?.horas || 0;
+    const unidades = diseno?.unidades || 0;
+    const cantidad = diseno?.cantidad || 0;
+
+    const newTotal = horas * ENV.PRECIOS.DISENO * unidades * cantidad;
 
     // Actualiza el estado 'total' con el nuevo valor calculado
     setTotal(newTotal);
 
     // Asigna el nuevoTotal al precio en formik.values.diseno[index]
     formik.values.diseno[index].precio = newTotal;
-  }, [formik.values.diseno[index]]);
+  }, [formik.values.diseno[index], formik.values.diseno, index ]);
 
   return (
     <div className="rounded-md bg-[#6E5FFF30] mt-5 p-3">
