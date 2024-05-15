@@ -47,7 +47,7 @@ export const FormEmpleado = ({ onClose, getUsers }) => {
         formik.values.confirmed = true;
       } // Esto imprimirá el nombre antes del @
     }
-  }, [formik.values.email, formik.errors.email]);
+  }, [formik.values.email, formik.errors.email, formik.values]);
 
   const onUpload = (data) => {
     formik.values.foto = data;

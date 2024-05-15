@@ -26,16 +26,16 @@ export const Contenido = ({
   const { audioURL, isRecording, startRecording, stopRecording, error } =
     useAudioRecorder();
 
-    const handleChange = (e, mediaType, fieldId) => {
-      handleMultimediaChange(e, mediaType, fieldId);
-      // formik.setFieldValue(fieldId, files[fieldId] || []);
-    };
+  const handleChange = (e, mediaType, fieldId) => {
+    handleMultimediaChange(e, mediaType, fieldId);
+    // formik.setFieldValue(fieldId, files[fieldId] || []);
+  };
 
   useEffect(() => {
     if (audioURL !== "") {
       uploadAudioFromBlob(audioURL, "audios");
     }
-  }, [audioURL]);
+  }, [audioURL, uploadAudioFromBlob]);
 
   const handleMediaRemove = (mediaType, index) => {
     setFiles((prevFiles) => {
@@ -223,7 +223,7 @@ export const Contenido = ({
               src="/images/icon/photo-plus.svg"
               width={24}
               height={24}
-              alt="videos"
+              alt="Fotos"
             />
           )}
           <p>Seleccionar fotos</p>
@@ -239,8 +239,10 @@ export const Contenido = ({
                 <SwiperSlide key={index}>
                   <div className="relative">
                     <>
-                      <img
+                      <Image
                         src={`${ENV.SERVER_HOST}${file.url}`}
+                        width={24}
+                        height={24}
                         className="w-full max-h-[150px] min-h-[150px] rounded-xl object-cover"
                         alt="presupuesto"
                       />

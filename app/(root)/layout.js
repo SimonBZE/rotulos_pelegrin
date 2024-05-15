@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
     if (user?.id) {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, setLoading]);
 
   return (
     <section>

@@ -3,7 +3,7 @@ import {
   Input,
 } from "@nextui-org/react";
 import {  IoSearch } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 
 const TipoCliente = [
@@ -33,7 +33,7 @@ export const TopContent = ({ query, tipo, paginacion }) => {
   };
 
 
-  const selectedValue = (tipo) => {
+  const selectedValue = useCallback((tipo) => {
     const params = new URLSearchParams(searchParams);
     console.log(tipo)
     setTipoFilter(tipo);
@@ -53,14 +53,14 @@ export const TopContent = ({ query, tipo, paginacion }) => {
     }
 
     router.replace(`${pathname}?${params.toString()}`);
-  };
+  }, [searchParams, paginacion.pageCount, pathname, router]); // Agregar dependencias correctas
 
   useEffect(() => {
     
     if (tipo) {
       selectedValue(new Set(tipo));
     }
-  }, [tipo]);
+  }, [tipo, selectedValue]);
 
   return (
     <>

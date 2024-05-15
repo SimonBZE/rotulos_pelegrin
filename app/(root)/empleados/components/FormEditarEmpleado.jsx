@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Select, SelectItem, Input } from "@nextui-org/react";
 import { useFormik } from "formik";
 import { initialValues, validationSchema } from "./FormikValidationsEditarEmpleado";
@@ -14,7 +14,7 @@ export const FormEditarEmpleado = ({ onClose, getUsers, id }) => {
 
   const [empleado, setEmpleado] = useState({});
 
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
     try {
       const data = await userCtrl.getUser(id);
       setEmpleado(data);
@@ -29,13 +29,13 @@ export const FormEditarEmpleado = ({ onClose, getUsers, id }) => {
     } catch (error) {
       return error;
     }
-  };
+  }, [id, formik.values]);
 
   useEffect(() => {
     if (!empleado.id) {
       getUser(id);
     }
-  }, [empleado.id, getUser, id]);
+  }, [empleado.id, getUser, id]); 
 
   const formik = useFormik({
     initialValues,
