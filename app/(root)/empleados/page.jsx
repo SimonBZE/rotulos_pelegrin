@@ -64,20 +64,20 @@ export default function Empleados() {
     } catch (error) {
       return error;
     }
-  }, [getUsers, notify, user.id]);
+  }, [getUsers, notify, user?.id]);
 
   useEffect(() => {
     if (user?.rol !== "administrador") {
       router.push("/");
     }
-  }, []);
+  }, [user?.rol, router]);
 
   useEffect(() => {
     async function fetchData() {
       const data = await getUsers();
     }
     fetchData();
-  }, []);
+  }, [getUsers]);
 
   return (
     <>
