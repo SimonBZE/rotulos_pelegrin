@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { CardProjects } from "../components/CardProjects";
 import Image from "next/image";
+import io from 'socket.io-client';
+import { ENV } from "@/utils";
 
 const depart = [
   "diseno",
@@ -35,13 +37,15 @@ const Departamentos = ({ params }) => {
   const [proximosProyectos, setProximosProyectos] = useState([]);
   const [orden, setOrden] = useState("mas antiguos"); // Estado para el orden
   const [proximos, setProximos] = useState(false);
+  
+  const getData = async () => {
+    const { res, resNext } = await cargarProyectos(params.id);
+    setProyectos(res.data);
+    setProximosProyectos(resNext.data);
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      const { res, resNext } = await cargarProyectos(params.id);
-      setProyectos(res.data);
-      setProximosProyectos(resNext.data);
-    };
+    
 
     getData();
   }, [params.id]);
@@ -63,13 +67,29 @@ const Departamentos = ({ params }) => {
   //   return proyectosOrdenados;
   // };
 
+  useEffect(() => {
+    const socket = io(`${ENV.SOCKET_URL}`);
+
+    socket.on('UPDATE_PROJECT', (data) => {
+      if (data.departamento === params.id) {
+        getData();
+      } else {
+        setProyectos((prevProyectos) =>
+          prevProyectos.filter((proyecto) => proyecto.id !== data.id)
+        );
+      }
+    });
+
+    return () => socket.disconnect();
+  }, [params.id]);
+
   const ordenarProyectos = () => {
     // Primero se separan los proyectos en dos grupos: con prioridad y sin prioridad
     let proyectosConPrioridad = proyectos.filter(
-      (proyecto) => proyecto.attributes.prioridad === true
+      (proyecto) => proyecto.attributes?.prioridad === true
     );
     let proyectosSinPrioridad = proyectos.filter(
-      (proyecto) => proyecto.attributes.prioridad === false
+      (proyecto) => proyecto.attributes?.prioridad === false
     );
   
     // Función para ordenar por fecha
@@ -148,7 +168,7 @@ const Departamentos = ({ params }) => {
         let validador = {}; // En esta variable se almacenan los departamentos, al finalizar se ve algo así {corte: 2, cerrajeria: 3, montaje: 5}
         depart.forEach((dep, index) => {
           // La respuesta de la api almacena cada proyecto en un [], si este está vácio significa que no hay tareas asiganadas al departamento, si está lleno se almacena el nombre del departamento y el index en validador
-          if (proximosProyectos.attributes?.[dep].length > 0)
+          if (proximosProyectos.attributes?.[dep]?.length > 0)
             validador[dep] = index;
         });
 
