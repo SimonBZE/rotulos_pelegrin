@@ -35,7 +35,7 @@ const buildFilters = (page, query, status, estado, fecha, fechaEnd) => {
   if (query) {
     // Suponiendo que `query` puede ser un nombre o un ID
     const numericQuery = query.replace(/\D/g, ""); // Extraer números para el ID
-
+    const textQuery = query;
     // Añadir un filtro OR
     filters.append("filters[$or][0][id][$contains]", numericQuery);
     filters.append("filters[$or][1][nombre][$contains]", query);

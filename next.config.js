@@ -9,8 +9,14 @@ const nextConfig = {
       remotePatterns: [
         {
           protocol: 'http',
-          hostname: 'pelegrin.up.railway.app',
-          port: '3000',
+          hostname: 'localhost',
+          port: '1337',
+          // pathname: '',
+        },
+        {
+          protocol: 'http',
+          hostname: '127.0.0.1',
+          port: '1337',
           // pathname: '',
         },
         {
