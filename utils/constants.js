@@ -1,7 +1,7 @@
 export const ENV = {
     SERVER_HOST: "http://127.0.0.1:1337",
     API_URL: 'http://127.0.0.1:1337/api',
-    SOCKET_URL: 'http://127.0.0.1:3000',
+    SOCKET_URL: 'localhost:3000',
     ENDPOINTS: {
         AUTH:{
             REGISTER: "auth/local/register",
