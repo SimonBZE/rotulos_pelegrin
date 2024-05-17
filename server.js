@@ -3,7 +3,6 @@ const { createServer } = require('http');
 const next = require('next');
 const { parse } = require('url');
 const SocketIO = require('socket.io');
-import {ENV} from '@/utils/constants'
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -27,7 +26,7 @@ app.prepare().then(() => {
 
   server.listen(3000, (err) => {
     if (err) throw err;
-    console.log(`> Ready on ${ENV.SOCKET_URL}`);
+    console.log('> Ready on http://127.0.0.1:3000');
   });
 
   // Hacer que io esté disponible globalmente

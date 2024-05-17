@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { CardProjects } from "../components/CardProjects";
 import Image from "next/image";
 import io from 'socket.io-client';
-import { ENV } from "@/utils";
+import { toast } from "react-toastify";
 
 const depart = [
   "diseno",
@@ -50,38 +50,31 @@ const Departamentos = ({ params }) => {
     getData();
   }, [params.id]);
 
-  // Función para ordenar los proyectos según la opción seleccionada
-  // const ordenarProyectos = () => {
-  //   let proyectosOrdenados = [...proyectos];
+  const notify = (mensaje, type = "") =>
+    type === "" ? toast(mensaje) : toast[type](mensaje);
 
-  //   if (orden === "mas recientes") {
-  //     proyectosOrdenados.sort(
-  //       (a, b) => new Date(b.attributes?.fecha) - new Date(a.attributes?.fecha)
-  //     );
-  //   } else if (orden === "mas antiguos") {
-  //     proyectosOrdenados.sort(
-  //       (a, b) => new Date(a.attributes?.fecha) - new Date(b.attributes?.fecha)
-  //     );
-  //   }
-
-  //   return proyectosOrdenados;
-  // };
 
   useEffect(() => {
-    const socket = io(`${ENV.SOCKET_URL}`);
+    getData();
+  }, [params.id]);
 
+  useEffect(() => {
+    const socket = io('http://127.0.0.1:3000');
+  
     socket.on('UPDATE_PROJECT', (data) => {
       if (data.departamento === params.id) {
         getData();
+        notify("Ha llegado un nuevo proyecto", "success");
       } else {
         setProyectos((prevProyectos) =>
           prevProyectos.filter((proyecto) => proyecto.id !== data.id)
         );
       }
     });
-
+  
     return () => socket.disconnect();
   }, [params.id]);
+  
 
   const ordenarProyectos = () => {
     // Primero se separan los proyectos en dos grupos: con prioridad y sin prioridad

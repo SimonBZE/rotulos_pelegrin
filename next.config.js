@@ -9,7 +9,7 @@ const nextConfig = {
       remotePatterns: [
         {
           protocol: 'http',
-          hostname: 'localhost',
+          hostname: '127.0.0.1',
           port: '1337',
           // pathname: '',
         },
@@ -33,6 +33,9 @@ const nextConfig = {
         },
       ],
       formats: ['image/avif', 'image/webp'],
+    },
+    env: {
+      NEXT_PUBLIC_SOCKET_URL: 'http://127.0.0.1:3000',
     },
     // ... otras configuraciones
   }
