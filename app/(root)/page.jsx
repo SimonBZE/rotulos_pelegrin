@@ -45,7 +45,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-5">
-     <Image src="./assets/pelegrin-design.svg" alt="Pelegrin Design" width={300} height={22} />
+     <Image src="./assets/PelegrinDesign.svg" alt="Pelegrin Design" width={300} height={22} />
      <div className='grid grid-cols-3 gap-5 mt-10'>
       {menu.map( ({nombre, imagen, color, link}) => (
         <Link key={nombre} href={link}>        
