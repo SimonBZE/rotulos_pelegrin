@@ -35,7 +35,7 @@ const nextConfig = {
       formats: ['image/avif', 'image/webp'],
     },
     env: {
-      NEXT_PUBLIC_SOCKET_URL: 'http://127.0.0.1:3000',
+      NEXT_PUBLIC_SOCKET_URL: 'https://rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app',
     },
     // ... otras configuraciones
   }
