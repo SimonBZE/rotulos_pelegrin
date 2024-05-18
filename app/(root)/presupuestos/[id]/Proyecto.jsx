@@ -318,7 +318,7 @@ export function Proyecto({ initialValues, id, cliente }) {
                     <input
                       id="fecha"
                       min={today}
-                      className={`formulario custom-input-date custom-input-date-1 w-40 rounded ${
+                      className={`formulario custom-input-date w-40 rounded ${
                         formik.touched.fecha && formik.errors.fecha
                           ? "errores"
                           : ""
