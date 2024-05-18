@@ -55,11 +55,10 @@ const Departamentos = ({ params }) => {
     getData();
   }, [params.id]);
 
+  
   useEffect(() => {
-    const socket = io(
-      "https://rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app"
-    );
-
+    const socket = io("https://rotulos-pelegrin.vercel.app");
+  
     socket.on("UPDATE_PROJECT", (data) => {
       if (data.departamento === params.id) {
         getData();
@@ -70,9 +69,10 @@ const Departamentos = ({ params }) => {
         );
       }
     });
-
+  
     return () => socket.disconnect();
   }, [params.id]);
+  
 
   const ordenarProyectos = () => {
     // Primero se separan los proyectos en dos grupos: con prioridad y sin prioridad
