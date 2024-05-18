@@ -1,5 +1,6 @@
 import { ProgressBar } from "@/components/ui";
 
+
 export const ProgresoDep = ({ tareasDep }) => {
   const tareasCompletadas = tareasDep.filter(
     (tarea) => tarea.completado === true
@@ -10,6 +11,7 @@ export const ProgresoDep = ({ tareasDep }) => {
   return (
     <div className=" flex justify-end gap-2 items-center flex-col md:flex-row">
       <div className="max-w-[80px]">
+      
         <ProgressBar percentage={porcentaje} />
       </div>
       <div>

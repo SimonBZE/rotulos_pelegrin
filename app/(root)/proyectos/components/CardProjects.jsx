@@ -45,18 +45,18 @@ export const CardProjects = ({ proyecto, params }) => {
         className="rounded-xl p-5 m-2 bg-white"
         style={
           proyecto.attributes.prioridad
-            ? { background: "#F871A0" }
+            ? { background: "#F31260", color: "white" }
             : { background: colors[estado] }
         }
       >
         <div className="flex">
         <div className="w-9/12 flex flex-col justify-center">
-          <p className="labels uppercase text-primary">
+          <p className={` uppercase ${proyecto.attributes.prioridad ? "text-white" : "text-primary"} text-xl font-bold`}>
             PR{proyecto.attributes.idpresupuesto}
             {proyecto.id} <span>{estado}</span>
           </p>
-          <p className="labels">{proyecto.attributes.nombre}</p>
-          <p className="labels">
+          <p className={`labels text-xl ${proyecto.attributes.prioridad && "text-white"} font-normal`}>{proyecto.attributes.nombre}</p>
+          <p className={`labels text-lg ${proyecto.attributes.prioridad && "text-white"} font-bold`}>
             Departamento actual:{" "}
             <span className="font-thin capitalize">
               {" "}
@@ -64,7 +64,7 @@ export const CardProjects = ({ proyecto, params }) => {
             </span>
           </p>
           <p className="labels">{proyecto.attributes.cliente}</p>
-          <p className="labels flex gap-2 items-center">
+          <p className={`labels flex gap-2 items-center ${proyecto.attributes.prioridad && "text-white"}`}>
             {proyecto.attributes.fecha} <CiCalendar className="ml-[-5px]" />
             {proyecto.attributes.hora?.slice(0, 5)}
           </p>
@@ -100,7 +100,7 @@ export const CardProjects = ({ proyecto, params }) => {
                   src={servicio.imagen}
                   alt={servicio.nombre}
                 />
-                <p className="font-sm text-sm">{servicio.nombre}</p>
+                <p className="font-sm text-sm text-black">{servicio.nombre}</p>
               </div>
             </div>
           );

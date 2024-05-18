@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { CardProjects } from "../components/CardProjects";
 import Image from "next/image";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 import { toast } from "react-toastify";
 
 const depart = [
@@ -37,7 +37,7 @@ const Departamentos = ({ params }) => {
   const [proximosProyectos, setProximosProyectos] = useState([]);
   const [orden, setOrden] = useState("mas antiguos"); // Estado para el orden
   const [proximos, setProximos] = useState(false);
-  
+
   const getData = async () => {
     const { res, resNext } = await cargarProyectos(params.id);
     setProyectos(res.data);
@@ -45,23 +45,22 @@ const Departamentos = ({ params }) => {
   };
 
   useEffect(() => {
-    
-
     getData();
   }, [params.id]);
 
   const notify = (mensaje, type = "") =>
     type === "" ? toast(mensaje) : toast[type](mensaje);
 
-
   useEffect(() => {
     getData();
   }, [params.id]);
 
   useEffect(() => {
-    const socket = io('https://rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app');
-  
-    socket.on('UPDATE_PROJECT', (data) => {
+    const socket = io(
+      "https://rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app"
+    );
+
+    socket.on("UPDATE_PROJECT", (data) => {
       if (data.departamento === params.id) {
         getData();
         notify("Ha llegado un nuevo proyecto", "success");
@@ -71,10 +70,9 @@ const Departamentos = ({ params }) => {
         );
       }
     });
-  
+
     return () => socket.disconnect();
   }, [params.id]);
-  
 
   const ordenarProyectos = () => {
     // Primero se separan los proyectos en dos grupos: con prioridad y sin prioridad
@@ -84,7 +82,7 @@ const Departamentos = ({ params }) => {
     let proyectosSinPrioridad = proyectos.filter(
       (proyecto) => proyecto.attributes?.prioridad === false
     );
-  
+
     // Función para ordenar por fecha
     const ordenarPorFecha = (lista) => {
       if (orden === "mas recientes") {
@@ -97,18 +95,19 @@ const Departamentos = ({ params }) => {
         );
       }
     };
-  
+
     // Aplicamos el ordenamiento por fecha a ambos grupos
     proyectosConPrioridad = ordenarPorFecha(proyectosConPrioridad);
     proyectosSinPrioridad = ordenarPorFecha(proyectosSinPrioridad);
-  
+
     // Concatenamos los proyectos con prioridad al inicio y los sin prioridad al final
     return [...proyectosConPrioridad, ...proyectosSinPrioridad];
   };
-
+  
   return (
     <div>
       {/* {JSON.stringify(proyectos)} */}
+
       <div className="flex flex-col gap-5 sm:flex-row justify-between items-center mb-5 p-5">
         <div className="flex items-center gap-3">
           <Image
@@ -138,7 +137,17 @@ const Departamentos = ({ params }) => {
         }
 
         return (
-          <CardProjects key={index} proyecto={proyecto} params={params.id} />
+          <>
+            {proyectos.length == 0 ? 
+              <h2 className="text-2xl">No hay proyectos para mostrar</h2>
+             : 
+              <CardProjects
+                key={index}
+                proyecto={proyecto}
+                params={params.id}
+              />
+            }
+          </>
         );
       })}
 
@@ -209,7 +218,7 @@ const Departamentos = ({ params }) => {
                 />
               );
             }
-            
+
             return null;
           })}
         </>
