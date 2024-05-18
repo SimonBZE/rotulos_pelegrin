@@ -27,7 +27,13 @@ const nextConfig = {
         },
         {
           protocol: 'http',
-          hostname: 'https://rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app',
+          hostname: 'rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app',
+          // port: '3000',
+          // pathname: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'pelegrin.up.railway.app',
           // port: '3000',
           // pathname: '',
         },

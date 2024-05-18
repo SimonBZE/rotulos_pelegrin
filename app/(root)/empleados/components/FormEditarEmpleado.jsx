@@ -14,6 +14,29 @@ export const FormEditarEmpleado = ({ onClose, getUsers, id }) => {
 
   const [empleado, setEmpleado] = useState({});
 
+  
+
+  
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: async (formData) => {
+      try {
+        const data = await userCtrl.updateMe(formData, id);
+        if(!data.id){
+            throw error;
+        }
+        notify("Empleado actualizado", "success");
+        getUsers();
+        onClose();
+      } catch (error) {
+        console.log(error);
+        notify("Error al actualizar", "error");
+      }
+    },
+  });
+
   const getUser = useCallback(async () => {
     try {
       const data = await userCtrl.getUser(id);
@@ -36,25 +59,6 @@ export const FormEditarEmpleado = ({ onClose, getUsers, id }) => {
       getUser(id);
     }
   }, [empleado.id, getUser, id]); 
-
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: async (formData) => {
-      try {
-        const data = await userCtrl.updateMe(formData, id);
-        if(!data.id){
-            throw error;
-        }
-        notify("Empleado actualizado", "success");
-        getUsers();
-        onClose();
-      } catch (error) {
-        console.log(error);
-        notify("Error al actualizar", "error");
-      }
-    },
-  });
 
   useEffect(() => {
     if (formik.errors.email) return;
