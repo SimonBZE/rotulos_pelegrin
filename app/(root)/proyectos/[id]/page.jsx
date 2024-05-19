@@ -61,11 +61,12 @@ const Departamentos = ({ params }) => {
   }, [params.id]);
 
   useEffect(() => {
-    const socket = io('https://rotulos-pelegrin-0df6d9acd9ec.herokuapp.com');
+    const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
   
     socket.on('UPDATE_PROJECT', (data) => {
       if (data.departamento === params.id) {
         getData();
+        
         notify("Ha llegado un nuevo proyecto", "success");
       } else {
         setProyectos((prevProyectos) =>
