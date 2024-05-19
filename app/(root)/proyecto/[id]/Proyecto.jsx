@@ -335,9 +335,9 @@ export default function Proyecto({ params }) {
             <ProjectMedia proyecto={proyecto} />
           )}
 
-          {!!proyecto.attributes.mensajes.data?.[0] && <Mensajes />}
+          {/* {!!proyecto.attributes.mensajes.data?.[0] && <Mensajes />} */}
 
-          {/* <Messages /> */}
+          <Mensajes />
         </>
       )}
     </>

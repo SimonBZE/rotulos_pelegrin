@@ -1,6 +1,6 @@
 "use client";
 import { Projects } from "@/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { CardProjects } from "../components/CardProjects";
 import Image from "next/image";
@@ -40,11 +40,11 @@ const Departamentos = ({ params }) => {
 
   
   
-  const getData = async () => {
+  const getData = useCallback(async () => {
     const { res, resNext } = await cargarProyectos(params.id);
     setProyectos(res.data);
     setProximosProyectos(resNext.data);
-  };
+  }, [proyectos] );
 
   useEffect(() => {
     
@@ -61,18 +61,13 @@ const Departamentos = ({ params }) => {
   }, [params.id]);
 
   useEffect(() => {
-    const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
+    const socket = io('https://rotulos-pelegrin-0df6d9acd9ec.herokuapp.com');
   
     socket.on('UPDATE_PROJECT', (data) => {
       if (data.departamento === params.id) {
         getData();
-        
         notify("Ha llegado un nuevo proyecto", "success");
-      } else {
-        setProyectos((prevProyectos) =>
-          prevProyectos.filter((proyecto) => proyecto.id !== data.id)
-        );
-      }
+      } 
     });
   
     return () => socket.disconnect();

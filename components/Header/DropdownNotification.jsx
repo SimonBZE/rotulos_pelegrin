@@ -1,12 +1,39 @@
+// components/Header/DropdownNotifications.jsx
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import io from 'socket.io-client';
+import { useAuth } from '@/hooks/useAuth'; // Suponiendo que tienes un hook de autenticación
 
 const DropdownNotification = () => {
+  const { user } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifying, setNotifying] = useState(true);
+  const [notifications, setNotifications] = useState([]);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
+
+  useEffect(() => {
+    const socket = io('https://rotulos-pelegrin-0df6d9acd9ec.herokuapp.com');
+
+    socket.on('UPDATE_PROJECT', (data) => {
+      // Solo mostrar notificación si el proyecto pertenece al departamento del usuario actual
+      if (data.departamento === user.rol) {
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          {
+            message: `Ha llegado un nuevo proyecto al departamento ${data.departamento}`,
+            date: new Date().toLocaleString(),
+          },
+        ]);
+        setNotifying(true);
+      }
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user?.rol]);
 
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -23,7 +50,6 @@ const DropdownNotification = () => {
     return () => document.removeEventListener('click', clickHandler);
   });
 
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -76,73 +102,25 @@ const DropdownNotification = () => {
         }`}
       >
         <div className="px-4.5 py-3">
-          <h5 className="text-sm font-medium text-bodydark2">Notification</h5>
+          <h5 className="text-sm font-medium text-bodydark2">Notificaciones</h5>
         </div>
 
         <ul className="flex h-auto flex-col overflow-y-auto">
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  Edit your information in a swipe
-                </span>{' '}
-                Sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim.
-              </p>
-
-              <p className="text-xs">12 May, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  It is a long established fact
-                </span>{' '}
-                that a reader will be distracted by the readable.
-              </p>
-
-              <p className="text-xs">24 Feb, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  There are many variations
-                </span>{' '}
-                of passages of Lorem Ipsum available, but the majority have
-                suffered
-              </p>
-
-              <p className="text-xs">04 Jan, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  There are many variations
-                </span>{' '}
-                of passages of Lorem Ipsum available, but the majority have
-                suffered
-              </p>
-
-              <p className="text-xs">01 Dec, 2024</p>
-            </Link>
-          </li>
+          {notifications.map((notification, index) => (
+            <li key={index}>
+              <Link
+                className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+                href="#"
+              >
+                <p className="text-sm">
+                  <span className="text-black dark:text-white">
+                    {notification.message}
+                  </span>
+                </p>
+                <p className="text-xs">{notification.date}</p>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
     </li>

@@ -9,7 +9,7 @@ import { EffectFade, Navigation } from "swiper/modules";
 
 export const ProjectMedia = ({ proyecto }) => {
   const { fotos, videos, audios } = proyecto.attributes;
-  
+
   return (
     <div className="rounded-xl mt-5 p-5 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div>
@@ -38,7 +38,6 @@ export const ProjectMedia = ({ proyecto }) => {
                             className="w-[70%]"
                           />
                         </div>
-                        
                       </>
                     </div>
                   </SwiperSlide>
@@ -64,7 +63,6 @@ export const ProjectMedia = ({ proyecto }) => {
                           className="w-full max-h-[150px] min-h-[150px] rounded-xl"
                           controls
                         />
-                        
                       </>
                     </div>
                   </SwiperSlide>
@@ -85,12 +83,16 @@ export const ProjectMedia = ({ proyecto }) => {
                   <SwiperSlide key={index}>
                     <div className="relative">
                       <>
-                        <img
-                          src={`${ENV.SERVER_HOST}${file.attributes.url}`}
-                          className="w-full max-h-[150px] min-h-[150px] rounded-xl object-cover"
-                          alt="presupuesto"
-                        />
-                        
+                        <a
+                          href={`${ENV.SERVER_HOST}${file.attributes.url}`}
+                          target="_blank"
+                        >
+                          <img
+                            src={`${ENV.SERVER_HOST}${file.attributes.url}`}
+                            className="w-full max-h-[150px] min-h-[150px] rounded-xl object-cover"
+                            alt="presupuesto"
+                          />
+                        </a>
                       </>
                     </div>
                   </SwiperSlide>
