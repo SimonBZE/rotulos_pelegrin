@@ -37,6 +37,8 @@ const Departamentos = ({ params }) => {
   const [proximosProyectos, setProximosProyectos] = useState([]);
   const [orden, setOrden] = useState("mas antiguos"); // Estado para el orden
   const [proximos, setProximos] = useState(false);
+
+  
   
   const getData = async () => {
     const { res, resNext } = await cargarProyectos(params.id);
@@ -74,6 +76,10 @@ const Departamentos = ({ params }) => {
   
     return () => socket.disconnect();
   }, [params.id]);
+  
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   
 
   const ordenarProyectos = () => {
@@ -113,7 +119,7 @@ const Departamentos = ({ params }) => {
         <div className="flex items-center gap-3">
           <Image
             className="w-[40px] h-[40px]"
-            src={`/assets/${(params.id).toUpperCase()}.svg`}
+            src={`/assets/${capitalizeFirstLetter(params.id)}.svg`}
             alt={params.id}
             width={40}
             height={40}
