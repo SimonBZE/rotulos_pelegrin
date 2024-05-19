@@ -59,7 +59,7 @@ const Departamentos = ({ params }) => {
   }, [params.id]);
 
   useEffect(() => {
-    const socket = io('https://rotulos-pelegrin-git-alpha-rotulos-pelegrin.vercel.app');
+    const socket = io('https://rotulos-pelegrin-0df6d9acd9ec.herokuapp.com');
   
     socket.on('UPDATE_PROJECT', (data) => {
       if (data.departamento === params.id) {
