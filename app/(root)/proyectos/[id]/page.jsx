@@ -6,6 +6,7 @@ import { CardProjects } from "../components/CardProjects";
 import Image from "next/image";
 import io from 'socket.io-client';
 import { toast } from "react-toastify";
+import { ENV } from "@/utils";
 
 const depart = [
   "diseno",
@@ -61,7 +62,7 @@ const Departamentos = ({ params }) => {
   }, [params.id]);
 
   useEffect(() => {
-    const socket = io('https://rotulos-pelegrin-0df6d9acd9ec.herokuapp.com');
+    const socket = io(ENV.SOCKET_URL);
   
     socket.on('UPDATE_PROJECT', (data) => {
       if (data.departamento === params.id) {
