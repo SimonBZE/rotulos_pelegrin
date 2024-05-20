@@ -92,7 +92,13 @@ app.prepare().then(() => {
     handle(req, res, parsedUrl);
   });
 
-  const io = SocketIO(server);
+  const io = SocketIO(server, {
+    cors: {
+      origin: "http://localhost:3000", // Asegúrate de permitir tu dominio de desarrollo aquí
+      methods: ["GET", "POST"],
+      credentials: true
+    }
+  });
 
   io.on('connection', (socket) => {
     console.log('New client connected');
