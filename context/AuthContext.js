@@ -170,7 +170,7 @@ export function AuthProvider({ children }) {
       setLoading(false);
       
     } catch (error) {      
-      console.error(error);
+      console.error("error al conectar", error);
       setLoading(false);
     }
   };

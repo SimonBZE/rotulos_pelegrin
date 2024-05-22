@@ -5,6 +5,8 @@ import { Budget, Projects, Comments } from "@/api";
 
 import { useAuth } from "@/hooks/useAuth";
 
+
+
 const ProjectContext = createContext();
 
 export const useProjectContext = () => useContext(ProjectContext);
@@ -208,8 +210,10 @@ export const ProjectProvider = ({ children }) => {
       "comentario": mensaje,
       "autor": user.id,
       "presupuesto": proyecto.id,
-      "motivo": motivo
+      "motivo": motivo,
+      "departamento":proyecto.attributes.departamento,
     };
+    
     commentsCtrl.createComment(nuevoMensaje);
 
     actualizarEstadoProyecto(motivo)

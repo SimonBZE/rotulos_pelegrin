@@ -116,6 +116,11 @@ app.prepare().then(() => {
       io.emit('NEW_MESSAGE', message);
     });
 
+    socket.on('NEW_IMAGE', (image) => {
+      console.log('Received new image:', image);
+      io.emit('NEW_IMAGE', image);
+    });
+
     socket.on('UPDATE_PROJECT', (update) => {
       console.log('Received project update:', update);
       // Lógica para manejar la actualización del proyecto

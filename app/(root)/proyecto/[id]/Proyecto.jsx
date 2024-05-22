@@ -16,6 +16,7 @@ import { Mensajes } from "./components/Mensajes";
 import { ModalRetroceder } from "./components/ModalRetroceder";
 import { ModalIncidencia } from "./components/ModalIncidencia";
 import { ModalPausa } from "./components/ModalPausa";
+import { Burbuja } from "./components/Burbuja";
 
 export default function Proyecto({ params }) {
   const [loading, setLoading] = useState(true);
@@ -337,7 +338,8 @@ export default function Proyecto({ params }) {
 
           {/* {!!proyecto.attributes.mensajes.data?.[0] && <Mensajes />} */}
 
-          <Mensajes />
+          {/* <Mensajes /> */}
+          <Burbuja />
         </>
       )}
     </>

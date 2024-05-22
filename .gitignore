@@ -16,6 +16,7 @@
 /build
 /frontend-pelegrin.zip
 /frontend.zip
+/ably conf.zip
 
 # misc
 .DS_Store
