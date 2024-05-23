@@ -18,7 +18,7 @@ export const Burbuja = () => {
           !chatOpen && "hidden"
         }`}
       >
-        <Mensajes />
+        <Mensajes chatOpen={chatOpen} />
       </motion.div>
       <Badge content="0" shape="circle" color="danger">
         <Button

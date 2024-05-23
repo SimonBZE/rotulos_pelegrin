@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import { useState } from "react";
 import { ENV } from "@/utils";
 // import { MultiModal } from "@/components/common/MultiModal";
 
@@ -9,15 +9,15 @@ const motivo = {
 };
 
 export const Mensaje = ({ proyecto, Alert, user }) => {
-  // const [modalOpen, setModalOpen] = useState(null);
+  const [modalOpen, setModalOpen] = useState(null);
 
-  // const handleModalOpen = (id) => {
-  //   setModalOpen(id);
-  // };
+  const handleModalOpen = (id) => {
+    setModalOpen(id);
+  };
 
-  // const handleModalClose = () => {
-  //   setModalOpen(null);
-  // };
+  const handleModalClose = () => {
+    setModalOpen(null);
+  };
   return (
     <>
       {proyecto.attributes.mensajes.data.map((mensaje) => {
@@ -41,14 +41,16 @@ export const Mensaje = ({ proyecto, Alert, user }) => {
                     className={`rounded-xl bg-gray-2 shadow-2`}
                   >
                     <a
+                      onClick={() => handleModalOpen(imagen.id)}
+                      className="cursor-pointer"
                       href={`${ENV.SERVER_HOST}${imagen.attributes.url}`}
                       target="_blank"
-                      className="cursor-pointer"
                     >
                       <img
                         src={`${ENV.SERVER_HOST}${imagen.attributes.url}`}
                         alt="Imagen adjunta"
                         className="w-26 h-26 object-cover rounded-md"
+                        target="_blank"
                       />
                     </a>
                     {/* <MultiModal
@@ -86,16 +88,15 @@ export const Mensaje = ({ proyecto, Alert, user }) => {
                 mensaje.attributes.autor?.data?.attributes.username ? (
                   <div className="ml-auto max-w-125">
                     {mensaje.attributes.comentario !== "" && (
-                      <div className="mb-2.5 rounded-2xl rounded-br-none bg-primary py-3 px-5">
-                        <p className="text-white">
-                          {mensaje.attributes.comentario}
+                      <>
+                        <div className="mb-2.5 rounded-2xl rounded-tl-none bg-gray py-3 px-5 dark:bg-boxdark-2">
+                          <p>{mensaje.attributes.comentario}</p>
+                        </div>
+                        <p className="text-xs">
+                          {fecha.toLocaleString("es-Es")}
                         </p>
-                      </div>
+                      </>
                     )}
-
-                    <p className="text-right text-xs">
-                      {fecha.toLocaleString("es-Es")}
-                    </p>
                   </div>
                 ) : (
                   <div className="max-w-125">
@@ -104,12 +105,15 @@ export const Mensaje = ({ proyecto, Alert, user }) => {
                       {mensaje.attributes?.autor?.data?.attributes.lastname}
                     </p>
                     {mensaje.attributes.comentario !== "" && (
-                      <div className="mb-2.5 rounded-2xl rounded-tl-none bg-gray py-3 px-5 dark:bg-boxdark-2">
-                        <p>{mensaje.attributes.comentario}</p>
-                      </div>
+                      <>
+                        <div className="mb-2.5 rounded-2xl rounded-tl-none bg-gray py-3 px-5 dark:bg-boxdark-2">
+                          <p>{mensaje.attributes.comentario}</p>
+                        </div>
+                        <p className="text-xs">
+                          {fecha.toLocaleString("es-Es")}
+                        </p>
+                      </>
                     )}
-
-                    <p className="text-xs">{fecha.toLocaleString("es-Es")}</p>
                   </div>
                 )}
               </>

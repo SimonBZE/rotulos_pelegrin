@@ -30,7 +30,7 @@ export const servicios = [
     departamento: "pintura",
   },
   {
-    nombre: "montaje",
+    nombre: "Montaje",
     color: "#FFA008",
     imagen: "/assets/Montaje.svg",
     departamento: "montaje",
