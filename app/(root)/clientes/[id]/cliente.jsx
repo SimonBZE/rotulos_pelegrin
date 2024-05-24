@@ -122,7 +122,7 @@ const Cliente = ({ id }) => {
               </p>
             </div>
           </div>
-          <Table removeWrapper aria-label="Proyectos del cliente">
+          <Table  aria-label="Proyectos del cliente">
             <TableHeader>
               <TableColumn>ID</TableColumn>
               <TableColumn>Nombre</TableColumn>
