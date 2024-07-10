@@ -14,12 +14,11 @@ import {
   Spinner,
 } from "@nextui-org/react";
 
-import { CiEdit, CiTrash, CiViewList  } from "react-icons/ci";
+import { CiEdit, CiViewList  } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import { Paginacion } from "@/components/common/Paginacion";
 import { TopContent } from "./components/TopContant";
 // import { Factura } from "./components";
-import { useDebouncedCallback } from "use-debounce";
 import {colores} from "@/utils"
 import { EliminarPresupuesto } from "@/components/Presupuestos/EliminarPresupuesto";
 const projectsCtrl = new Projects();
@@ -37,8 +36,9 @@ const buildFilters = (page, query, status, estado, fecha, fechaEnd) => {
     const numericQuery = query.replace(/\D/g, ""); // Extraer números para el ID
     const textQuery = query;
     // Añadir un filtro OR
-    filters.append("filters[$or][0][id][$contains]", numericQuery);
-    filters.append("filters[$or][1][nombre][$contains]", query);
+    filters.append("filters[$or][0][nombre][$contains]", textQuery);
+    filters.append("filters[$or][1][id][$contains]", numericQuery);
+
 
     return filters.toString();
   }
@@ -73,7 +73,7 @@ const fetchData = async (
   fechaEnd
 ) => {
   const filters = buildFilters(page, query, status, estado, fecha, fechaEnd);
-
+  console.log(filters)
   
   const res = await projectsCtrl.getPresupuestos(token, `?${filters}`);
   return res;

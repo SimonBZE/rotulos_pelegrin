@@ -184,9 +184,10 @@ export const Mensajes = ({ chatOpen }) => {
                 onChange={(e) => {
                   e.stopPropagation();
                   handleFileChange(e, "imageInput");
-                  setValidForm(
-                    e.target.files?.length > 0 || form.mensaje.trim() !== ""
-                  ); // Actualizar el estado de validForm al agregar imágenes
+                  // setValidForm(
+                  //   e.target.files?.length > 0 || form.mensaje.trim() !== ""
+                  // ); // Actualizar el estado de validForm al agregar imágenes
+                  
                 }}
                 accept="image/png, image/jpeg, image/jpg, image/gif"
               />

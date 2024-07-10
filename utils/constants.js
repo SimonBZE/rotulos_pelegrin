@@ -1,6 +1,6 @@
 export const ENV = {
-    SERVER_HOST: "https://pelegrin.up.railway.app",
-    API_URL: 'https://pelegrin.up.railway.app/api',
+    SERVER_HOST: "https://backend-pelegrin-design-production.up.railway.app",
+    API_URL: 'https://backend-pelegrin-design-production.up.railway.app/api',
     SOCKET_URL: 'https://rotulos-pelegrin-0df6d9acd9ec.herokuapp.com',
     ENDPOINTS: {
         AUTH:{
