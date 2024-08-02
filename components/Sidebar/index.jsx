@@ -33,12 +33,12 @@ const menu = [
     color: "#ff5f5f",
     link: "/clientes",
   },
-  {
-    nombre: "Calendario",
-    imagen: "/assets/Calendario-blanco.svg",
-    color: "#16dae4",
-    link: "/calendario",
-  },
+  // {
+  //   nombre: "Calendario",
+  //   imagen: "/assets/Calendario-blanco.svg",
+  //   color: "#16dae4",
+  //   link: "/calendario",
+  // },
   {
     nombre: "Stock",
     imagen: "/assets/Stock-blanco.svg",
