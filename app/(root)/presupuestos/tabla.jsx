@@ -100,9 +100,17 @@ export function Tabla({ token, page, query, status, estado, fecha, fechaEnd }) {
       fecha,
       fechaEnd
     );
-    setPresupuestos(presupuestos);
-    setPaginacion(paginacion.pagination);
-    setCargando(false);
+    
+    if(presupuestos){
+      setPresupuestos(presupuestos);
+      setPaginacion(paginacion.pagination);
+      setCargando(false);
+    } else {
+      setCargando(false);
+    }
+    
+    
+
   }
 
   useEffect(() => {

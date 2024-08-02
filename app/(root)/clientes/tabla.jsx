@@ -70,7 +70,9 @@ export function Tabla({ query, tipo, page }) {
     );
 
     setClientes(clientes);
-    setPaginacion(pagination.pagination);
+    if(pagination > 1){
+      setPaginacion(pagination.pagination);
+    }
     setCargando(false);
   }, 1000);
 

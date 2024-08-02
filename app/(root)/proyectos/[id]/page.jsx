@@ -135,6 +135,8 @@ const Departamentos = ({ params }) => {
         </select>
       </div>
 
+      {proyectos.length == 0 && <h3 className="text-center labels pt-5">No hay proyectos para mostrar</h3> }
+
       {ordenarProyectos().map((proyecto, index) => {
         if (proyecto.attributes?.departamento !== params.id) {
           return;

@@ -33,7 +33,7 @@ const nextConfig = {
         },
         {
           protocol: 'https',
-          hostname: 'pelegrin.up.railway.app',
+          hostname: 'backend-pelegrin-design-production.up.railway.app',
           // port: '3000',
           // pathname: '',
         },
