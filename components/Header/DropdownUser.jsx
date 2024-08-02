@@ -25,7 +25,7 @@ const DropdownUser = () => {
         <Avatar
           src={
             user?.foto
-              ? `${ENV.SERVER_HOST}${user.foto.formats?.thumbnail.url}`
+              ? `${ENV.SERVER_HOST}/${user.foto.formats?.thumbnail.url}`
               : ""
           }
           size="lg"
