@@ -152,7 +152,7 @@ export default function NuevoProyecto() {
   useEffect(() => {
     const getPrices = async () => {
       const precios = await budgetCtrl.getPrecios();
-      setPreciosServicios(precios.data.attributes);
+      setPreciosServicios(precios?.data?.attributes);
     };
 
     getPrices();
