@@ -21,12 +21,12 @@ const menu = [
     color: '#ff5f5f',
     link: '/proyectos'
 },
-{
-    nombre: 'Calendario',
-    imagen: './assets/Calendario.svg',
-    color: '#16dae4',
-    link: '/calendario'
-},
+// {
+//     nombre: 'Calendario',
+//     imagen: './assets/Calendario.svg',
+//     color: '#16dae4',
+//     link: '/calendario'
+// },
 {
     nombre: 'Stock',
     imagen: './assets/Stock.svg',

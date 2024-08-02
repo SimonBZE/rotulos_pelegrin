@@ -39,6 +39,7 @@ const menu = [
   //   color: "#16dae4",
   //   link: "/calendario",
   // },
+  
   {
     nombre: "Stock",
     imagen: "/assets/Stock-blanco.svg",
@@ -50,6 +51,12 @@ const menu = [
     imagen: "/assets/Empleados-blanco.svg",
     color: "#ffa008",
     link: "/empleados",
+  },
+  {
+    nombre: "Registro actividad",
+    imagen: "/assets/log.svg",
+    color: "#16dae4",
+    link: "/registro-actividad",
   },
 ];
 
