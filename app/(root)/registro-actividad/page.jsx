@@ -7564,6 +7564,7 @@ export default function App() {
   const [userSearch, setUserSearch] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [sortOrder, setSortOrder] = useState("desc"); // Nueva: orden descendente por defecto
 
   // Filtros rápidos de fecha
   const applyQuickFilter = (days) => {
@@ -7574,8 +7575,15 @@ export default function App() {
     setPage(1);
   };
 
+  // Ordenar registros
+  const registroOrdenado = [...registro].sort((a, b) => {
+    return sortOrder === "desc"
+      ? new Date(b.fecha) - new Date(a.fecha) // Más reciente primero
+      : new Date(a.fecha) - new Date(b.fecha); // Más antiguo primero
+  });
+
   // Filtrado por rango de fechas y usuario
-  const filteredData = registro.filter(item => {
+  const filteredData = registroOrdenado.filter(item => {
     const date = new Date(item.fecha);
     const start = dateRange.start ? new Date(dateRange.start) : null;
     const end = dateRange.end ? new Date(dateRange.end) : null;
@@ -7643,13 +7651,23 @@ export default function App() {
           />
         </div>
 
+        {/* Orden ascendente/descendente */}
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="border border-gray-300 rounded-lg px-3 py-2"
+        >
+          <option value="desc">Más reciente</option>
+          <option value="asc">Más antiguo</option>
+        </select>
+
         {/* Selección de registros por página */}
         <select
           value={pageSize}
           onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
           className="border border-gray-300 rounded-lg px-3 py-2"
         >
-          {[10, 20, 50].map(size => (
+          {[10, 20, 50, 100, 500].map(size => (
             <option key={size} value={size}>{size} registros</option>
           ))}
         </select>
